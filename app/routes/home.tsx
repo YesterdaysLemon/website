@@ -14,7 +14,7 @@ export default function Home() {
       <div className="flex h-screen flex-col items-center justify-center">
         <div className="bg-primary w-1/2 rounded-lg p-4">
           <div className="flex h-1/3 flex-col">
-            <h1 className="text-4xl font-bold">Alireza Afshan</h1>
+            <h1 className="text-5xl font-bold">Alireza Afshan</h1>
             <h2 className="text-2xl font-bold">
               Software / Dev Ops / Information Systems
             </h2>
