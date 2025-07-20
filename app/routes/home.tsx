@@ -11,8 +11,8 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <div className="container mx-auto">
-      <div className="flex h-screen flex-col items-center justify-center">
-        <div className="bg-primary w-1/2 rounded-lg p-4">
+      <div className="flex h-screen flex-col sm:items-center justify-center">
+        <div className="bg-primary w-full sm:w-1/2 rounded-lg p-4">
           <div className="flex h-1/3 flex-col">
             <h1 className="text-5xl font-bold">Alireza Afshan</h1>
             <h2 className="text-2xl font-bold">
@@ -22,12 +22,12 @@ export default function Home() {
 
           <div className="h-1/3"></div>
 
-          <div className="h-1/3">
+          <div className="h-1/3 flex flex-col gap-2">
             <p>
               email{" "}
               <a
                 className="text-blue-500"
-                href="mailto:alirezaafshan4@gmail.com"
+                href="mailto:mail@alirezaafshan.com"
               >
                 me
               </a>
