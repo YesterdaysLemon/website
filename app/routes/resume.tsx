@@ -13,7 +13,7 @@ export default function Resume() {
     <div className="container mx-auto">
         <div className="flex flex-col items-center justify-between h-screen">
             
-            <iframe src="../public/resume/Alireza_Afshanv4.pdf" 
+            <iframe src="./resume/Alireza_Afshanv4.pdf" 
             className="w-dvw h-[90vh]">
             </iframe>
             <Link to="/" className="mb-4 text-5xl font-bold hover:underline">
