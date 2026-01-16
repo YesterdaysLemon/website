@@ -24,22 +24,16 @@ export default function Home() {
 
           <div className="h-1/3 flex flex-col gap-2">
             <p>
-              email{" "}
+              email me at {" "}
               <a
                 className="text-blue-500"
                 href="mailto:mail@alirezaafshan.com"
               >
-                me
+                mail@alirezaafshan.com
               </a>
             </p>
             <p>
-              check out my projects{" "}
-              <Link className="text-blue-500" to="/projects">
-                here
-              </Link>
-            </p>
-            <p>
-              or on{" "}
+              check out my projects on{" "}
               <a className="text-blue-500" href="https://github.com/YesterdaysLemon" target="_blank">
                 GitHub
               </a>
