@@ -1,0 +1,10 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#F6F2E9"/>
+  <rect x="94" y="94" width="1412" height="712" rx="40" fill="#FFFDF8" stroke="#D8D2C5" stroke-width="4"/>
+  <rect x="246" y="258" width="232" height="286" rx="28" fill="#172B4D"/>
+  <rect x="536" y="204" width="232" height="340" rx="28" fill="#2C5E57"/>
+  <rect x="826" y="310" width="232" height="234" rx="28" fill="#BA6C3F"/>
+  <rect x="1116" y="232" width="232" height="312" rx="28" fill="#5B615F"/>
+  <text x="220" y="656" fill="#172B4D" font-family="Georgia, serif" font-size="68">CentraID</text>
+  <text x="220" y="730" fill="#5B615F" font-family="Arial, sans-serif" font-size="28">attendance platform · architecture · delivery pipeline</text>
+</svg>

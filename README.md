@@ -82,6 +82,17 @@ Make sure to deploy the output of `npm run build`
 
 This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
 
+## Content authoring
+
+This site now keeps authored content in-repo.
+
+- Projects live in `content/projects/*.md`
+- Blog posts live in `content/blog/*.md`
+- Project and blog images live in `public/images/...`
+- The resume page content lives in `app/content/resume.ts`
+
+Markdown entries use frontmatter plus body content. Image references should use site-relative paths such as `/images/blog/my-post/cover.svg`.
+
 ---
 
 Built with ❤️ using React Router.
