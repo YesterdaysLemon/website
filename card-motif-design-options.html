@@ -1,0 +1,1156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deck of Cards Navigation Design Options</title>
+    <style>
+      :root {
+        --paper: #f6f2e9;
+        --card: #fffdf8;
+        --ink: #172126;
+        --muted: #5b615f;
+        --line: #d8d2c5;
+        --blue: #1e4b7a;
+        --red: #9b3f36;
+        --green: #27624f;
+        --gold: #a66d2f;
+        --plum: #5b4267;
+        --shadow: 0 24px 60px rgba(23, 33, 38, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background:
+          radial-gradient(circle at 12% 0%, rgba(30, 75, 122, 0.1), transparent 30%),
+          radial-gradient(circle at 90% 18%, rgba(155, 63, 54, 0.09), transparent 28%),
+          var(--paper);
+        color: var(--ink);
+        font-family:
+          Manrope, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: 32px 20px 56px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 500;
+        letter-spacing: 0;
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 7vw, 5.8rem);
+        line-height: 0.92;
+        max-width: 900px;
+      }
+
+      h2 {
+        font-size: clamp(1.7rem, 4vw, 3rem);
+        line-height: 1;
+      }
+
+      h3 {
+        font-size: 1.35rem;
+        line-height: 1.15;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.24em;
+        margin-bottom: 18px;
+        text-transform: uppercase;
+      }
+
+      .hero {
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 32px;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        padding: 26px 0 42px;
+      }
+
+      .hero p {
+        font-size: 1.08rem;
+        max-width: 680px;
+      }
+
+      .hero-note {
+        align-self: end;
+        border: 1px solid var(--line);
+        background: rgba(255, 253, 248, 0.78);
+        border-radius: 8px;
+        padding: 18px;
+      }
+
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 24px 0 0;
+      }
+
+      .toc a {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        font-size: 0.86rem;
+        font-weight: 750;
+        padding: 8px 12px;
+        text-decoration: none;
+      }
+
+      .section {
+        padding: 44px 0 0;
+      }
+
+      .intro-grid,
+      .spec-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .brief,
+      .spec-card {
+        background: rgba(255, 253, 248, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+      }
+
+      .brief strong,
+      .spec-card strong {
+        color: var(--ink);
+        display: block;
+        font-size: 0.83rem;
+        letter-spacing: 0.16em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+
+      .option {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 28px;
+        grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+        padding: 44px 0;
+      }
+
+      .option:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .option-copy {
+        max-width: 680px;
+      }
+
+      .option-copy h2 {
+        margin-bottom: 14px;
+      }
+
+      .option-copy p {
+        margin-bottom: 18px;
+      }
+
+      .meta-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .meta-row {
+        border-left: 2px solid currentColor;
+        color: var(--blue);
+        padding-left: 12px;
+      }
+
+      .meta-row:nth-child(2) {
+        color: var(--red);
+      }
+
+      .meta-row:nth-child(3) {
+        color: var(--green);
+      }
+
+      .meta-row b {
+        color: var(--ink);
+        display: block;
+        font-size: 0.86rem;
+        margin-bottom: 2px;
+      }
+
+      .meta-row span {
+        color: var(--muted);
+        display: block;
+        line-height: 1.55;
+      }
+
+      .mock {
+        border: 1px solid rgba(23, 33, 38, 0.16);
+        border-radius: 12px;
+        min-height: 440px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: var(--shadow);
+      }
+
+      .mock-header {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        left: 18px;
+        position: absolute;
+        right: 18px;
+        top: 16px;
+        z-index: 3;
+      }
+
+      .brand {
+        font-size: 0.69rem;
+        font-weight: 850;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .mini-nav {
+        display: flex;
+        gap: 6px;
+      }
+
+      .mini-nav span {
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        font-size: 0.62rem;
+        font-weight: 760;
+        padding: 4px 7px;
+      }
+
+      .playing-card {
+        aspect-ratio: 2.5 / 3.5;
+        background:
+          linear-gradient(140deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0)),
+          var(--card);
+        border: 1px solid rgba(23, 33, 38, 0.14);
+        border-radius: 10px;
+        box-shadow: 0 16px 28px rgba(23, 33, 38, 0.13);
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 10px;
+        position: relative;
+      }
+
+      .playing-card.red {
+        color: var(--red);
+      }
+
+      .card-rank {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        line-height: 1;
+      }
+
+      .card-title {
+        color: var(--ink);
+        font-size: 0.72rem;
+        font-weight: 850;
+        letter-spacing: 0.1em;
+        line-height: 1.25;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .card-suit {
+        font-size: 1.4rem;
+        line-height: 1;
+        text-align: right;
+      }
+
+      .card-note {
+        color: var(--muted);
+        font-size: 0.66rem;
+        line-height: 1.35;
+        text-align: center;
+      }
+
+      .control-strip {
+        display: flex;
+        gap: 8px;
+      }
+
+      .control-strip span {
+        background: var(--ink);
+        border-radius: 999px;
+        color: var(--paper);
+        display: inline-flex;
+        font-size: 0.68rem;
+        font-weight: 800;
+        padding: 7px 10px;
+      }
+
+      .table-mock {
+        background:
+          radial-gradient(circle at 50% 30%, rgba(255, 253, 248, 0.26), transparent 35%),
+          linear-gradient(145deg, #194936, #0f2f28);
+        color: #fffdf8;
+      }
+
+      .felt-stage {
+        inset: 58px 26px 24px;
+        position: absolute;
+      }
+
+      .deck-stack {
+        height: 158px;
+        left: 50%;
+        position: absolute;
+        top: 14px;
+        transform: translateX(-50%);
+        width: 112px;
+      }
+
+      .deck-stack .playing-card {
+        height: 150px;
+        position: absolute;
+        width: 106px;
+      }
+
+      .deck-stack .playing-card:nth-child(1) {
+        transform: rotate(-10deg) translateX(-14px);
+      }
+
+      .deck-stack .playing-card:nth-child(2) {
+        transform: rotate(7deg) translateX(12px);
+      }
+
+      .deck-stack .playing-card:nth-child(3) {
+        transform: rotate(0deg);
+      }
+
+      .hand-row {
+        bottom: 0;
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+
+      .hand-row .playing-card {
+        min-height: 152px;
+      }
+
+      .hand-row .playing-card:nth-child(1) {
+        transform: rotate(-7deg) translateY(14px);
+      }
+
+      .hand-row .playing-card:nth-child(2) {
+        transform: rotate(-3deg) translateY(4px);
+      }
+
+      .hand-row .playing-card:nth-child(4) {
+        transform: rotate(3deg) translateY(4px);
+      }
+
+      .hand-row .playing-card:nth-child(5) {
+        transform: rotate(7deg) translateY(14px);
+      }
+
+      .solitaire-mock {
+        background:
+          linear-gradient(rgba(246, 242, 233, 0.78), rgba(246, 242, 233, 0.9)),
+          repeating-linear-gradient(90deg, rgba(30, 75, 122, 0.08) 0 1px, transparent 1px 52px);
+      }
+
+      .solitaire-board {
+        inset: 64px 22px 22px;
+        position: absolute;
+      }
+
+      .slots {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .slot {
+        border: 1px dashed rgba(23, 33, 38, 0.26);
+        border-radius: 10px;
+        height: 120px;
+      }
+
+      .solitaire-board .hand-row {
+        bottom: 0;
+      }
+
+      .solitaire-board .playing-card {
+        box-shadow: 0 12px 24px rgba(23, 33, 38, 0.11);
+      }
+
+      .tarot-mock {
+        background:
+          radial-gradient(circle at 50% 40%, rgba(246, 242, 233, 0.18), transparent 42%),
+          linear-gradient(145deg, #382f48, #172126 72%);
+        color: #fffdf8;
+      }
+
+      .tarot-spread {
+        inset: 62px 32px 28px;
+        position: absolute;
+      }
+
+      .tarot-spread .playing-card {
+        background:
+          linear-gradient(150deg, rgba(255, 253, 248, 0.92), rgba(230, 221, 200, 0.84)),
+          var(--card);
+        border-color: rgba(255, 253, 248, 0.38);
+        min-height: 178px;
+        padding: 12px;
+      }
+
+      .arc-card {
+        position: absolute;
+        width: 92px;
+      }
+
+      .arc-card:nth-child(1) {
+        left: 2%;
+        top: 124px;
+        transform: rotate(-16deg);
+      }
+
+      .arc-card:nth-child(2) {
+        left: 22%;
+        top: 56px;
+        transform: rotate(-8deg);
+      }
+
+      .arc-card:nth-child(3) {
+        left: 43%;
+        top: 32px;
+      }
+
+      .arc-card:nth-child(4) {
+        right: 22%;
+        top: 56px;
+        transform: rotate(8deg);
+      }
+
+      .arc-card:nth-child(5) {
+        right: 2%;
+        top: 124px;
+        transform: rotate(16deg);
+      }
+
+      .command-mock {
+        background: #fffdf8;
+      }
+
+      .command-area {
+        inset: 64px 22px 22px;
+        position: absolute;
+      }
+
+      .command-title {
+        max-width: 250px;
+      }
+
+      .command-title h3 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .command-hand {
+        align-items: end;
+        bottom: 0;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+
+      .command-hand .playing-card {
+        min-height: 190px;
+      }
+
+      .command-hand .playing-card:first-child {
+        border: 2px solid var(--blue);
+        transform: translateY(-18px);
+      }
+
+      .cut-mock {
+        background:
+          linear-gradient(90deg, rgba(23, 33, 38, 0.045) 1px, transparent 1px) 0 0 / 36px 36px,
+          #f6f2e9;
+      }
+
+      .cut-layout {
+        inset: 64px 22px 22px;
+        position: absolute;
+      }
+
+      .cut-deck {
+        height: 180px;
+        left: 4px;
+        position: absolute;
+        top: 34px;
+        width: 126px;
+      }
+
+      .cut-deck .playing-card {
+        height: 170px;
+        position: absolute;
+        width: 122px;
+      }
+
+      .cut-deck .playing-card:nth-child(1) {
+        transform: translate(18px, 12px);
+      }
+
+      .cut-deck .playing-card:nth-child(2) {
+        transform: translate(9px, 6px);
+      }
+
+      .cut-list {
+        display: grid;
+        gap: 10px;
+        margin-left: 150px;
+      }
+
+      .cut-list a {
+        align-items: center;
+        background: rgba(255, 253, 248, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        display: flex;
+        font-weight: 820;
+        justify-content: space-between;
+        min-height: 52px;
+        padding: 0 14px;
+        text-decoration: none;
+      }
+
+      .cut-list b {
+        color: var(--red);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.5rem;
+      }
+
+      .case-mock {
+        background:
+          linear-gradient(rgba(255, 253, 248, 0.82), rgba(255, 253, 248, 0.92)),
+          linear-gradient(135deg, rgba(39, 98, 79, 0.24), rgba(166, 109, 47, 0.14));
+      }
+
+      .case-layout {
+        inset: 62px 22px 20px;
+        position: absolute;
+      }
+
+      .case-grid {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 24px;
+      }
+
+      .case-file {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-height: 92px;
+        padding: 12px;
+        position: relative;
+      }
+
+      .case-file::before {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        border-radius: 6px 6px 0 0;
+        content: "";
+        height: 15px;
+        left: 12px;
+        position: absolute;
+        top: -15px;
+        width: 48px;
+      }
+
+      .case-file strong {
+        display: block;
+        font-size: 0.86rem;
+        margin-bottom: 5px;
+      }
+
+      .case-file span {
+        color: var(--muted);
+        font-size: 0.7rem;
+        line-height: 1.35;
+      }
+
+      .animation-note {
+        background: rgba(23, 33, 38, 0.04);
+        border-radius: 8px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.6;
+        margin-top: 18px;
+        padding: 14px;
+      }
+
+      .checklist {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .check {
+        background: rgba(255, 253, 248, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .check b {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      code {
+        background: rgba(23, 33, 38, 0.06);
+        border-radius: 5px;
+        color: var(--ink);
+        padding: 2px 5px;
+      }
+
+      @media (max-width: 940px) {
+        .hero,
+        .option {
+          grid-template-columns: 1fr;
+        }
+
+        .intro-grid,
+        .spec-grid,
+        .checklist {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        main {
+          padding: 22px 14px 42px;
+        }
+
+        .mock {
+          min-height: 520px;
+        }
+
+        .option {
+          gap: 20px;
+          padding: 34px 0;
+        }
+
+        .hand-row,
+        .slots,
+        .command-hand {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .hand-row .playing-card,
+        .command-hand .playing-card {
+          min-height: 132px;
+          transform: none !important;
+        }
+
+        .deck-stack {
+          top: 0;
+        }
+
+        .tarot-spread {
+          display: grid;
+          gap: 8px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .arc-card {
+          min-height: 132px;
+          position: static;
+          transform: none !important;
+          width: auto;
+        }
+
+        .cut-deck {
+          display: none;
+        }
+
+        .cut-list {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Spec sheet / homepage navigation concept</div>
+          <h1>Deck of Cards Motif for Alireza Afshan</h1>
+          <p>
+            The homepage opens with a deck. The deck shuffles, draws five cards, and each
+            card becomes a direct action: Projects, Blog, Resume, About, and Contact.
+            This document gives an implementer six distinct ways to execute that idea
+            while staying compatible with the current React Router site.
+          </p>
+          <nav class="toc" aria-label="Design options">
+            <a href="#table">Dealer's Table</a>
+            <a href="#solitaire">Solitaire Board</a>
+            <a href="#tarot">Quiet Tarot</a>
+            <a href="#command">Command Hand</a>
+            <a href="#cut">Minimal Cut</a>
+            <a href="#case">Case File Deck</a>
+          </nav>
+        </div>
+        <aside class="hero-note">
+          <strong>Recommended baseline</strong>
+          <p>
+            Start with Option 4, Command Hand, if the goal is a portfolio homepage
+            that feels interactive but still professional. Use Option 1 if the
+            shuffle animation should be the main event.
+          </p>
+        </aside>
+      </section>
+
+      <section class="section" aria-labelledby="shared-brief">
+        <div class="eyebrow">Shared product brief</div>
+        <h2 id="shared-brief">Core interaction</h2>
+        <div class="intro-grid">
+          <div class="brief">
+            <strong>Navigation Cards</strong>
+            <p>
+              Draw exactly five cards: Projects, Blog, Resume, About, Contact. Each card
+              is a real link. Do not hide normal navigation completely; keep a small
+              fallback nav for accessibility and repeat visits.
+            </p>
+          </div>
+          <div class="brief">
+            <strong>Motion Model</strong>
+            <p>
+              Load state shows a compact deck, then 600-900ms of shuffle, then five cards
+              fan or place into final positions. Hover previews lift cards; click navigates.
+              Respect <code>prefers-reduced-motion</code>.
+            </p>
+          </div>
+          <div class="brief">
+            <strong>Site Fit</strong>
+            <p>
+              Preserve the current paper/card visual system, serif name treatment, and
+              restrained palette. The motif should feel like a navigational device, not a
+              casino game or novelty landing page.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="options">
+        <div class="eyebrow">Six directions</div>
+        <h2 id="options">Visual options</h2>
+
+        <article class="option" id="table">
+          <div class="option-copy">
+            <h2>1. Dealer's Table</h2>
+            <p>
+              A green felt table gives the deck idea the clearest visual read. The deck
+              sits center-stage, shuffles, then deals a five-card hand across the bottom.
+              Best when you want the homepage to feel memorable immediately.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Shuffle deck in place, deal cards one by one from center to hand.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>A bold homepage with a strong first impression and obvious card metaphor.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Use CSS keyframes or Framer Motion. Cards should still render in final state without JS.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              Timing: deck appears at 0ms, shuffle rotations 150-650ms, cards deal at
+              700ms, 820ms, 940ms, 1060ms, 1180ms.
+            </div>
+          </div>
+          <div class="mock table-mock" aria-label="Dealer's Table visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Reset</span><span>Draw</span></div>
+            </div>
+            <div class="felt-stage">
+              <div class="deck-stack" aria-hidden="true">
+                <div class="playing-card"><span class="card-rank">A</span><span class="card-title">Deck</span><span class="card-suit">♠</span></div>
+                <div class="playing-card red"><span class="card-rank">K</span><span class="card-title">Deck</span><span class="card-suit">♥</span></div>
+                <div class="playing-card"><span class="card-rank">Q</span><span class="card-title">Deck</span><span class="card-suit">♣</span></div>
+              </div>
+              <div class="hand-row">
+                <div class="playing-card"><span class="card-rank">P</span><span class="card-title">Projects</span><span class="card-note">Selected work</span><span class="card-suit">♠</span></div>
+                <div class="playing-card red"><span class="card-rank">B</span><span class="card-title">Blog</span><span class="card-note">Writing</span><span class="card-suit">♥</span></div>
+                <div class="playing-card"><span class="card-rank">R</span><span class="card-title">Resume</span><span class="card-note">Experience</span><span class="card-suit">♣</span></div>
+                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">About</span><span class="card-note">Profile</span><span class="card-suit">♦</span></div>
+                <div class="playing-card"><span class="card-rank">C</span><span class="card-title">Contact</span><span class="card-note">Email</span><span class="card-suit">♠</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="option" id="solitaire">
+          <div class="option-copy">
+            <h2>2. Solitaire Board</h2>
+            <p>
+              The homepage behaves like an orderly solitaire layout. The five actions
+              are placed into clean slots, making the motif structured and less theatrical.
+              This direction fits the current minimal site best.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Cards slide from a draw pile into labeled slots. Hover reveals a short description.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>Minimal portfolio navigation where clarity matters more than spectacle.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Use CSS grid for the final layout; animate transforms only to avoid layout shift.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              Include a persistent "Shuffle again" control, but never require replaying the animation to navigate.
+            </div>
+          </div>
+          <div class="mock solitaire-mock" aria-label="Solitaire Board visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Home</span><span>Blog</span></div>
+            </div>
+            <div class="solitaire-board">
+              <div class="slots" aria-hidden="true">
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+              </div>
+              <div class="hand-row">
+                <div class="playing-card"><span class="card-rank">01</span><span class="card-title">Projects</span><span class="card-note">Builds and systems</span><span class="card-suit">♣</span></div>
+                <div class="playing-card red"><span class="card-rank">02</span><span class="card-title">Blog</span><span class="card-note">Notes and essays</span><span class="card-suit">♦</span></div>
+                <div class="playing-card"><span class="card-rank">03</span><span class="card-title">Resume</span><span class="card-note">PDF and history</span><span class="card-suit">♠</span></div>
+                <div class="playing-card red"><span class="card-rank">04</span><span class="card-title">About</span><span class="card-note">Context</span><span class="card-suit">♥</span></div>
+                <div class="playing-card"><span class="card-rank">05</span><span class="card-title">Contact</span><span class="card-note">Reach out</span><span class="card-suit">♣</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="option" id="tarot">
+          <div class="option-copy">
+            <h2>3. Quiet Tarot Spread</h2>
+            <p>
+              A more editorial version of the card idea. The five actions are revealed
+              in an arc, like a spread, with rich labels and subtle symbolic styling.
+              It feels more personal and essay-like than game-like.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Cards flip from face-down to face-up along an arc, then settle into tappable links.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>A distinctive personal site that leans literary, reflective, and atmospheric.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Keep text short. Flip animation must not make card labels unreadable on mobile.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              Use sparingly: this is the most stylized option and could feel too mystical if pushed too far.
+            </div>
+          </div>
+          <div class="mock tarot-mock" aria-label="Quiet Tarot visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Draw</span></div>
+            </div>
+            <div class="tarot-spread">
+              <div class="playing-card arc-card"><span class="card-rank">I</span><span class="card-title">Projects</span><span class="card-note">The work</span><span class="card-suit">♠</span></div>
+              <div class="playing-card red arc-card"><span class="card-rank">II</span><span class="card-title">Blog</span><span class="card-note">The notes</span><span class="card-suit">♥</span></div>
+              <div class="playing-card arc-card"><span class="card-rank">III</span><span class="card-title">Resume</span><span class="card-note">The record</span><span class="card-suit">♣</span></div>
+              <div class="playing-card red arc-card"><span class="card-rank">IV</span><span class="card-title">About</span><span class="card-note">The context</span><span class="card-suit">♦</span></div>
+              <div class="playing-card arc-card"><span class="card-rank">V</span><span class="card-title">Contact</span><span class="card-note">The signal</span><span class="card-suit">♠</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="option" id="command">
+          <div class="option-copy">
+            <h2>4. Command Hand</h2>
+            <p>
+              The cards are treated as a hand of available commands. One card is focused,
+              and arrow keys or pointer hover can move focus across the hand. This is the
+              strongest option for a software portfolio because it makes the metaphor feel
+              like an interface.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Initial draw creates a hand. Focused card lifts and shows a preview panel.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>Professional, keyboard-friendly navigation with just enough playfulness.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Use actual anchor elements inside cards and support tab, arrow keys, enter, and escape.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              Recommended choice: it balances the current minimal design with a memorable interaction.
+            </div>
+          </div>
+          <div class="mock command-mock" aria-label="Command Hand visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Tab</span><span>Enter</span></div>
+            </div>
+            <div class="command-area">
+              <div class="command-title">
+                <h3>Choose a card.</h3>
+                <p>Available actions are dealt into your hand. The focused card previews the route.</p>
+              </div>
+              <div class="command-hand">
+                <div class="playing-card"><span class="card-rank">P</span><span class="card-title">Projects</span><span class="card-note">3 selected projects</span><span class="card-suit">♠</span></div>
+                <div class="playing-card red"><span class="card-rank">B</span><span class="card-title">Blog</span><span class="card-note">Recent writing</span><span class="card-suit">♥</span></div>
+                <div class="playing-card"><span class="card-rank">R</span><span class="card-title">Resume</span><span class="card-note">Download PDF</span><span class="card-suit">♣</span></div>
+                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">About</span><span class="card-note">Short profile</span><span class="card-suit">♦</span></div>
+                <div class="playing-card"><span class="card-rank">C</span><span class="card-title">Contact</span><span class="card-note">Email and GitHub</span><span class="card-suit">♠</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="option" id="cut">
+          <div class="option-copy">
+            <h2>5. Minimal Card Cut</h2>
+            <p>
+              The deck motif is reduced to a simple cut-and-draw gesture. Instead of
+              showing a full hand, the interface lists five card-like rows. This is the
+              safest option if performance, accessibility, and readability outrank
+              spectacle.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Deck cuts once, then five horizontal card rows slide into view.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>Keeping the existing site nearly intact while adding a subtle motif.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Works well as pure HTML/CSS with minimal client JavaScript.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              This is the easiest direction to implement without creating mobile layout risk.
+            </div>
+          </div>
+          <div class="mock cut-mock" aria-label="Minimal Card Cut visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Shuffle</span></div>
+            </div>
+            <div class="cut-layout">
+              <div class="cut-deck" aria-hidden="true">
+                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">Cut</span><span class="card-suit">♦</span></div>
+                <div class="playing-card"><span class="card-rank">A</span><span class="card-title">Deck</span><span class="card-suit">♠</span></div>
+              </div>
+              <div class="cut-list">
+                <a href="#"><span>Projects</span><b>♠</b></a>
+                <a href="#"><span>Blog</span><b>♥</b></a>
+                <a href="#"><span>Resume</span><b>♣</b></a>
+                <a href="#"><span>About</span><b>♦</b></a>
+                <a href="#"><span>Contact</span><b>♠</b></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="option" id="case">
+          <div class="option-copy">
+            <h2>6. Case File Deck</h2>
+            <p>
+              A hybrid of cards and file tabs. The shuffle reveals five indexed cards
+              that feel like records in a working system. This is less literal, but it
+              connects well to software, systems, and information architecture.
+            </p>
+            <div class="meta-list">
+              <div class="meta-row">
+                <b>Interaction</b>
+                <span>Cards fan like an index deck; selecting one expands it into a file-style panel.</span>
+              </div>
+              <div class="meta-row">
+                <b>Best for</b>
+                <span>A mature systems-engineering tone with a light card motif.</span>
+              </div>
+              <div class="meta-row">
+                <b>Implementation note</b>
+                <span>Map route metadata to card summaries so labels and descriptions stay centralized.</span>
+              </div>
+            </div>
+            <div class="animation-note">
+              Consider this if the final site should feel like a tool or archive rather than a game.
+            </div>
+          </div>
+          <div class="mock case-mock" aria-label="Case File Deck visual mockup">
+            <div class="mock-header">
+              <span class="brand">Alireza Afshan</span>
+              <div class="mini-nav"><span>Index</span><span>Draw</span></div>
+            </div>
+            <div class="case-layout">
+              <h3>Drawn from the index</h3>
+              <p>Five cards become navigable files for the site's main actions.</p>
+              <div class="case-grid">
+                <div class="case-file"><strong>Projects</strong><span>Selected work, systems, and builds.</span></div>
+                <div class="case-file"><strong>Blog</strong><span>Technical notes and essays.</span></div>
+                <div class="case-file"><strong>Resume</strong><span>Experience and downloadable PDF.</span></div>
+                <div class="case-file"><strong>About</strong><span>Short profile and current focus.</span></div>
+                <div class="case-file"><strong>Contact</strong><span>Email, GitHub, and location.</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" aria-labelledby="implementation-spec">
+        <div class="eyebrow">Implementation spec for another LLM</div>
+        <h2 id="implementation-spec">Build requirements</h2>
+        <div class="spec-grid">
+          <div class="spec-card">
+            <strong>Routes</strong>
+            <p>
+              Keep existing routes: <code>/projects</code>, <code>/blog</code>,
+              <code>/resume</code>. Add <code>/about</code> if the chosen design uses a
+              dedicated About card; otherwise link About to a homepage section.
+            </p>
+          </div>
+          <div class="spec-card">
+            <strong>Card Data</strong>
+            <p>
+              Create a single array with title, rank, suit, route, summary, and accent.
+              Render the deck and final hand from that data instead of hard-coding each card.
+            </p>
+          </div>
+          <div class="spec-card">
+            <strong>Accessibility</strong>
+            <p>
+              Cards must be keyboard-focusable anchors with visible focus states. Provide
+              skip nav, fallback nav, reduced motion styles, and final-state rendering if
+              JavaScript is disabled.
+            </p>
+          </div>
+          <div class="spec-card">
+            <strong>Motion</strong>
+            <p>
+              Animate only <code>transform</code> and <code>opacity</code>. Avoid layout
+              shifts. Use a deterministic shuffle sequence, not random positions that can
+              overlap text or push cards off-screen.
+            </p>
+          </div>
+          <div class="spec-card">
+            <strong>Responsive</strong>
+            <p>
+              Desktop can show a five-card hand. Tablet can show a shallow fan. Mobile
+              should switch to a two-column or vertical card list so text remains readable.
+            </p>
+          </div>
+          <div class="spec-card">
+            <strong>Visual Tone</strong>
+            <p>
+              Retain the current paper background, serif display type, dark ink, muted
+              copy, and restrained accent colors. Add suits, ranks, and deck backs as
+              details rather than replacing the portfolio tone.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="handoff">
+        <div class="eyebrow">Handoff checklist</div>
+        <h2 id="handoff">Acceptance criteria</h2>
+        <div class="checklist">
+          <div class="check">
+            <b>Animation complete</b>
+            <p>On first load, the user sees deck, shuffle, draw, and five stable action cards.</p>
+          </div>
+          <div class="check">
+            <b>Navigation works</b>
+            <p>Each card is clickable, keyboard reachable, and routes to the intended page.</p>
+          </div>
+          <div class="check">
+            <b>No motion trap</b>
+            <p>Users can navigate immediately after the cards settle, replay is optional, and reduced motion skips the shuffle.</p>
+          </div>
+          <div class="check">
+            <b>Mobile fit</b>
+            <p>Card labels, hover/focus states, and controls do not overlap at 320px, 390px, tablet, and desktop widths.</p>
+          </div>
+          <div class="check">
+            <b>Current content preserved</b>
+            <p>Existing projects, blog, resume, contact email, and GitHub links remain accessible.</p>
+          </div>
+          <div class="check">
+            <b>Performance budget</b>
+            <p>No heavy canvas or 3D dependency unless the chosen design truly requires it. CSS transforms are enough for these concepts.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

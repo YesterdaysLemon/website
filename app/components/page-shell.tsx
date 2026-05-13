@@ -10,6 +10,7 @@ type PageShellProps = {
 
 const navItems = [
   { to: "/", label: "Home", end: true },
+  { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/blog", label: "Blog" },
   { to: "/resume", label: "Resume" },

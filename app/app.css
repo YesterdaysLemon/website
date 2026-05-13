@@ -129,4 +129,103 @@
   .markdown-content td {
     @apply px-4 py-3;
   }
+
+  .playing-action-card {
+    --card-rotate: 0deg;
+    transform: translate(-50%, -50%) rotate(var(--card-rotate)) scale(1);
+    transition:
+      transform 180ms ease,
+      filter 180ms ease,
+      box-shadow 180ms ease,
+      opacity 260ms ease;
+  }
+
+  .playing-action-card:hover,
+  .playing-action-card:focus-visible {
+    transform: translate(-50%, calc(-50% - 0.35rem))
+      rotate(var(--card-rotate)) scale(1.03);
+  }
+
+  .playing-action-card.is-dragging {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1.04);
+    transition:
+      filter 120ms ease,
+      box-shadow 120ms ease;
+  }
+
+  .playing-action-card.is-playing {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1.1);
+  }
+
+  .deck-card {
+    @apply border-line bg-card absolute inset-0 rounded-xl border shadow-[0_18px_36px_rgba(23,33,38,0.2)];
+    background:
+      linear-gradient(135deg, rgba(255, 253, 248, 0.78), transparent 42%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(30, 75, 122, 0.16) 0 6px,
+        rgba(155, 63, 54, 0.12) 6px 12px
+      ),
+      var(--color-card);
+  }
+
+  .card-deck-stack.is-shuffling .deck-card:nth-child(1) {
+    animation: shuffle-left 760ms ease-in-out both;
+  }
+
+  .card-deck-stack.is-shuffling .deck-card:nth-child(2) {
+    animation: shuffle-right 760ms 80ms ease-in-out both;
+  }
+
+  .card-deck-stack.is-shuffling .deck-card:nth-child(3) {
+    animation: shuffle-top 760ms 160ms ease-in-out both;
+  }
+}
+
+@keyframes shuffle-left {
+  0%,
+  100% {
+    transform: translateX(0) rotate(-6deg);
+  }
+  35% {
+    transform: translateX(-42px) translateY(6px) rotate(-18deg);
+  }
+  70% {
+    transform: translateX(28px) translateY(-4px) rotate(8deg);
+  }
+}
+
+@keyframes shuffle-right {
+  0%,
+  100% {
+    transform: translateX(0) rotate(3deg);
+  }
+  35% {
+    transform: translateX(38px) translateY(-5px) rotate(17deg);
+  }
+  70% {
+    transform: translateX(-24px) translateY(5px) rotate(-7deg);
+  }
+}
+
+@keyframes shuffle-top {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  45% {
+    transform: translateY(-16px) rotate(5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing-action-card,
+  .playing-action-card:hover,
+  .playing-action-card:focus-visible,
+  .playing-action-card.is-dragging,
+  .playing-action-card.is-playing,
+  .deck-card {
+    animation: none !important;
+    transition: none !important;
+  }
 }
