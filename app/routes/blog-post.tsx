@@ -48,25 +48,29 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
       routeId="blog"
       title={post.title}
     >
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-8 flex flex-wrap items-center gap-3">
+      <div className="space-y-5">
+        <div className="text-muted flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
           <Link
-            className="archive-button archive-button-secondary"
+            className="archive-inline-link w-fit font-bold"
             to="/blog"
           >
-            Back to blog
+            take me back
           </Link>
-          {post.tags?.map((tag) => (
-            <span
-              key={tag}
-              className="archive-tag"
-            >
-              {tag}
-            </span>
-          ))}
+          {post.tags?.length ? (
+            <div className="flex flex-wrap gap-x-4 gap-y-2 sm:justify-end">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs font-bold tracking-[0.16em] text-[var(--route-accent)]/65 uppercase"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
 
-        <article className="archive-card p-6 sm:p-8">
+        <article className="archive-card p-6 sm:p-8 lg:p-10">
           {post.coverImage ? (
             <img
               alt=""
@@ -75,7 +79,9 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
             />
           ) : null}
 
-          <MarkdownContent>{post.body}</MarkdownContent>
+          <div className="max-w-3xl">
+            <MarkdownContent>{post.body}</MarkdownContent>
+          </div>
         </article>
       </div>
     </PageShell>
