@@ -3,20 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Deck of Cards Navigation Design Options</title>
+    <title>Card Table Website Design Language Options</title>
     <style>
       :root {
-        --paper: #f6f2e9;
-        --card: #fffdf8;
+        --felt: #14382f;
+        --felt-dark: #09231e;
+        --felt-mid: #1f5a46;
+        --black: #101414;
         --ink: #172126;
-        --muted: #5b615f;
+        --red: #a7332d;
+        --red-dark: #6f1d1b;
+        --card: #fffdf8;
+        --paper: #f6f2e9;
         --line: #d8d2c5;
-        --blue: #1e4b7a;
-        --red: #9b3f36;
-        --green: #27624f;
-        --gold: #a66d2f;
-        --plum: #5b4267;
-        --shadow: 0 24px 60px rgba(23, 33, 38, 0.12);
+        --muted: #6a706d;
+        --gold: #b08745;
+        --shadow: 0 22px 70px rgba(3, 13, 11, 0.18);
       }
 
       * {
@@ -25,10 +27,10 @@
 
       html {
         background:
-          radial-gradient(circle at 12% 0%, rgba(30, 75, 122, 0.1), transparent 30%),
-          radial-gradient(circle at 90% 18%, rgba(155, 63, 54, 0.09), transparent 28%),
-          var(--paper);
-        color: var(--ink);
+          radial-gradient(circle at 20% 0%, rgba(255, 253, 248, 0.13), transparent 26rem),
+          radial-gradient(circle at 90% 14%, rgba(167, 51, 45, 0.12), transparent 24rem),
+          linear-gradient(145deg, #14382f, #071916 74%);
+        color: var(--card);
         font-family:
           Manrope, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", sans-serif;
@@ -40,1117 +42,1088 @@
 
       main {
         margin: 0 auto;
-        max-width: 1200px;
-        padding: 32px 20px 56px;
+        max-width: 1420px;
+        padding: 32px 18px 64px;
       }
 
       h1,
       h2,
-      h3 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-weight: 500;
-        letter-spacing: 0;
+      h3,
+      p {
         margin: 0;
       }
 
+      h1,
+      h2,
+      h3,
+      .serif {
+        font-family: Newsreader, Georgia, "Times New Roman", serif;
+        font-weight: 520;
+        letter-spacing: 0;
+      }
+
       h1 {
-        font-size: clamp(2.5rem, 7vw, 5.8rem);
-        line-height: 0.92;
-        max-width: 900px;
+        max-width: 940px;
+        font-size: clamp(2.6rem, 8vw, 6.8rem);
+        line-height: 0.9;
       }
 
       h2 {
-        font-size: clamp(1.7rem, 4vw, 3rem);
+        font-size: clamp(1.7rem, 3.4vw, 3.1rem);
         line-height: 1;
       }
 
       h3 {
         font-size: 1.35rem;
-        line-height: 1.15;
+        line-height: 1.08;
       }
 
       p {
-        color: var(--muted);
+        color: rgba(255, 253, 248, 0.74);
         line-height: 1.7;
-        margin: 0;
       }
 
-      .eyebrow {
-        color: var(--muted);
-        font-size: 0.74rem;
-        font-weight: 800;
-        letter-spacing: 0.24em;
-        margin-bottom: 18px;
-        text-transform: uppercase;
+      a {
+        color: inherit;
       }
 
       .hero {
-        border-bottom: 1px solid var(--line);
+        min-height: 72vh;
         display: grid;
+        align-content: end;
+        padding: 18px 0 44px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
         gap: 32px;
-        grid-template-columns: minmax(0, 1fr) 330px;
-        padding: 26px 0 42px;
+        align-items: end;
       }
 
-      .hero p {
-        font-size: 1.08rem;
-        max-width: 680px;
-      }
-
-      .hero-note {
-        align-self: end;
-        border: 1px solid var(--line);
-        background: rgba(255, 253, 248, 0.78);
-        border-radius: 8px;
-        padding: 18px;
-      }
-
-      .toc {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 24px 0 0;
-      }
-
-      .toc a {
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        color: var(--ink);
-        font-size: 0.86rem;
-        font-weight: 750;
-        padding: 8px 12px;
-        text-decoration: none;
-      }
-
-      .section {
-        padding: 44px 0 0;
-      }
-
-      .intro-grid,
-      .spec-grid {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        margin-top: 20px;
-      }
-
-      .brief,
-      .spec-card {
-        background: rgba(255, 253, 248, 0.82);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 18px;
-      }
-
-      .brief strong,
-      .spec-card strong {
-        color: var(--ink);
-        display: block;
-        font-size: 0.83rem;
-        letter-spacing: 0.16em;
-        margin-bottom: 8px;
+      .eyebrow {
+        color: rgba(255, 253, 248, 0.62);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.25em;
         text-transform: uppercase;
       }
 
-      .option {
-        border-top: 1px solid var(--line);
+      .hero-copy {
         display: grid;
-        gap: 28px;
-        grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-        padding: 44px 0;
+        gap: 18px;
       }
 
-      .option:last-child {
-        border-bottom: 1px solid var(--line);
+      .hero-copy p {
+        max-width: 700px;
+        font-size: 1.04rem;
+      }
+
+      .toc {
+        border: 1px solid rgba(255, 253, 248, 0.16);
+        background: rgba(255, 253, 248, 0.08);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .toc strong {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--card);
+        font-family: Newsreader, Georgia, serif;
+        font-size: 1.35rem;
+        font-weight: 540;
+      }
+
+      .toc a {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        border-top: 1px solid rgba(255, 253, 248, 0.13);
+        padding: 11px 0;
+        color: rgba(255, 253, 248, 0.76);
+        text-decoration: none;
+      }
+
+      .toc span:last-child {
+        color: rgba(255, 253, 248, 0.48);
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+      }
+
+      .section {
+        display: grid;
+        gap: 20px;
+        padding: 42px 0;
+      }
+
+      .brief {
+        border: 1px solid rgba(255, 253, 248, 0.16);
+        background: rgba(255, 253, 248, 0.07);
+        padding: 22px;
+      }
+
+      .brief-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .brief-card {
+        border: 1px solid rgba(255, 253, 248, 0.12);
+        background: rgba(5, 17, 15, 0.24);
+        padding: 16px;
+      }
+
+      .brief-card b {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--card);
+      }
+
+      .brief-card p {
+        color: rgba(255, 253, 248, 0.68);
+        font-size: 0.9rem;
+      }
+
+      .options {
+        display: grid;
+        gap: 28px;
+      }
+
+      .option {
+        --radius: 8px;
+        --accent: var(--red);
+        --accent-2: var(--felt-mid);
+        --surface: var(--card);
+        --surface-2: var(--paper);
+        --text: var(--ink);
+        --soft: #68706c;
+        --rule: rgba(23, 33, 38, 0.16);
+        display: grid;
+        grid-template-columns: minmax(250px, 0.42fr) minmax(0, 0.58fr);
+        gap: 20px;
+        border: 1px solid rgba(255, 253, 248, 0.15);
+        background: rgba(255, 253, 248, 0.075);
+        padding: 18px;
       }
 
       .option-copy {
-        max-width: 680px;
-      }
-
-      .option-copy h2 {
-        margin-bottom: 14px;
+        display: grid;
+        align-content: start;
+        gap: 16px;
+        padding: 8px 4px;
       }
 
       .option-copy p {
-        margin-bottom: 18px;
+        color: rgba(255, 253, 248, 0.7);
       }
 
       .meta-list {
         display: grid;
-        gap: 10px;
-        margin-top: 20px;
+        gap: 9px;
       }
 
       .meta-row {
-        border-left: 2px solid currentColor;
-        color: var(--blue);
-        padding-left: 12px;
-      }
-
-      .meta-row:nth-child(2) {
-        color: var(--red);
-      }
-
-      .meta-row:nth-child(3) {
-        color: var(--green);
+        display: grid;
+        grid-template-columns: 6.5rem minmax(0, 1fr);
+        gap: 12px;
+        border-top: 1px solid rgba(255, 253, 248, 0.12);
+        padding-top: 9px;
+        font-size: 0.9rem;
       }
 
       .meta-row b {
-        color: var(--ink);
-        display: block;
-        font-size: 0.86rem;
-        margin-bottom: 2px;
+        color: rgba(255, 253, 248, 0.92);
       }
 
       .meta-row span {
-        color: var(--muted);
-        display: block;
-        line-height: 1.55;
+        color: rgba(255, 253, 248, 0.66);
+      }
+
+      .swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .swatch {
+        display: inline-flex;
+        min-width: 58px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 253, 248, 0.22);
+        color: rgba(255, 253, 248, 0.9);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
       }
 
       .mock {
-        border: 1px solid rgba(23, 33, 38, 0.16);
-        border-radius: 12px;
-        min-height: 440px;
         overflow: hidden;
-        position: relative;
+        border: 1px solid rgba(255, 253, 248, 0.18);
+        background: var(--surface-2);
+        color: var(--text);
         box-shadow: var(--shadow);
       }
 
-      .mock-header {
-        align-items: center;
+      .mock-inner {
+        min-height: 560px;
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+      }
+
+      .mock-nav {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        left: 18px;
-        position: absolute;
-        right: 18px;
-        top: 16px;
-        z-index: 3;
+        gap: 16px;
+        border-bottom: 1px solid var(--rule);
+        padding: 16px 18px;
       }
 
       .brand {
-        font-size: 0.69rem;
-        font-weight: 850;
+        font-size: 0.76rem;
+        font-weight: 900;
         letter-spacing: 0.2em;
         text-transform: uppercase;
       }
 
-      .mini-nav {
+      .links {
         display: flex;
-        gap: 6px;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
       }
 
-      .mini-nav span {
-        border: 1px solid currentColor;
-        border-radius: 999px;
-        font-size: 0.62rem;
-        font-weight: 760;
-        padding: 4px 7px;
+      .links span,
+      .button,
+      .chip {
+        border: 1px solid var(--rule);
+        padding: 7px 10px;
+        font-size: 0.76rem;
+        font-weight: 800;
       }
 
-      .playing-card {
-        aspect-ratio: 2.5 / 3.5;
-        background:
-          linear-gradient(140deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0)),
-          var(--card);
-        border: 1px solid rgba(23, 33, 38, 0.14);
-        border-radius: 10px;
-        box-shadow: 0 16px 28px rgba(23, 33, 38, 0.13);
-        color: var(--ink);
+      .links span.active {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--surface);
+      }
+
+      .mock-header {
+        display: grid;
+        gap: 11px;
+        padding: 26px 22px 20px;
+      }
+
+      .mock-header .eyebrow {
+        color: var(--soft);
+      }
+
+      .mock-header p {
+        max-width: 680px;
+        color: var(--soft);
+        font-size: 0.94rem;
+      }
+
+      .mock-body {
+        display: grid;
+        grid-template-columns: 1fr 0.86fr;
+        gap: 16px;
+        padding: 0 22px 22px;
+      }
+
+      .panel,
+      .content-card,
+      .mini-card {
+        border: 1px solid var(--rule);
+        background: var(--surface);
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .panel h3,
+      .content-card h3 {
+        margin-bottom: 8px;
+      }
+
+      .panel p,
+      .content-card p,
+      .mini-card p {
+        color: var(--soft);
+        font-size: 0.86rem;
+      }
+
+      .sample-row {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .button.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--surface);
+      }
+
+      .button.secondary {
+        color: var(--text);
+      }
+
+      .content-stack {
+        display: grid;
+        gap: 10px;
+      }
+
+      .content-card {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .content-card-top {
+        display: flex;
         justify-content: space-between;
-        min-width: 0;
-        padding: 10px;
-        position: relative;
+        gap: 14px;
       }
 
-      .playing-card.red {
-        color: var(--red);
-      }
-
-      .card-rank {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.25rem;
+      .rank {
+        color: var(--accent);
+        font-family: Georgia, serif;
+        font-size: 1.45rem;
         line-height: 1;
       }
 
-      .card-title {
-        color: var(--ink);
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .chip {
+        background: color-mix(in srgb, var(--accent) 9%, transparent);
+        color: var(--text);
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .mini-card {
+        min-height: 108px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 12px;
+      }
+
+      .mini-card strong {
+        display: block;
+        font-family: Georgia, serif;
+        font-size: 1.12rem;
+        font-weight: 540;
+      }
+
+      .corner-round .mock,
+      .corner-round .toc,
+      .corner-round .brief,
+      .corner-round .brief-card,
+      .corner-round .panel,
+      .corner-round .content-card,
+      .corner-round .mini-card,
+      .corner-round .swatch {
+        border-radius: 28px;
+      }
+
+      .corner-round .links span,
+      .corner-round .button,
+      .corner-round .chip {
+        border-radius: 999px;
+      }
+
+      .corner-soft .mock,
+      .corner-soft .toc,
+      .corner-soft .brief,
+      .corner-soft .brief-card,
+      .corner-soft .panel,
+      .corner-soft .content-card,
+      .corner-soft .mini-card,
+      .corner-soft .swatch {
+        border-radius: 8px;
+      }
+
+      .corner-soft .links span,
+      .corner-soft .button,
+      .corner-soft .chip {
+        border-radius: 999px;
+      }
+
+      .corner-sharp .mock,
+      .corner-sharp .toc,
+      .corner-sharp .brief,
+      .corner-sharp .brief-card,
+      .corner-sharp .panel,
+      .corner-sharp .content-card,
+      .corner-sharp .mini-card,
+      .corner-sharp .links span,
+      .corner-sharp .button,
+      .corner-sharp .chip,
+      .corner-sharp .swatch {
+        border-radius: 0;
+      }
+
+      .corner-mixed .mock,
+      .corner-mixed .panel,
+      .corner-mixed .content-card {
+        border-radius: 4px;
+      }
+
+      .corner-mixed .mini-card,
+      .corner-mixed .links span,
+      .corner-mixed .button,
+      .corner-mixed .chip,
+      .corner-mixed .swatch {
+        border-radius: 2px 14px 2px 14px;
+      }
+
+      .corner-card .mock,
+      .corner-card .panel,
+      .corner-card .content-card,
+      .corner-card .mini-card {
+        border-radius: 14px;
+      }
+
+      .corner-card .links span,
+      .corner-card .button,
+      .corner-card .chip,
+      .corner-card .swatch {
+        border-radius: 3px;
+      }
+
+      #felt {
+        --accent: #a7332d;
+        --accent-2: #1f5a46;
+        --surface: #fffdf8;
+        --surface-2: #f6f2e9;
+        --text: #172126;
+        --soft: #626b67;
+        --rule: rgba(23, 33, 38, 0.16);
+      }
+
+      #felt .mock-inner {
+        background:
+          radial-gradient(circle at 50% 0%, rgba(31, 90, 70, 0.15), transparent 18rem),
+          var(--paper);
+      }
+
+      #club {
+        --accent: #111514;
+        --accent-2: #b12e28;
+        --surface: #fffdf8;
+        --surface-2: #0f1e1b;
+        --text: #111514;
+        --soft: #5c625f;
+        --rule: rgba(17, 21, 20, 0.18);
+      }
+
+      #club .mock {
+        background:
+          linear-gradient(145deg, rgba(255, 253, 248, 0.95), rgba(255, 253, 248, 0.83)),
+          var(--surface-2);
+      }
+
+      #club .mock-inner {
+        background:
+          linear-gradient(90deg, rgba(9, 35, 30, 0.95) 0 34%, transparent 34%),
+          var(--card);
+      }
+
+      #club .mock-nav,
+      #club .mock-header {
+        color: var(--card);
+      }
+
+      #club .mock-nav {
+        border-color: rgba(255, 253, 248, 0.15);
+      }
+
+      #club .mock-header .eyebrow,
+      #club .mock-header p {
+        color: rgba(255, 253, 248, 0.66);
+      }
+
+      #club .mock-body {
+        grid-template-columns: 0.78fr 1fr;
+      }
+
+      #club .panel:first-child {
+        background: rgba(255, 253, 248, 0.08);
+        border-color: rgba(255, 253, 248, 0.16);
+        color: var(--card);
+      }
+
+      #club .panel:first-child p {
+        color: rgba(255, 253, 248, 0.68);
+      }
+
+      #ruby {
+        --accent: #9f2724;
+        --accent-2: #0c2a24;
+        --surface: #fffdf8;
+        --surface-2: #efe6db;
+        --text: #231918;
+        --soft: #695d58;
+        --rule: rgba(35, 25, 24, 0.18);
+      }
+
+      #ruby .mock-inner {
+        background:
+          linear-gradient(180deg, rgba(159, 39, 36, 0.09), transparent 34%),
+          var(--surface-2);
+      }
+
+      #grid {
+        --accent: #193f34;
+        --accent-2: #b22624;
+        --surface: #fffdf8;
+        --surface-2: #111514;
+        --text: #171a18;
+        --soft: #656c68;
+        --rule: rgba(23, 26, 24, 0.17);
+      }
+
+      #grid .mock-inner {
+        background:
+          linear-gradient(rgba(255, 253, 248, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 253, 248, 0.05) 1px, transparent 1px),
+          #101414;
+        background-size: 24px 24px;
+      }
+
+      #grid .mock-nav,
+      #grid .mock-header {
+        color: var(--card);
+      }
+
+      #grid .mock-header .eyebrow,
+      #grid .mock-header p {
+        color: rgba(255, 253, 248, 0.65);
+      }
+
+      #grid .mock-body {
+        grid-template-columns: 1.12fr 0.88fr;
+      }
+
+      #archive {
+        --accent: #7c221e;
+        --accent-2: #1c4d3c;
+        --surface: #fdf9ef;
+        --surface-2: #e7dfd0;
+        --text: #151918;
+        --soft: #65615a;
+        --rule: rgba(21, 25, 24, 0.18);
+      }
+
+      #archive .mock-inner {
+        background:
+          linear-gradient(90deg, rgba(124, 34, 30, 0.08), transparent 36%),
+          var(--surface-2);
+      }
+
+      .card-spread {
+        position: relative;
+        min-height: 230px;
+        margin-top: 16px;
+      }
+
+      .playing-card {
+        position: absolute;
+        width: 108px;
+        aspect-ratio: 2.5 / 3.5;
+        border: 1px solid var(--rule);
+        background:
+          linear-gradient(135deg, rgba(255, 253, 248, 0.86), transparent 54%),
+          var(--surface);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+        padding: 10px;
+      }
+
+      .playing-card:nth-child(1) {
+        left: 2%;
+        top: 38px;
+        transform: rotate(-12deg);
+      }
+
+      .playing-card:nth-child(2) {
+        left: 28%;
+        top: 8px;
+        transform: rotate(-3deg);
+      }
+
+      .playing-card:nth-child(3) {
+        left: 54%;
+        top: 28px;
+        transform: rotate(9deg);
+      }
+
+      .playing-card b {
+        display: block;
+        color: var(--accent);
+        font-family: Georgia, serif;
+        font-size: 1.8rem;
+        line-height: 1;
+      }
+
+      .playing-card span {
+        display: block;
+        margin-top: 58px;
+        color: var(--text);
         font-size: 0.72rem;
-        font-weight: 850;
-        letter-spacing: 0.1em;
-        line-height: 1.25;
+        font-weight: 900;
+        letter-spacing: 0.13em;
         text-align: center;
         text-transform: uppercase;
       }
 
-      .card-suit {
-        font-size: 1.4rem;
-        line-height: 1;
-        text-align: right;
+      .footer-note {
+        border-top: 1px solid rgba(255, 253, 248, 0.15);
+        padding-top: 22px;
+        color: rgba(255, 253, 248, 0.62);
+        font-size: 0.95rem;
       }
 
-      .card-note {
-        color: var(--muted);
-        font-size: 0.66rem;
-        line-height: 1.35;
-        text-align: center;
-      }
-
-      .control-strip {
-        display: flex;
-        gap: 8px;
-      }
-
-      .control-strip span {
-        background: var(--ink);
-        border-radius: 999px;
-        color: var(--paper);
-        display: inline-flex;
-        font-size: 0.68rem;
-        font-weight: 800;
-        padding: 7px 10px;
-      }
-
-      .table-mock {
-        background:
-          radial-gradient(circle at 50% 30%, rgba(255, 253, 248, 0.26), transparent 35%),
-          linear-gradient(145deg, #194936, #0f2f28);
-        color: #fffdf8;
-      }
-
-      .felt-stage {
-        inset: 58px 26px 24px;
-        position: absolute;
-      }
-
-      .deck-stack {
-        height: 158px;
-        left: 50%;
-        position: absolute;
-        top: 14px;
-        transform: translateX(-50%);
-        width: 112px;
-      }
-
-      .deck-stack .playing-card {
-        height: 150px;
-        position: absolute;
-        width: 106px;
-      }
-
-      .deck-stack .playing-card:nth-child(1) {
-        transform: rotate(-10deg) translateX(-14px);
-      }
-
-      .deck-stack .playing-card:nth-child(2) {
-        transform: rotate(7deg) translateX(12px);
-      }
-
-      .deck-stack .playing-card:nth-child(3) {
-        transform: rotate(0deg);
-      }
-
-      .hand-row {
-        bottom: 0;
-        display: grid;
-        gap: 9px;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        left: 0;
-        position: absolute;
-        right: 0;
-      }
-
-      .hand-row .playing-card {
-        min-height: 152px;
-      }
-
-      .hand-row .playing-card:nth-child(1) {
-        transform: rotate(-7deg) translateY(14px);
-      }
-
-      .hand-row .playing-card:nth-child(2) {
-        transform: rotate(-3deg) translateY(4px);
-      }
-
-      .hand-row .playing-card:nth-child(4) {
-        transform: rotate(3deg) translateY(4px);
-      }
-
-      .hand-row .playing-card:nth-child(5) {
-        transform: rotate(7deg) translateY(14px);
-      }
-
-      .solitaire-mock {
-        background:
-          linear-gradient(rgba(246, 242, 233, 0.78), rgba(246, 242, 233, 0.9)),
-          repeating-linear-gradient(90deg, rgba(30, 75, 122, 0.08) 0 1px, transparent 1px 52px);
-      }
-
-      .solitaire-board {
-        inset: 64px 22px 22px;
-        position: absolute;
-      }
-
-      .slots {
-        display: grid;
-        gap: 10px;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-      }
-
-      .slot {
-        border: 1px dashed rgba(23, 33, 38, 0.26);
-        border-radius: 10px;
-        height: 120px;
-      }
-
-      .solitaire-board .hand-row {
-        bottom: 0;
-      }
-
-      .solitaire-board .playing-card {
-        box-shadow: 0 12px 24px rgba(23, 33, 38, 0.11);
-      }
-
-      .tarot-mock {
-        background:
-          radial-gradient(circle at 50% 40%, rgba(246, 242, 233, 0.18), transparent 42%),
-          linear-gradient(145deg, #382f48, #172126 72%);
-        color: #fffdf8;
-      }
-
-      .tarot-spread {
-        inset: 62px 32px 28px;
-        position: absolute;
-      }
-
-      .tarot-spread .playing-card {
-        background:
-          linear-gradient(150deg, rgba(255, 253, 248, 0.92), rgba(230, 221, 200, 0.84)),
-          var(--card);
-        border-color: rgba(255, 253, 248, 0.38);
-        min-height: 178px;
-        padding: 12px;
-      }
-
-      .arc-card {
-        position: absolute;
-        width: 92px;
-      }
-
-      .arc-card:nth-child(1) {
-        left: 2%;
-        top: 124px;
-        transform: rotate(-16deg);
-      }
-
-      .arc-card:nth-child(2) {
-        left: 22%;
-        top: 56px;
-        transform: rotate(-8deg);
-      }
-
-      .arc-card:nth-child(3) {
-        left: 43%;
-        top: 32px;
-      }
-
-      .arc-card:nth-child(4) {
-        right: 22%;
-        top: 56px;
-        transform: rotate(8deg);
-      }
-
-      .arc-card:nth-child(5) {
-        right: 2%;
-        top: 124px;
-        transform: rotate(16deg);
-      }
-
-      .command-mock {
-        background: #fffdf8;
-      }
-
-      .command-area {
-        inset: 64px 22px 22px;
-        position: absolute;
-      }
-
-      .command-title {
-        max-width: 250px;
-      }
-
-      .command-title h3 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-
-      .command-hand {
-        align-items: end;
-        bottom: 0;
-        display: grid;
-        gap: 8px;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        left: 0;
-        position: absolute;
-        right: 0;
-      }
-
-      .command-hand .playing-card {
-        min-height: 190px;
-      }
-
-      .command-hand .playing-card:first-child {
-        border: 2px solid var(--blue);
-        transform: translateY(-18px);
-      }
-
-      .cut-mock {
-        background:
-          linear-gradient(90deg, rgba(23, 33, 38, 0.045) 1px, transparent 1px) 0 0 / 36px 36px,
-          #f6f2e9;
-      }
-
-      .cut-layout {
-        inset: 64px 22px 22px;
-        position: absolute;
-      }
-
-      .cut-deck {
-        height: 180px;
-        left: 4px;
-        position: absolute;
-        top: 34px;
-        width: 126px;
-      }
-
-      .cut-deck .playing-card {
-        height: 170px;
-        position: absolute;
-        width: 122px;
-      }
-
-      .cut-deck .playing-card:nth-child(1) {
-        transform: translate(18px, 12px);
-      }
-
-      .cut-deck .playing-card:nth-child(2) {
-        transform: translate(9px, 6px);
-      }
-
-      .cut-list {
-        display: grid;
-        gap: 10px;
-        margin-left: 150px;
-      }
-
-      .cut-list a {
-        align-items: center;
-        background: rgba(255, 253, 248, 0.82);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        color: var(--ink);
-        display: flex;
-        font-weight: 820;
-        justify-content: space-between;
-        min-height: 52px;
-        padding: 0 14px;
-        text-decoration: none;
-      }
-
-      .cut-list b {
-        color: var(--red);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.5rem;
-      }
-
-      .case-mock {
-        background:
-          linear-gradient(rgba(255, 253, 248, 0.82), rgba(255, 253, 248, 0.92)),
-          linear-gradient(135deg, rgba(39, 98, 79, 0.24), rgba(166, 109, 47, 0.14));
-      }
-
-      .case-layout {
-        inset: 62px 22px 20px;
-        position: absolute;
-      }
-
-      .case-grid {
-        display: grid;
-        gap: 10px;
-        grid-template-columns: 1fr 1fr;
-        margin-top: 24px;
-      }
-
-      .case-file {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        min-height: 92px;
-        padding: 12px;
-        position: relative;
-      }
-
-      .case-file::before {
-        background: var(--paper);
-        border: 1px solid var(--line);
-        border-bottom: 0;
-        border-radius: 6px 6px 0 0;
-        content: "";
-        height: 15px;
-        left: 12px;
-        position: absolute;
-        top: -15px;
-        width: 48px;
-      }
-
-      .case-file strong {
-        display: block;
-        font-size: 0.86rem;
-        margin-bottom: 5px;
-      }
-
-      .case-file span {
-        color: var(--muted);
-        font-size: 0.7rem;
-        line-height: 1.35;
-      }
-
-      .animation-note {
-        background: rgba(23, 33, 38, 0.04);
-        border-radius: 8px;
-        color: var(--muted);
-        font-size: 0.86rem;
-        line-height: 1.6;
-        margin-top: 18px;
-        padding: 14px;
-      }
-
-      .checklist {
-        display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-top: 20px;
-      }
-
-      .check {
-        background: rgba(255, 253, 248, 0.82);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 16px;
-      }
-
-      .check b {
-        display: block;
-        margin-bottom: 6px;
-      }
-
-      code {
-        background: rgba(23, 33, 38, 0.06);
-        border-radius: 5px;
-        color: var(--ink);
-        padding: 2px 5px;
-      }
-
-      @media (max-width: 940px) {
-        .hero,
-        .option {
+      @media (max-width: 980px) {
+        .hero-grid,
+        .option,
+        .mock-body,
+        #club .mock-body,
+        #grid .mock-body {
           grid-template-columns: 1fr;
         }
 
-        .intro-grid,
-        .spec-grid,
-        .checklist {
-          grid-template-columns: 1fr;
+        .brief-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .mock-inner {
+          min-height: auto;
         }
       }
 
-      @media (max-width: 560px) {
+      @media (max-width: 620px) {
         main {
-          padding: 22px 14px 42px;
+          padding-inline: 12px;
         }
 
-        .mock {
-          min-height: 520px;
+        .hero {
+          min-height: auto;
+          padding-top: 36px;
         }
 
-        .option {
-          gap: 20px;
-          padding: 34px 0;
+        .mock-nav {
+          align-items: flex-start;
+          flex-direction: column;
         }
 
-        .hand-row,
-        .slots,
-        .command-hand {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+        .brief-grid,
+        .mini-grid {
+          grid-template-columns: 1fr;
         }
 
-        .hand-row .playing-card,
-        .command-hand .playing-card {
-          min-height: 132px;
-          transform: none !important;
+        .meta-row {
+          grid-template-columns: 1fr;
+          gap: 3px;
         }
 
-        .deck-stack {
-          top: 0;
-        }
-
-        .tarot-spread {
-          display: grid;
-          gap: 8px;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .arc-card {
-          min-height: 132px;
-          position: static;
-          transform: none !important;
-          width: auto;
-        }
-
-        .cut-deck {
-          display: none;
-        }
-
-        .cut-list {
-          margin-left: 0;
+        .playing-card {
+          width: 92px;
         }
       }
     </style>
   </head>
   <body>
     <main>
-      <section class="hero">
-        <div>
-          <div class="eyebrow">Spec sheet / homepage navigation concept</div>
-          <h1>Deck of Cards Motif for Alireza Afshan</h1>
-          <p>
-            The homepage opens with a deck. The deck shuffles, draws five cards, and each
-            card becomes a direct action: Projects, Blog, Resume, About, and Contact.
-            This document gives an implementer six distinct ways to execute that idea
-            while staying compatible with the current React Router site.
-          </p>
+      <section class="hero corner-soft">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">Design language board / card table motif</div>
+            <h1>Five ways to extend the home page into the full site.</h1>
+            <p>
+              Each option keeps the current homepage DNA: dark felt, warm playing-card
+              white, black ink, red suits, serif titles, and navigation that feels drawn
+              from a deck. The mockups focus on navbar treatment, page titles, page
+              shells, individual cards, color, type, links, and corner style.
+            </p>
+          </div>
+
           <nav class="toc" aria-label="Design options">
-            <a href="#table">Dealer's Table</a>
-            <a href="#solitaire">Solitaire Board</a>
-            <a href="#tarot">Quiet Tarot</a>
-            <a href="#command">Command Hand</a>
-            <a href="#cut">Minimal Cut</a>
-            <a href="#case">Case File Deck</a>
+            <strong>Options</strong>
+            <a href="#felt"><span>Felt Casino</span><span>soft</span></a>
+            <a href="#club"><span>Private Club</span><span>round</span></a>
+            <a href="#ruby"><span>Ruby Cut</span><span>sharp</span></a>
+            <a href="#grid"><span>Dealer Grid</span><span>mixed</span></a>
+            <a href="#archive"><span>Card Archive</span><span>card</span></a>
           </nav>
         </div>
-        <aside class="hero-note">
-          <strong>Recommended baseline</strong>
-          <p>
-            Start with Option 4, Command Hand, if the goal is a portfolio homepage
-            that feels interactive but still professional. Use Option 1 if the
-            shuffle animation should be the main event.
-          </p>
-        </aside>
       </section>
 
-      <section class="section" aria-labelledby="shared-brief">
-        <div class="eyebrow">Shared product brief</div>
-        <h2 id="shared-brief">Core interaction</h2>
-        <div class="intro-grid">
-          <div class="brief">
-            <strong>Navigation Cards</strong>
-            <p>
-              Draw exactly five cards: Projects, Blog, Resume, About, Contact. Each card
-              is a real link. Do not hide normal navigation completely; keep a small
-              fallback nav for accessibility and repeat visits.
-            </p>
-          </div>
-          <div class="brief">
-            <strong>Motion Model</strong>
-            <p>
-              Load state shows a compact deck, then 600-900ms of shuffle, then five cards
-              fan or place into final positions. Hover previews lift cards; click navigates.
-              Respect <code>prefers-reduced-motion</code>.
-            </p>
-          </div>
-          <div class="brief">
-            <strong>Site Fit</strong>
-            <p>
-              Preserve the current paper/card visual system, serif name treatment, and
-              restrained palette. The motif should feel like a navigational device, not a
-              casino game or novelty landing page.
-            </p>
+      <section class="section corner-soft" aria-labelledby="shared-language">
+        <div class="eyebrow">Shared direction</div>
+        <h2 id="shared-language">What should stay congruent</h2>
+        <div class="brief">
+          <div class="brief-grid">
+            <div class="brief-card">
+              <b>Navbar</b>
+              <p>Keep it compact and game-table inspired: chips, tabs, card labels, or a dealer rail.</p>
+            </div>
+            <div class="brief-card">
+              <b>Titles</b>
+              <p>Use a literary serif for page titles so the site still reads as a portfolio, not a game UI.</p>
+            </div>
+            <div class="brief-card">
+              <b>Pages</b>
+              <p>Use felt or paper as the page shell. Reserve true card white for clickable content.</p>
+            </div>
+            <div class="brief-card">
+              <b>Cards</b>
+              <p>Use rank, suit, rule lines, and subtle rotation as details. Avoid over-decorating every block.</p>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="section" aria-labelledby="options">
-        <div class="eyebrow">Six directions</div>
-        <h2 id="options">Visual options</h2>
+        <div class="eyebrow">Five distinct systems</div>
+        <h2 id="options">Design options</h2>
 
-        <article class="option" id="table">
-          <div class="option-copy">
-            <h2>1. Dealer's Table</h2>
-            <p>
-              A green felt table gives the deck idea the clearest visual read. The deck
-              sits center-stage, shuffles, then deals a five-card hand across the bottom.
-              Best when you want the homepage to feel memorable immediately.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Shuffle deck in place, deal cards one by one from center to hand.</span>
+        <div class="options">
+          <article class="option corner-soft" id="felt">
+            <div class="option-copy">
+              <div class="eyebrow">Option 1</div>
+              <h2>Felt Casino</h2>
+              <p>
+                The closest extension of the current homepage: warm paper pages set on
+                a dark green table, with soft cards and pill nav. It feels calm,
+                polished, and familiar.
+              </p>
+              <div class="swatches">
+                <span class="swatch" style="background:#14382f">FELT</span>
+                <span class="swatch" style="background:#fffdf8;color:#172126">CARD</span>
+                <span class="swatch" style="background:#172126">INK</span>
+                <span class="swatch" style="background:#a7332d">RED</span>
               </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>A bold homepage with a strong first impression and obvious card metaphor.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Use CSS keyframes or Framer Motion. Cards should still render in final state without JS.</span>
-              </div>
-            </div>
-            <div class="animation-note">
-              Timing: deck appears at 0ms, shuffle rotations 150-650ms, cards deal at
-              700ms, 820ms, 940ms, 1060ms, 1180ms.
-            </div>
-          </div>
-          <div class="mock table-mock" aria-label="Dealer's Table visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Reset</span><span>Draw</span></div>
-            </div>
-            <div class="felt-stage">
-              <div class="deck-stack" aria-hidden="true">
-                <div class="playing-card"><span class="card-rank">A</span><span class="card-title">Deck</span><span class="card-suit">♠</span></div>
-                <div class="playing-card red"><span class="card-rank">K</span><span class="card-title">Deck</span><span class="card-suit">♥</span></div>
-                <div class="playing-card"><span class="card-rank">Q</span><span class="card-title">Deck</span><span class="card-suit">♣</span></div>
-              </div>
-              <div class="hand-row">
-                <div class="playing-card"><span class="card-rank">P</span><span class="card-title">Projects</span><span class="card-note">Selected work</span><span class="card-suit">♠</span></div>
-                <div class="playing-card red"><span class="card-rank">B</span><span class="card-title">Blog</span><span class="card-note">Writing</span><span class="card-suit">♥</span></div>
-                <div class="playing-card"><span class="card-rank">R</span><span class="card-title">Resume</span><span class="card-note">Experience</span><span class="card-suit">♣</span></div>
-                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">About</span><span class="card-note">Profile</span><span class="card-suit">♦</span></div>
-                <div class="playing-card"><span class="card-rank">C</span><span class="card-title">Contact</span><span class="card-note">Email</span><span class="card-suit">♠</span></div>
+              <div class="meta-list">
+                <div class="meta-row"><b>Navbar</b><span>Rounded chip links, active route filled in red.</span></div>
+                <div class="meta-row"><b>Titles</b><span>Newsreader or Georgia, large and calm.</span></div>
+                <div class="meta-row"><b>Cards</b><span>8-14px radius, soft shadows, tiny rank/suit corner.</span></div>
+                <div class="meta-row"><b>Use for</b><span>Safest full-site direction; strongest continuity with home.</span></div>
               </div>
             </div>
-          </div>
-        </article>
+            <div class="mock">
+              <div class="mock-inner">
+                <div class="mock-nav">
+                  <span class="brand">Alireza Afshan</span>
+                  <div class="links"><span>About</span><span class="active">Projects</span><span>Blog</span><span>Resume</span></div>
+                </div>
+                <div class="mock-header">
+                  <div class="eyebrow">Selected work / &spades; &hearts;</div>
+                  <h3>Projects drawn from the table</h3>
+                  <p>A light page shell with clickable cards that still feel like portfolio entries.</p>
+                </div>
+                <div class="mock-body">
+                  <div class="panel">
+                    <h3>Page rule</h3>
+                    <p>Use the dark green only around the page edges and in hover states. Let reading surfaces stay warm white.</p>
+                    <div class="sample-row">
+                      <span class="button primary">Open notes</span>
+                      <span class="button secondary">Repository</span>
+                    </div>
+                    <div class="mini-grid">
+                      <div class="mini-card"><strong>Blog</strong><p>&hearts; working notes</p></div>
+                      <div class="mini-card"><strong>Resume</strong><p>&clubs; experience</p></div>
+                    </div>
+                  </div>
+                  <div class="content-stack">
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Drive Safe Doha</h3><span class="rank">A&spades;</span></div>
+                      <p>Navigation card with a short summary and quiet metadata.</p>
+                      <div class="tag-row"><span class="chip">React</span><span class="chip">Maps</span></div>
+                    </div>
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Centraid</h3><span class="rank">K&hearts;</span></div>
+                      <p>Hover can lift slightly, like drawing a card from the table.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
 
-        <article class="option" id="solitaire">
-          <div class="option-copy">
-            <h2>2. Solitaire Board</h2>
-            <p>
-              The homepage behaves like an orderly solitaire layout. The five actions
-              are placed into clean slots, making the motif structured and less theatrical.
-              This direction fits the current minimal site best.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Cards slide from a draw pile into labeled slots. Hover reveals a short description.</span>
+          <article class="option corner-round" id="club">
+            <div class="option-copy">
+              <div class="eyebrow">Option 2</div>
+              <h2>Private Club</h2>
+              <p>
+                A darker, more editorial route: the navbar becomes a dealer rail, cards
+                sit inside a black-green room, and rounded chips make actions feel
+                tactile.
+              </p>
+              <div class="swatches">
+                <span class="swatch" style="background:#09231e">TABLE</span>
+                <span class="swatch" style="background:#101414">BLACK</span>
+                <span class="swatch" style="background:#fffdf8;color:#172126">WHITE</span>
+                <span class="swatch" style="background:#b12e28">RED</span>
               </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>Minimal portfolio navigation where clarity matters more than spectacle.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Use CSS grid for the final layout; animate transforms only to avoid layout shift.</span>
-              </div>
-            </div>
-            <div class="animation-note">
-              Include a persistent "Shuffle again" control, but never require replaying the animation to navigate.
-            </div>
-          </div>
-          <div class="mock solitaire-mock" aria-label="Solitaire Board visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Home</span><span>Blog</span></div>
-            </div>
-            <div class="solitaire-board">
-              <div class="slots" aria-hidden="true">
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-              </div>
-              <div class="hand-row">
-                <div class="playing-card"><span class="card-rank">01</span><span class="card-title">Projects</span><span class="card-note">Builds and systems</span><span class="card-suit">♣</span></div>
-                <div class="playing-card red"><span class="card-rank">02</span><span class="card-title">Blog</span><span class="card-note">Notes and essays</span><span class="card-suit">♦</span></div>
-                <div class="playing-card"><span class="card-rank">03</span><span class="card-title">Resume</span><span class="card-note">PDF and history</span><span class="card-suit">♠</span></div>
-                <div class="playing-card red"><span class="card-rank">04</span><span class="card-title">About</span><span class="card-note">Context</span><span class="card-suit">♥</span></div>
-                <div class="playing-card"><span class="card-rank">05</span><span class="card-title">Contact</span><span class="card-note">Reach out</span><span class="card-suit">♣</span></div>
+              <div class="meta-list">
+                <div class="meta-row"><b>Navbar</b><span>Full pill chips; active page is a filled white chip.</span></div>
+                <div class="meta-row"><b>Titles</b><span>High-contrast serif over dark felt.</span></div>
+                <div class="meta-row"><b>Cards</b><span>Very rounded capsules for controls, soft cards for content.</span></div>
+                <div class="meta-row"><b>Use for</b><span>A moodier site with more premium lounge energy.</span></div>
               </div>
             </div>
-          </div>
-        </article>
+            <div class="mock">
+              <div class="mock-inner">
+                <div class="mock-nav">
+                  <span class="brand">Alireza Afshan</span>
+                  <div class="links"><span>Home</span><span class="active">Blog</span><span>Projects</span><span>Resume</span></div>
+                </div>
+                <div class="mock-header">
+                  <div class="eyebrow">Notes / table side</div>
+                  <h3>Writing from the rail</h3>
+                  <p>Dark surrounding chrome makes white content cards feel like playable objects.</p>
+                </div>
+                <div class="mock-body">
+                  <div class="panel">
+                    <h3>Dark shell</h3>
+                    <p>Best when the rest of the pages should feel immersive like the homepage.</p>
+                    <div class="sample-row">
+                      <span class="button primary">Read post</span>
+                      <span class="button secondary">All notes</span>
+                    </div>
+                    <div class="card-spread" aria-hidden="true">
+                      <div class="playing-card"><b>J&clubs;</b><span>About</span></div>
+                      <div class="playing-card"><b>Q&hearts;</b><span>Blog</span></div>
+                      <div class="playing-card"><b>K&spades;</b><span>Resume</span></div>
+                    </div>
+                  </div>
+                  <div class="content-stack">
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Small systems, big scope</h3><span class="rank">Q&hearts;</span></div>
+                      <p>Article card in playing-card white, framed by dark table color.</p>
+                    </div>
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Building a file-based site</h3><span class="rank">9&clubs;</span></div>
+                      <p>Rounded pills make metadata read as chips rather than tags.</p>
+                      <div class="tag-row"><span class="chip">Delivery</span><span class="chip">Writing</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
 
-        <article class="option" id="tarot">
-          <div class="option-copy">
-            <h2>3. Quiet Tarot Spread</h2>
-            <p>
-              A more editorial version of the card idea. The five actions are revealed
-              in an arc, like a spread, with rich labels and subtle symbolic styling.
-              It feels more personal and essay-like than game-like.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Cards flip from face-down to face-up along an arc, then settle into tappable links.</span>
+          <article class="option corner-sharp" id="ruby">
+            <div class="option-copy">
+              <div class="eyebrow">Option 3</div>
+              <h2>Ruby Cut</h2>
+              <p>
+                A sharper, more graphic interpretation. Red becomes the signature
+                accent, corners are square, and the page feels like cut cardstock rather
+                than soft felt.
+              </p>
+              <div class="swatches">
+                <span class="swatch" style="background:#0c2a24">GREEN</span>
+                <span class="swatch" style="background:#231918">INK</span>
+                <span class="swatch" style="background:#9f2724">RUBY</span>
+                <span class="swatch" style="background:#fffdf8;color:#172126">CARD</span>
               </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>A distinctive personal site that leans literary, reflective, and atmospheric.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Keep text short. Flip animation must not make card labels unreadable on mobile.</span>
+              <div class="meta-list">
+                <div class="meta-row"><b>Navbar</b><span>Thin square tabs with a red underline or block.</span></div>
+                <div class="meta-row"><b>Titles</b><span>Serif titles with tight, formal composition.</span></div>
+                <div class="meta-row"><b>Cards</b><span>Sharp corners, strong rules, flatter shadows.</span></div>
+                <div class="meta-row"><b>Use for</b><span>Most distinctive option; better if you want less softness.</span></div>
               </div>
             </div>
-            <div class="animation-note">
-              Use sparingly: this is the most stylized option and could feel too mystical if pushed too far.
+            <div class="mock">
+              <div class="mock-inner">
+                <div class="mock-nav">
+                  <span class="brand">Alireza Afshan</span>
+                  <div class="links"><span>About</span><span>Projects</span><span class="active">Resume</span><span>Contact</span></div>
+                </div>
+                <div class="mock-header">
+                  <div class="eyebrow">Resume / red suit</div>
+                  <h3>Experience, cut clean</h3>
+                  <p>Square edges make the card metaphor more architectural and less playful.</p>
+                </div>
+                <div class="mock-body">
+                  <div class="panel">
+                    <h3>Corner rule</h3>
+                    <p>Use sharp controls everywhere. Let the playing-card white do the warmth.</p>
+                    <div class="sample-row">
+                      <span class="button primary">Download PDF</span>
+                      <span class="button secondary">Email</span>
+                    </div>
+                    <div class="mini-grid">
+                      <div class="mini-card"><strong>Systems</strong><p>Black suit section.</p></div>
+                      <div class="mini-card"><strong>Delivery</strong><p>Red suit section.</p></div>
+                    </div>
+                  </div>
+                  <div class="content-stack">
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Experience</h3><span class="rank">A&diams;</span></div>
+                      <p>Use red for active section markers and dates.</p>
+                    </div>
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Education</h3><span class="rank">10&spades;</span></div>
+                      <p>Content cards feel like index cards, not floating bubbles.</p>
+                      <div class="tag-row"><span class="chip">Sharp tabs</span><span class="chip">High contrast</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="mock tarot-mock" aria-label="Quiet Tarot visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Draw</span></div>
-            </div>
-            <div class="tarot-spread">
-              <div class="playing-card arc-card"><span class="card-rank">I</span><span class="card-title">Projects</span><span class="card-note">The work</span><span class="card-suit">♠</span></div>
-              <div class="playing-card red arc-card"><span class="card-rank">II</span><span class="card-title">Blog</span><span class="card-note">The notes</span><span class="card-suit">♥</span></div>
-              <div class="playing-card arc-card"><span class="card-rank">III</span><span class="card-title">Resume</span><span class="card-note">The record</span><span class="card-suit">♣</span></div>
-              <div class="playing-card red arc-card"><span class="card-rank">IV</span><span class="card-title">About</span><span class="card-note">The context</span><span class="card-suit">♦</span></div>
-              <div class="playing-card arc-card"><span class="card-rank">V</span><span class="card-title">Contact</span><span class="card-note">The signal</span><span class="card-suit">♠</span></div>
-            </div>
-          </div>
-        </article>
+          </article>
 
-        <article class="option" id="command">
-          <div class="option-copy">
-            <h2>4. Command Hand</h2>
-            <p>
-              The cards are treated as a hand of available commands. One card is focused,
-              and arrow keys or pointer hover can move focus across the hand. This is the
-              strongest option for a software portfolio because it makes the metaphor feel
-              like an interface.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Initial draw creates a hand. Focused card lifts and shows a preview panel.</span>
+          <article class="option corner-mixed" id="grid">
+            <div class="option-copy">
+              <div class="eyebrow">Option 4</div>
+              <h2>Dealer Grid</h2>
+              <p>
+                A systems-forward version of the table: black felt grid, angled corner
+                cuts, dense cards, and compact nav. It suits technical project pages
+                without losing the deck motif.
+              </p>
+              <div class="swatches">
+                <span class="swatch" style="background:#111514">GRID</span>
+                <span class="swatch" style="background:#193f34">GREEN</span>
+                <span class="swatch" style="background:#b22624">RED</span>
+                <span class="swatch" style="background:#fffdf8;color:#172126">CARD</span>
               </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>Professional, keyboard-friendly navigation with just enough playfulness.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Use actual anchor elements inside cards and support tab, arrow keys, enter, and escape.</span>
-              </div>
-            </div>
-            <div class="animation-note">
-              Recommended choice: it balances the current minimal design with a memorable interaction.
-            </div>
-          </div>
-          <div class="mock command-mock" aria-label="Command Hand visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Tab</span><span>Enter</span></div>
-            </div>
-            <div class="command-area">
-              <div class="command-title">
-                <h3>Choose a card.</h3>
-                <p>Available actions are dealt into your hand. The focused card previews the route.</p>
-              </div>
-              <div class="command-hand">
-                <div class="playing-card"><span class="card-rank">P</span><span class="card-title">Projects</span><span class="card-note">3 selected projects</span><span class="card-suit">♠</span></div>
-                <div class="playing-card red"><span class="card-rank">B</span><span class="card-title">Blog</span><span class="card-note">Recent writing</span><span class="card-suit">♥</span></div>
-                <div class="playing-card"><span class="card-rank">R</span><span class="card-title">Resume</span><span class="card-note">Download PDF</span><span class="card-suit">♣</span></div>
-                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">About</span><span class="card-note">Short profile</span><span class="card-suit">♦</span></div>
-                <div class="playing-card"><span class="card-rank">C</span><span class="card-title">Contact</span><span class="card-note">Email and GitHub</span><span class="card-suit">♠</span></div>
+              <div class="meta-list">
+                <div class="meta-row"><b>Navbar</b><span>Compact square-ish tabs with asymmetric clipped-feel corners.</span></div>
+                <div class="meta-row"><b>Titles</b><span>Serif title plus small monospace-like metadata rows.</span></div>
+                <div class="meta-row"><b>Cards</b><span>Dense, slightly angular cards; minimal shadow.</span></div>
+                <div class="meta-row"><b>Use for</b><span>Best for project indexes, case studies, and technical writing.</span></div>
               </div>
             </div>
-          </div>
-        </article>
+            <div class="mock">
+              <div class="mock-inner">
+                <div class="mock-nav">
+                  <span class="brand">Alireza Afshan</span>
+                  <div class="links"><span class="active">Projects</span><span>Blog</span><span>Stack</span><span>Resume</span></div>
+                </div>
+                <div class="mock-header">
+                  <div class="eyebrow">Project table / grid view</div>
+                  <h3>Cards as operating records</h3>
+                  <p>More utilitarian, less decorative. The deck language appears in corners and ranks.</p>
+                </div>
+                <div class="mock-body">
+                  <div class="panel">
+                    <h3>Page shell</h3>
+                    <p>Use dark grid backgrounds on index pages, then switch to white reading cards for detail pages.</p>
+                    <div class="sample-row">
+                      <span class="button primary">Open case</span>
+                      <span class="button secondary">Filter</span>
+                    </div>
+                    <div class="mini-grid">
+                      <div class="mini-card"><strong>P-01</strong><p>QR attendance.</p></div>
+                      <div class="mini-card"><strong>P-02</strong><p>Drive Safe Doha.</p></div>
+                    </div>
+                  </div>
+                  <div class="content-stack">
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>QR Attendance Verification</h3><span class="rank">7&clubs;</span></div>
+                      <p>Dense information card with rank used as visual index.</p>
+                      <div class="tag-row"><span class="chip">Auth</span><span class="chip">Verification</span></div>
+                    </div>
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Drive Safe Doha</h3><span class="rank">8&diams;</span></div>
+                      <p>Good fit for repeatable content patterns across the site.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
 
-        <article class="option" id="cut">
-          <div class="option-copy">
-            <h2>5. Minimal Card Cut</h2>
-            <p>
-              The deck motif is reduced to a simple cut-and-draw gesture. Instead of
-              showing a full hand, the interface lists five card-like rows. This is the
-              safest option if performance, accessibility, and readability outrank
-              spectacle.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Deck cuts once, then five horizontal card rows slide into view.</span>
+          <article class="option corner-card" id="archive">
+            <div class="option-copy">
+              <div class="eyebrow">Option 5</div>
+              <h2>Card Archive</h2>
+              <p>
+                The quietest design language: paper-first pages, modest card corners,
+                black and red suit accents, and a navbar that feels like an index of
+                dealt categories.
+              </p>
+              <div class="swatches">
+                <span class="swatch" style="background:#e7dfd0;color:#172126">PAPER</span>
+                <span class="swatch" style="background:#fdf9ef;color:#172126">CARD</span>
+                <span class="swatch" style="background:#1c4d3c">GREEN</span>
+                <span class="swatch" style="background:#7c221e">RED</span>
               </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>Keeping the existing site nearly intact while adding a subtle motif.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Works well as pure HTML/CSS with minimal client JavaScript.</span>
-              </div>
-            </div>
-            <div class="animation-note">
-              This is the easiest direction to implement without creating mobile layout risk.
-            </div>
-          </div>
-          <div class="mock cut-mock" aria-label="Minimal Card Cut visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Shuffle</span></div>
-            </div>
-            <div class="cut-layout">
-              <div class="cut-deck" aria-hidden="true">
-                <div class="playing-card red"><span class="card-rank">A</span><span class="card-title">Cut</span><span class="card-suit">♦</span></div>
-                <div class="playing-card"><span class="card-rank">A</span><span class="card-title">Deck</span><span class="card-suit">♠</span></div>
-              </div>
-              <div class="cut-list">
-                <a href="#"><span>Projects</span><b>♠</b></a>
-                <a href="#"><span>Blog</span><b>♥</b></a>
-                <a href="#"><span>Resume</span><b>♣</b></a>
-                <a href="#"><span>About</span><b>♦</b></a>
-                <a href="#"><span>Contact</span><b>♠</b></a>
+              <div class="meta-list">
+                <div class="meta-row"><b>Navbar</b><span>Small rectangular labels, like category dividers.</span></div>
+                <div class="meta-row"><b>Titles</b><span>Classic serif with generous whitespace.</span></div>
+                <div class="meta-row"><b>Cards</b><span>Playing-card radius on content; square micro controls.</span></div>
+                <div class="meta-row"><b>Use for</b><span>Best if readability and restraint matter most.</span></div>
               </div>
             </div>
-          </div>
-        </article>
-
-        <article class="option" id="case">
-          <div class="option-copy">
-            <h2>6. Case File Deck</h2>
-            <p>
-              A hybrid of cards and file tabs. The shuffle reveals five indexed cards
-              that feel like records in a working system. This is less literal, but it
-              connects well to software, systems, and information architecture.
-            </p>
-            <div class="meta-list">
-              <div class="meta-row">
-                <b>Interaction</b>
-                <span>Cards fan like an index deck; selecting one expands it into a file-style panel.</span>
-              </div>
-              <div class="meta-row">
-                <b>Best for</b>
-                <span>A mature systems-engineering tone with a light card motif.</span>
-              </div>
-              <div class="meta-row">
-                <b>Implementation note</b>
-                <span>Map route metadata to card summaries so labels and descriptions stay centralized.</span>
-              </div>
-            </div>
-            <div class="animation-note">
-              Consider this if the final site should feel like a tool or archive rather than a game.
-            </div>
-          </div>
-          <div class="mock case-mock" aria-label="Case File Deck visual mockup">
-            <div class="mock-header">
-              <span class="brand">Alireza Afshan</span>
-              <div class="mini-nav"><span>Index</span><span>Draw</span></div>
-            </div>
-            <div class="case-layout">
-              <h3>Drawn from the index</h3>
-              <p>Five cards become navigable files for the site's main actions.</p>
-              <div class="case-grid">
-                <div class="case-file"><strong>Projects</strong><span>Selected work, systems, and builds.</span></div>
-                <div class="case-file"><strong>Blog</strong><span>Technical notes and essays.</span></div>
-                <div class="case-file"><strong>Resume</strong><span>Experience and downloadable PDF.</span></div>
-                <div class="case-file"><strong>About</strong><span>Short profile and current focus.</span></div>
-                <div class="case-file"><strong>Contact</strong><span>Email, GitHub, and location.</span></div>
+            <div class="mock">
+              <div class="mock-inner">
+                <div class="mock-nav">
+                  <span class="brand">Alireza Afshan</span>
+                  <div class="links"><span>Index</span><span class="active">About</span><span>Writing</span><span>Work</span></div>
+                </div>
+                <div class="mock-header">
+                  <div class="eyebrow">About / archive card</div>
+                  <h3>A profile page with deck details</h3>
+                  <p>Light pages keep the site mature while the card motif lives in labels, borders, and section cards.</p>
+                </div>
+                <div class="mock-body">
+                  <div class="panel">
+                    <h3>Type pairing</h3>
+                    <p>Serif for display and section names. Manrope or Inter for nav, metadata, and body.</p>
+                    <div class="sample-row">
+                      <span class="button primary">Contact</span>
+                      <span class="button secondary">GitHub</span>
+                    </div>
+                    <div class="mini-grid">
+                      <div class="mini-card"><strong>&spades; Focus</strong><p>Software and systems.</p></div>
+                      <div class="mini-card"><strong>&hearts; Notes</strong><p>Short writing.</p></div>
+                    </div>
+                  </div>
+                  <div class="content-stack">
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Current focus</h3><span class="rank">A&spades;</span></div>
+                      <p>Readable blocks with understated suit markers.</p>
+                    </div>
+                    <div class="content-card">
+                      <div class="content-card-top"><h3>Elsewhere</h3><span class="rank">K&hearts;</span></div>
+                      <p>Links remain rectangular so actions feel precise.</p>
+                      <div class="tag-row"><span class="chip">Email</span><span class="chip">GitHub</span></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </article>
-      </section>
-
-      <section class="section" aria-labelledby="implementation-spec">
-        <div class="eyebrow">Implementation spec for another LLM</div>
-        <h2 id="implementation-spec">Build requirements</h2>
-        <div class="spec-grid">
-          <div class="spec-card">
-            <strong>Routes</strong>
-            <p>
-              Keep existing routes: <code>/projects</code>, <code>/blog</code>,
-              <code>/resume</code>. Add <code>/about</code> if the chosen design uses a
-              dedicated About card; otherwise link About to a homepage section.
-            </p>
-          </div>
-          <div class="spec-card">
-            <strong>Card Data</strong>
-            <p>
-              Create a single array with title, rank, suit, route, summary, and accent.
-              Render the deck and final hand from that data instead of hard-coding each card.
-            </p>
-          </div>
-          <div class="spec-card">
-            <strong>Accessibility</strong>
-            <p>
-              Cards must be keyboard-focusable anchors with visible focus states. Provide
-              skip nav, fallback nav, reduced motion styles, and final-state rendering if
-              JavaScript is disabled.
-            </p>
-          </div>
-          <div class="spec-card">
-            <strong>Motion</strong>
-            <p>
-              Animate only <code>transform</code> and <code>opacity</code>. Avoid layout
-              shifts. Use a deterministic shuffle sequence, not random positions that can
-              overlap text or push cards off-screen.
-            </p>
-          </div>
-          <div class="spec-card">
-            <strong>Responsive</strong>
-            <p>
-              Desktop can show a five-card hand. Tablet can show a shallow fan. Mobile
-              should switch to a two-column or vertical card list so text remains readable.
-            </p>
-          </div>
-          <div class="spec-card">
-            <strong>Visual Tone</strong>
-            <p>
-              Retain the current paper background, serif display type, dark ink, muted
-              copy, and restrained accent colors. Add suits, ranks, and deck backs as
-              details rather than replacing the portfolio tone.
-            </p>
-          </div>
+          </article>
         </div>
       </section>
 
-      <section class="section" aria-labelledby="handoff">
-        <div class="eyebrow">Handoff checklist</div>
-        <h2 id="handoff">Acceptance criteria</h2>
-        <div class="checklist">
-          <div class="check">
-            <b>Animation complete</b>
-            <p>On first load, the user sees deck, shuffle, draw, and five stable action cards.</p>
-          </div>
-          <div class="check">
-            <b>Navigation works</b>
-            <p>Each card is clickable, keyboard reachable, and routes to the intended page.</p>
-          </div>
-          <div class="check">
-            <b>No motion trap</b>
-            <p>Users can navigate immediately after the cards settle, replay is optional, and reduced motion skips the shuffle.</p>
-          </div>
-          <div class="check">
-            <b>Mobile fit</b>
-            <p>Card labels, hover/focus states, and controls do not overlap at 320px, 390px, tablet, and desktop widths.</p>
-          </div>
-          <div class="check">
-            <b>Current content preserved</b>
-            <p>Existing projects, blog, resume, contact email, and GitHub links remain accessible.</p>
-          </div>
-          <div class="check">
-            <b>Performance budget</b>
-            <p>No heavy canvas or 3D dependency unless the chosen design truly requires it. CSS transforms are enough for these concepts.</p>
-          </div>
-        </div>
-      </section>
+      <p class="footer-note">
+        Recommendation: start from Felt Casino for the full site, borrow Dealer Grid for
+        project indexes, and reserve Ruby Cut accents for active states. That keeps the
+        homepage motif intact without making every page feel like a novelty game screen.
+      </p>
     </main>
   </body>
 </html>
