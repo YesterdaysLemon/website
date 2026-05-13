@@ -4,6 +4,7 @@ import { Link } from "react-router";
 
 import { PageShell } from "~/components/page-shell";
 import { getPublishedBlogPosts } from "~/lib/content.server";
+import { getArchiveMarker } from "~/lib/route-design";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -37,21 +38,22 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
     <PageShell
       eyebrow="Notes"
       intro="Short posts, working notes, and things worth writing down while building and learning."
+      routeId="blog"
       title="Blog"
     >
       <div className="space-y-5">
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <article
             key={post.slug}
-            className="border-line bg-card hover:border-ink rounded-[1.75rem] border p-6 transition hover:shadow-[0_24px_60px_rgba(23,33,38,0.06)] sm:p-8"
+            className="archive-card p-6 sm:p-8"
           >
-            <div className="grid gap-6 lg:grid-cols-[0.78fr_0.22fr] lg:items-start">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start">
               <div>
                 <p className="text-muted text-xs font-semibold tracking-[0.25em] uppercase">
                   {formatDate(post.publishedAt)}
                 </p>
-                <h2 className="mt-3 font-serif text-3xl leading-tight">
-                  <Link className="hover:text-accent transition" to={post.href}>
+                <h2 className="mt-3 font-serif text-3xl leading-tight text-[var(--route-accent)]">
+                  <Link className="archive-card-link" to={post.href}>
                     {post.title}
                   </Link>
                 </h2>
@@ -61,12 +63,17 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
               </div>
 
               <div className="space-y-4 lg:text-right">
+                <div className="flex justify-end">
+                  <span className="archive-marker text-2xl">
+                    {getArchiveMarker("blog", index)}
+                  </span>
+                </div>
                 {post.tags?.length ? (
                   <div className="flex flex-wrap gap-2 lg:justify-end">
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="bg-ink/5 text-ink rounded-full px-3 py-1 text-xs font-medium"
+                        className="archive-tag"
                       >
                         {tag}
                       </span>
@@ -75,7 +82,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                 ) : null}
 
                 <Link
-                  className="text-accent inline-flex text-sm font-semibold"
+                  className="archive-button archive-button-primary inline-flex"
                   to={post.href}
                 >
                   Read post

@@ -45,12 +45,13 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
     <PageShell
       eyebrow={formatDate(post.publishedAt)}
       intro={post.summary}
+      routeId="blog"
       title={post.title}
     >
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 flex flex-wrap items-center gap-3">
           <Link
-            className="border-line text-muted hover:border-ink hover:text-ink rounded-full border px-3 py-1.5 text-sm transition"
+            className="archive-button archive-button-secondary"
             to="/blog"
           >
             Back to blog
@@ -58,18 +59,18 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
           {post.tags?.map((tag) => (
             <span
               key={tag}
-              className="bg-ink/5 text-ink rounded-full px-3 py-1 text-xs font-medium"
+              className="archive-tag"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <article className="border-line bg-card rounded-[2rem] border p-6 sm:p-8">
+        <article className="archive-card p-6 sm:p-8">
           {post.coverImage ? (
             <img
               alt=""
-              className="border-line bg-paper mb-8 aspect-[16/9] w-full rounded-[1.5rem] border object-cover"
+              className="border-line bg-paper mb-8 aspect-[16/9] w-full rounded-[var(--radius)] border object-cover"
               src={post.coverImage}
             />
           ) : null}

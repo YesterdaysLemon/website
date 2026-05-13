@@ -1,48 +1,61 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { NavLink } from "react-router";
 
+import {
+  archiveNavItems,
+  routeDesigns,
+  type RouteDesignId,
+} from "~/lib/route-design";
+
 type PageShellProps = {
+  routeId: RouteDesignId;
   title: string;
   eyebrow?: string;
   intro?: string;
   children: ReactNode;
 };
 
-const navItems = [
-  { to: "/", label: "Home", end: true },
-  { to: "/about", label: "About" },
-  { to: "/projects", label: "Projects" },
-  { to: "/blog", label: "Blog" },
-  { to: "/resume", label: "Resume" },
-];
+export function PageShell({
+  routeId,
+  title,
+  eyebrow,
+  intro,
+  children,
+}: PageShellProps) {
+  const route = routeDesigns[routeId];
+  const footerContact = routeDesigns.contact;
 
-export function PageShell({ title, eyebrow, intro, children }: PageShellProps) {
   return (
-    <div className="bg-paper text-ink min-h-screen">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <header className="border-line flex flex-col gap-8 border-b pb-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div
+      className="bg-paper text-ink min-h-screen"
+      style={{ "--route-accent": route.accent } as CSSProperties}
+    >
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-5 sm:px-8 lg:px-10">
+        <header className="border-line flex flex-col gap-9 border-b pb-9">
+          <div className="bg-warm-card border-line flex flex-col gap-4 rounded-[var(--radius)] border px-4 py-4 shadow-[0_14px_38px_rgba(21,25,24,0.035)] sm:flex-row sm:items-start sm:justify-between sm:px-5">
             <NavLink
-              className="text-muted hover:text-ink text-sm font-semibold tracking-[0.22em] uppercase transition"
+              className="text-muted hover:text-ink text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper focus-visible:outline-none"
               to="/"
               end
             >
               Alireza Afshan
             </NavLink>
 
-            <nav className="text-muted flex flex-wrap gap-3 text-sm">
-              {navItems.map((item) => (
+            <nav
+              aria-label="Main navigation"
+              className="text-muted flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold"
+            >
+              {archiveNavItems.map((item) => (
                 <NavLink
                   key={item.to}
+                  aria-label={`${item.label} ${item.rank}${item.suit}`}
                   className={({ isActive }) =>
                     [
-                      "rounded-full border px-3 py-1 transition",
-                      isActive
-                        ? "border-ink text-ink"
-                        : "border-line hover:border-ink hover:text-ink",
+                      "archive-nav-link",
+                      isActive ? "is-active" : "",
                     ].join(" ")
                   }
-                  end={item.end}
+                  style={{ "--nav-accent": item.accent } as CSSProperties}
                   to={item.to}
                 >
                   {item.label}
@@ -51,24 +64,61 @@ export function PageShell({ title, eyebrow, intro, children }: PageShellProps) {
             </nav>
           </div>
 
-          <div className="max-w-3xl">
-            {eyebrow ? (
-              <p className="text-muted mb-3 text-xs font-semibold tracking-[0.28em] uppercase">
-                {eyebrow}
-              </p>
-            ) : null}
-            <h1 className="font-serif text-4xl leading-tight sm:text-5xl">
-              {title}
-            </h1>
-            {intro ? (
-              <p className="text-muted mt-4 max-w-2xl text-base leading-7 sm:text-lg">
-                {intro}
-              </p>
-            ) : null}
+          <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_8rem] md:items-end">
+            <div className="max-w-3xl">
+              {eyebrow ? (
+                <p className="text-muted mb-3 text-xs font-extrabold tracking-[0.28em] uppercase">
+                  {eyebrow} / {route.rank}
+                  {route.suit}
+                </p>
+              ) : null}
+              <h1 className="font-serif text-4xl leading-tight text-[var(--route-accent)] sm:text-5xl lg:text-6xl">
+                {title}
+              </h1>
+              {intro ? (
+                <p className="text-muted mt-4 max-w-2xl text-base leading-7 sm:text-lg">
+                  {intro}
+                </p>
+              ) : null}
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="border-line bg-card hidden aspect-[2.5/3.5] rounded-[var(--radius)] border p-4 text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.08)] md:flex md:flex-col md:justify-between"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-serif text-4xl leading-none">
+                  {route.rank}
+                </span>
+                <span className="text-3xl leading-none">{route.suit}</span>
+              </div>
+              <div className="text-center text-xs font-extrabold tracking-[0.18em] uppercase">
+                {route.label}
+              </div>
+              <div className="flex items-end justify-between gap-2">
+                <span className="rotate-180 text-3xl leading-none">
+                  {route.suit}
+                </span>
+                <span className="rotate-180 font-serif text-4xl leading-none">
+                  {route.rank}
+                </span>
+              </div>
+            </div>
           </div>
         </header>
 
         <main className="flex-1 py-10">{children}</main>
+
+        <footer className="border-line text-muted flex flex-col gap-3 border-t py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <p>Alireza Afshan 2026</p>
+          <a
+            className="archive-inline-link w-fit"
+            href={footerContact.to}
+            style={{ "--route-accent": footerContact.accent } as CSSProperties}
+          >
+            mail@alirezaafshan.com
+          </a>
+        </footer>
       </div>
     </div>
   );

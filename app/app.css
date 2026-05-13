@@ -5,28 +5,33 @@
     "Manrope", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Newsreader", ui-serif, Georgia, serif;
-  --color-paper: #f6f2e9;
+  --color-paper: #e7dfd0;
   --color-card: #fffdf8;
-  --color-line: #d8d2c5;
-  --color-ink: #172126;
-  --color-muted: #5b615f;
-  --color-accent: #1e4b7a;
+  --color-warm-card: #fdf9ef;
+  --color-line: rgba(21, 25, 24, 0.16);
+  --color-ink: #151918;
+  --color-muted: #69645d;
+  --color-accent: #172126;
 }
 
 @layer base {
+  :root {
+    --paper: #e7dfd0;
+    --card: #fffdf8;
+    --warm-card: #fdf9ef;
+    --ink: #151918;
+    --muted: #69645d;
+    --line: rgba(21, 25, 24, 0.16);
+    --spade: #172126;
+    --heart: #8f2622;
+    --club: #12342c;
+    --diamond: #a64a26;
+    --radius: 7px;
+    --small-radius: 5px;
+  }
+
   html {
-    background:
-      radial-gradient(
-        circle at top left,
-        rgba(30, 75, 122, 0.08),
-        transparent 28%
-      ),
-      radial-gradient(
-        circle at bottom right,
-        rgba(186, 108, 63, 0.08),
-        transparent 30%
-      ),
-      var(--color-paper);
+    background: var(--paper);
   }
 
   body {
@@ -34,11 +39,152 @@
   }
 
   ::selection {
-    background: rgba(30, 75, 122, 0.18);
+    background: color-mix(in srgb, var(--route-accent, var(--spade)) 22%, transparent);
   }
 }
 
 @layer components {
+  .archive-nav-link {
+    position: relative;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .archive-nav-link::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.45rem;
+    left: 0;
+    height: 2px;
+    content: "";
+    background: var(--nav-accent);
+    opacity: 0;
+    transform: scaleX(0.45);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .archive-nav-link:hover,
+  .archive-nav-link.is-active {
+    color: var(--nav-accent);
+  }
+
+  .archive-nav-link:hover::after,
+  .archive-nav-link.is-active::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .archive-nav-link:focus-visible,
+  .archive-inline-link:focus-visible,
+  .archive-button:focus-visible,
+  .archive-card-link:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--paper),
+      0 0 0 4px var(--route-accent, var(--spade));
+  }
+
+  .archive-card,
+  .archive-panel {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--warm-card);
+  }
+
+  .archive-card {
+    box-shadow: 0 18px 42px rgba(21, 25, 24, 0.045);
+  }
+
+  .archive-card-link {
+    color: inherit;
+    text-decoration: none;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      transform 160ms ease;
+  }
+
+  .archive-card-link:hover {
+    border-color: color-mix(in srgb, var(--route-accent) 46%, var(--line));
+    box-shadow: 0 22px 54px rgba(21, 25, 24, 0.075);
+    transform: translateY(-2px);
+  }
+
+  .archive-marker {
+    color: var(--route-accent);
+    font-family: var(--font-serif);
+    line-height: 1;
+  }
+
+  .archive-tag {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 18%, var(--line));
+    border-radius: var(--small-radius);
+    background: color-mix(in srgb, var(--route-accent) 6%, var(--card));
+    color: var(--ink);
+    font-size: 0.75rem;
+    font-weight: 650;
+    line-height: 1.2;
+    padding: 0.35rem 0.55rem;
+  }
+
+  .archive-button {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--small-radius);
+    font-size: 0.875rem;
+    font-weight: 750;
+    line-height: 1.2;
+    padding: 0.6rem 0.85rem;
+    text-decoration: none;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .archive-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .archive-button-primary {
+    border: 1px solid var(--route-accent);
+    background: var(--route-accent);
+    color: var(--card);
+  }
+
+  .archive-button-secondary {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+  }
+
+  .archive-button-secondary:hover {
+    border-color: color-mix(in srgb, var(--route-accent) 42%, var(--line));
+    color: var(--ink);
+  }
+
+  .archive-inline-link {
+    color: var(--route-accent, var(--nav-accent, var(--spade)));
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--route-accent, var(--nav-accent, var(--spade))) 42%,
+      transparent
+    );
+    text-decoration-line: underline;
+    text-underline-offset: 0.28rem;
+    transition: text-decoration-color 160ms ease;
+  }
+
+  .archive-inline-link:hover {
+    text-decoration-color: currentColor;
+  }
+
   .markdown-content {
     @apply text-ink space-y-5 text-base leading-8;
   }
@@ -86,7 +232,15 @@
   }
 
   .markdown-content a {
-    @apply text-accent decoration-accent/40 hover:decoration-accent underline underline-offset-4 transition;
+    color: var(--route-accent);
+    text-decoration-color: color-mix(in srgb, var(--route-accent) 42%, transparent);
+    text-decoration-line: underline;
+    text-underline-offset: 0.28rem;
+    transition: text-decoration-color 160ms ease;
+  }
+
+  .markdown-content a:hover {
+    text-decoration-color: currentColor;
   }
 
   .markdown-content strong {
@@ -94,11 +248,14 @@
   }
 
   .markdown-content code {
-    @apply bg-ink/5 text-ink rounded px-1.5 py-0.5 text-sm;
+    @apply text-ink px-1.5 py-0.5 text-sm;
+    border-radius: var(--small-radius);
+    background: color-mix(in srgb, var(--route-accent) 7%, var(--card));
   }
 
   .markdown-content pre {
-    @apply border-line bg-card text-ink overflow-x-auto rounded-2xl border p-4 text-sm;
+    @apply border-line bg-card text-ink overflow-x-auto border p-4 text-sm;
+    border-radius: var(--radius);
   }
 
   .markdown-content pre code {
@@ -106,11 +263,13 @@
   }
 
   .markdown-content blockquote {
-    @apply border-line border-l-2 pl-4 italic;
+    @apply pl-4 italic;
+    border-left: 2px solid var(--route-accent);
   }
 
   .markdown-content img {
-    @apply border-line bg-card w-full rounded-3xl border;
+    @apply border-line bg-card w-full border;
+    border-radius: var(--radius);
   }
 
   .markdown-content hr {
@@ -118,7 +277,8 @@
   }
 
   .markdown-content table {
-    @apply border-line bg-card block w-full overflow-x-auto rounded-2xl border text-left text-sm;
+    @apply border-line bg-card block w-full overflow-x-auto border text-left text-sm;
+    border-radius: var(--radius);
   }
 
   .markdown-content thead {

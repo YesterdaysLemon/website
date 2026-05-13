@@ -14,7 +14,7 @@ type ActionCard = {
   suit: string;
   to: string;
   summary: string;
-  accent: "ink" | "red";
+  accent: string;
 };
 
 type SpreadPosition = {
@@ -62,46 +62,46 @@ const actionCards: ActionCard[] = [
     id: "projects",
     title: "Projects",
     rank: "P",
-    suit: "♠",
+    suit: "\u2660",
     to: "/projects",
     summary: "Selected work, systems, and builds.",
-    accent: "ink",
+    accent: "var(--spade)",
   },
   {
     id: "blog",
     title: "Blog",
     rank: "B",
-    suit: "♥",
+    suit: "\u2665",
     to: "/blog",
     summary: "Notes on software and delivery.",
-    accent: "red",
+    accent: "var(--heart)",
   },
   {
     id: "resume",
     title: "Resume",
     rank: "R",
-    suit: "♣",
+    suit: "\u2663",
     to: "/resume",
     summary: "Experience, education, and PDF.",
-    accent: "ink",
+    accent: "var(--club)",
   },
   {
     id: "about",
     title: "About",
     rank: "A",
-    suit: "♦",
+    suit: "\u2666",
     to: "/about",
     summary: "Profile, focus, and context.",
-    accent: "red",
+    accent: "var(--diamond)",
   },
   {
     id: "contact",
     title: "Contact",
     rank: "C",
-    suit: "♠",
+    suit: "\u2660",
     to: "mailto:mail@alirezaafshan.com",
     summary: "Email and GitHub.",
-    accent: "ink",
+    accent: "var(--spade)",
   },
 ];
 
@@ -631,12 +631,10 @@ export default function Home() {
 
             return (
               <a
-                aria-label={`Play ${card.title}`}
+                aria-label={`Open ${card.title}`}
+                key={card.id}
                 className={[
-                  "playing-action-card group absolute flex aspect-[2.5/3.5] w-[6.35rem] select-none flex-col justify-between rounded-xl border bg-card p-2.5 text-left shadow-[0_18px_36px_rgba(23,33,38,0.18)] outline-none transition-[filter,box-shadow] duration-200 [touch-action:none] sm:w-36 sm:p-4 md:w-40 lg:w-44",
-                  card.accent === "red"
-                    ? "border-red-950/15 text-[#9b3f36]"
-                    : "border-slate-950/15 text-ink",
+                  "playing-action-card absolute flex aspect-[2.5/3.5] w-[6.35rem] select-none flex-col justify-between rounded-[var(--radius)] border border-[var(--line)] bg-[var(--warm-card)] p-2.5 text-left text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.16)] outline-none transition-[filter,box-shadow] duration-200 [touch-action:none] sm:w-36 sm:p-4 md:w-40 lg:w-44",
                   hasDealt
                     ? "pointer-events-auto opacity-100"
                     : "pointer-events-none opacity-0",
@@ -659,6 +657,7 @@ export default function Home() {
                 style={{
                   left,
                   top,
+                  "--route-accent": card.accent,
                   "--card-rotate": `${rotate}deg`,
                   "--card-origin-x": cardOrigin
                     ? `${cardOrigin.x}px`
@@ -672,31 +671,27 @@ export default function Home() {
                 } as CSSProperties}
               >
                 <span className="flex items-start justify-between gap-2">
-                  <span className="font-serif text-2xl leading-none sm:text-3xl">
+                  <span className="font-serif text-3xl leading-none sm:text-4xl">
                     {card.rank}
                   </span>
-                  <span className="text-2xl leading-none sm:text-3xl">
+                  <span className="text-3xl leading-none sm:text-4xl">
                     {card.suit}
                   </span>
                 </span>
 
-                <span className="text-center">
-                  <span className="text-ink block text-xs font-extrabold tracking-[0.14em] uppercase sm:text-sm">
+                <span className="flex min-h-0 flex-1 items-center justify-center px-1 text-center">
+                  <span className="text-xs font-extrabold tracking-[0.18em] uppercase sm:text-sm">
                     {card.title}
-                  </span>
-                  <span className="text-muted mt-2 block text-[0.68rem] leading-5 sm:text-xs">
-                    {card.summary}
                   </span>
                 </span>
 
                 <span className="flex items-end justify-between gap-2">
-                  <span className="rotate-180 text-2xl leading-none sm:text-3xl">
+                  <span className="rotate-180 text-3xl leading-none sm:text-4xl">
                     {card.suit}
                   </span>
-                  <span className="border-line text-muted rounded-full border px-2 py-1 text-[0.62rem] font-bold tracking-[0.16em] uppercase opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:opacity-100">
-                    Play
+                  <span className="rotate-180 font-serif text-3xl leading-none sm:text-4xl">
+                    {card.rank}
                   </span>
-                  
                 </span>
               </a>
             );
