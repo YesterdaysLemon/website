@@ -10,6 +10,7 @@ tags:
   - QR Codes
   - Education
 order: 2
+coverImage: /images/projects/qr-attendance-verification/cover.svg
 ---
 
 QR Attendance Verification adapted the earlier mobile architecture into a narrower education workflow: let a teacher open a class, display a QR code, and let students mark themselves present by scanning it from their phones.
