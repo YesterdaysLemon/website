@@ -189,6 +189,131 @@
     text-decoration-color: currentColor;
   }
 
+  .not-found-void {
+    --not-found-flicker: 0.4;
+    --not-found-glow: 1;
+    --not-found-shake: 2px;
+    --not-found-split: 1px;
+    position: relative;
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    overflow: hidden;
+    background: #000;
+    color: #ff1010;
+    isolation: isolate;
+  }
+
+  .not-found-void::before {
+    position: absolute;
+    inset: -18%;
+    z-index: -1;
+    content: "";
+    background: radial-gradient(
+      circle at 50% 47%,
+      rgba(150, 0, 0, 0.26),
+      transparent 25rem
+    );
+    opacity: 0.7;
+    animation: not-found-pulse 4.8s ease-in-out infinite;
+  }
+
+  .not-found-message {
+    display: grid;
+    gap: 2.4rem;
+    justify-items: center;
+    padding: 2rem;
+    text-align: center;
+    text-shadow:
+      0 0 calc(0.35rem * var(--not-found-glow)) rgba(255, 20, 20, 0.95),
+      0 0 calc(1.2rem * var(--not-found-glow)) rgba(255, 0, 0, 0.7),
+      0 0 calc(3.8rem * var(--not-found-glow)) rgba(180, 0, 0, 0.72);
+  }
+
+  .not-found-glitch-text {
+    position: relative;
+    animation:
+      not-found-shake 170ms steps(2, end) infinite,
+      not-found-flicker 2.4s steps(1, end) infinite;
+  }
+
+  .not-found-glitch-text::before,
+  .not-found-glitch-text::after {
+    position: absolute;
+    inset: 0;
+    content: attr(data-text);
+    opacity: calc(var(--not-found-flicker) * 0.75);
+    pointer-events: none;
+    text-shadow: none;
+  }
+
+  .not-found-glitch-text::before {
+    color: #ff3636;
+    clip-path: inset(0 0 54% 0);
+    transform: translate(
+      calc(var(--not-found-split) * -0.42),
+      calc(var(--not-found-shake) * -0.38)
+    );
+  }
+
+  .not-found-glitch-text::after {
+    color: #550000;
+    clip-path: inset(48% 0 0 0);
+    transform: translate(
+      calc(var(--not-found-split) * 0.4),
+      calc(var(--not-found-shake) * 0.44)
+    );
+  }
+
+  .not-found-message h1 {
+    max-width: min(92vw, 58rem);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.9rem, 9vw, 8rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.9;
+    text-transform: lowercase;
+  }
+
+  .not-found-message a,
+  .not-found-message a:visited {
+    color: #ff1010;
+    -webkit-text-fill-color: #ff1010;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.35rem, 4vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-shadow:
+      0 0 0.25rem rgba(255, 20, 20, 0.95),
+      0 0 1rem rgba(255, 0, 0, 0.82),
+      0 0 2.6rem rgba(180, 0, 0, 0.82);
+    transition:
+      color 160ms ease,
+      text-shadow 160ms ease,
+      transform 160ms ease;
+  }
+
+  .not-found-return {
+    display: inline-block;
+  }
+
+  .not-found-message a:hover,
+  .not-found-message a:focus-visible {
+    color: #ff4a4a;
+    -webkit-text-fill-color: #ff4a4a;
+    text-shadow:
+      0 0 0.45rem rgba(255, 60, 60, 1),
+      0 0 1.8rem rgba(255, 0, 0, 0.95),
+      0 0 4.2rem rgba(255, 0, 0, 0.82);
+    transform: translateY(-1px);
+  }
+
+  .not-found-message a:focus-visible {
+    outline: 1px solid rgba(255, 16, 16, 0.75);
+    outline-offset: 0.45rem;
+  }
+
   .project-cover-image {
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -650,6 +775,67 @@
   }
 }
 
+@keyframes not-found-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.86;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes not-found-shake {
+  0%,
+  100% {
+    transform: translate(0, 0) skewX(0deg);
+  }
+  18% {
+    transform: translate(
+        calc(var(--not-found-shake) * -1),
+        calc(var(--not-found-shake) * 0.35)
+      )
+      skewX(-0.7deg);
+  }
+  42% {
+    transform: translate(
+        calc(var(--not-found-shake) * 0.75),
+        calc(var(--not-found-shake) * -0.4)
+      )
+      skewX(0.55deg);
+  }
+  67% {
+    transform: translate(
+        calc(var(--not-found-shake) * -0.28),
+        calc(var(--not-found-shake) * 0.62)
+      )
+      skewX(-0.35deg);
+  }
+}
+
+@keyframes not-found-flicker {
+  0%,
+  3%,
+  6%,
+  100% {
+    opacity: 1;
+  }
+  4% {
+    opacity: calc(1 - (var(--not-found-flicker) * 0.48));
+  }
+  5% {
+    opacity: calc(1 - (var(--not-found-flicker) * 0.24));
+  }
+  47% {
+    opacity: calc(1 - (var(--not-found-flicker) * 0.32));
+  }
+  48% {
+    opacity: 1;
+  }
+}
+
 @keyframes shuffle-left {
   0%,
   100% {
@@ -695,6 +881,8 @@
   .playing-action-card.is-playing,
   .playing-action-card.is-idle,
   .deck-card,
+  .not-found-glitch-text,
+  .not-found-void::before,
   .under-construction-sprite {
     animation: none !important;
     transition: none !important;
