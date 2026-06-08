@@ -442,8 +442,9 @@
   }
 
   .playing-action-card.is-idle {
-    animation: card-idle 7.5s ease-in-out infinite;
+    animation: card-idle 8.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     animation-delay: calc(var(--idle-index, 0) * -1.1s);
+    will-change: translate;
   }
 
   .deck-card {
@@ -607,10 +608,10 @@
 @keyframes card-idle {
   0%,
   100% {
-    margin-top: 0;
+    translate: 0 0;
   }
   50% {
-    margin-top: -0.38rem;
+    translate: 0 -0.38rem;
   }
 }
 
@@ -693,5 +694,10 @@
   .under-construction-sprite {
     transform: translate3d(var(--sprite-x), var(--sprite-y), 0)
       rotate(var(--sprite-rotate));
+  }
+
+  .playing-action-card.is-idle {
+    translate: none !important;
+    will-change: auto;
   }
 }
