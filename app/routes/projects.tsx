@@ -63,7 +63,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             {project.coverImage ? (
               <img
                 alt=""
-                className="border-line bg-paper mb-5 aspect-[16/10] w-full rounded-[var(--radius)] border object-cover"
+                className="project-cover-image mb-5 aspect-[16/10] w-full object-contain p-3"
                 src={project.coverImage}
               />
             ) : null}
@@ -93,10 +93,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
               {project.tags?.length ? (
                 <div className="mt-5 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="archive-tag"
-                    >
+                    <span key={tag} className="archive-tag">
                       {tag}
                     </span>
                   ))}
@@ -149,7 +146,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
               {selectedProject.coverImage ? (
                 <img
                   alt=""
-                  className="border-line bg-paper mb-6 aspect-[16/9] w-full rounded-[var(--radius)] border object-cover"
+                  className="project-cover-image mb-6 aspect-[16/9] max-h-[42vh] w-full object-contain p-4"
                   src={selectedProject.coverImage}
                 />
               ) : null}
@@ -179,7 +176,29 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 </div>
               ) : null}
 
-              <MarkdownContent>{selectedProject.body}</MarkdownContent>
+              <section className="project-personal-notes-panel mb-6">
+                <h3 className="project-section-label">Personal notes</h3>
+                {selectedProject.personalNotes ? (
+                  <MarkdownContent>
+                    {selectedProject.personalNotes}
+                  </MarkdownContent>
+                ) : (
+                  <p className="text-muted text-sm leading-7 italic sm:text-base">
+                    Personal notes are not written yet. I&apos;ll add my own
+                    reflections here later.
+                  </p>
+                )}
+              </section>
+
+              {selectedProject.aiSummary ? (
+                <section className="project-ai-summary-panel">
+                  <div className="project-ai-summary-label">
+                    <span className="project-ai-summary-badge">01</span>
+                    AI-generated summary
+                  </div>
+                  <MarkdownContent>{selectedProject.aiSummary}</MarkdownContent>
+                </section>
+              ) : null}
             </div>
           </div>
         </div>

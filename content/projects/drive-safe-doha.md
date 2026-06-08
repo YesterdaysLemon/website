@@ -13,6 +13,10 @@ order: 1
 coverImage: /images/projects/drive-safe-doha/cover.svg
 ---
 
+<!-- personal-notes -->
+
+<!-- ai-summary -->
+
 Drive Safe Doha was built as a mobile proof of concept for a Qatar Ministry of Education-aligned student project. The goal was to make vehicle access more accountable by routing driver approval through an app instead of treating access as an invisible background event.
 
 The app was structured around two modes:

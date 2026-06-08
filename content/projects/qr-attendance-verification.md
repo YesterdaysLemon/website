@@ -13,6 +13,10 @@ order: 2
 coverImage: /images/projects/qr-attendance-verification/cover.svg
 ---
 
+<!-- personal-notes -->
+
+<!-- ai-summary -->
+
 QR Attendance Verification adapted the earlier mobile architecture into a narrower education workflow: let a teacher open a class, display a QR code, and let students mark themselves present by scanning it from their phones.
 
 The prototype used Expo Router and React Native for the mobile app, Firebase Auth and Firestore for account/data handling, `react-native-qrcode-svg` for QR generation, and Expo Camera for the student scanning flow.

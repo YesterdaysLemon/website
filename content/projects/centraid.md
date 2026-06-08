@@ -13,6 +13,10 @@ order: 3
 coverImage: /images/projects/centraid/cover.svg
 ---
 
+<!-- personal-notes -->
+
+<!-- ai-summary -->
+
 CentraID was my capstone project: a classroom attendance system built around the idea that attendance should be verified through the classroom environment, not just a direct app-to-server button.
 
 The system combined three main pieces:
