@@ -1,6 +1,6 @@
-# Welcome to React Router!
+# Alireza Afshan Website
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Personal site built with React Router, TypeScript, Tailwind CSS, and Docker.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
@@ -44,39 +44,37 @@ npm run build
 
 ## Deployment
 
-### Docker Deployment
+### Docker
 
 To build and run using Docker:
 
 ```bash
-docker build -t my-app .
+docker build -t website-app .
 
-# Run the container
-docker run -p 3000:3000 my-app
+docker run -p 127.0.0.1:3000:3000 website-app
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+### CI/CD
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+Pushes to `master` run `.github/workflows/deploy.yml`. The workflow installs
+dependencies, runs `npm run typecheck`, runs `npm run build`, and only then
+calls the server deploy webhook.
 
-### DIY Deployment
+Required GitHub secrets:
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+- `DEPLOY_WEBHOOK_URL`: HTTPS URL for the deploy webhook, ending in `/deploy`.
+- `DEPLOY_WEBHOOK_SECRET`: shared HMAC signing secret.
 
-Make sure to deploy the output of `npm run build`
+The webhook validates `X-Hub-Signature-256`, accepts only the configured event
+and branch, and runs `deploy/deploy.sh`.
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+Server secrets and deployment settings belong in `/etc/website-deploy.env`, not
+in git. Start from `deploy/website-deploy.env.example`.
+
+The Caddy config is intentionally server-managed. Caddy should terminate TLS and
+reverse proxy the public site to the app container's local port, for example
+`127.0.0.1:3000`, and proxy the deploy webhook URL to the local webhook service,
+for example `127.0.0.1:9000`.
 
 ## Styling
 

@@ -4,7 +4,7 @@ import type { Route } from "./+types/home";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
-type CardId = "projects" | "blog" | "resume" | "about" | "contact";
+type CardId = "about" | "blog" | "projects" | "resume";
 type Breakpoint = "mobile" | "tablet" | "desktop";
 
 type ActionCard = {
@@ -59,13 +59,13 @@ type DragState = {
 
 const actionCards: ActionCard[] = [
   {
-    id: "projects",
-    title: "Projects",
-    rank: "P",
-    suit: "\u2660",
-    to: "/projects",
-    summary: "Selected work, systems, and builds.",
-    accent: "var(--spade)",
+    id: "about",
+    title: "About",
+    rank: "A",
+    suit: "\u2666",
+    to: "/about",
+    summary: "Profile, focus, and context.",
+    accent: "var(--diamond)",
   },
   {
     id: "blog",
@@ -77,6 +77,15 @@ const actionCards: ActionCard[] = [
     accent: "var(--heart)",
   },
   {
+    id: "projects",
+    title: "Projects",
+    rank: "P",
+    suit: "\u2660",
+    to: "/projects",
+    summary: "Selected work, systems, and builds.",
+    accent: "var(--spade)",
+  },
+  {
     id: "resume",
     title: "Resume",
     rank: "R",
@@ -85,47 +94,26 @@ const actionCards: ActionCard[] = [
     summary: "Experience, education, and skills.",
     accent: "var(--club)",
   },
-  {
-    id: "about",
-    title: "About",
-    rank: "A",
-    suit: "\u2666",
-    to: "/about",
-    summary: "Profile, focus, and context.",
-    accent: "var(--diamond)",
-  },
-  {
-    id: "contact",
-    title: "Contact",
-    rank: "C",
-    suit: "\u2660",
-    to: "mailto:mail@alirezaafshan.com",
-    summary: "Email and GitHub.",
-    accent: "var(--spade)",
-  },
 ];
 
 const spreadPositions: Record<Breakpoint, Record<CardId, SpreadPosition>> = {
   mobile: {
-    projects: { x: 28, y: 74, rotate: -10 },
-    blog: { x: 72, y: 75, rotate: 8 },
-    resume: { x: 27, y: 88, rotate: 6 },
-    about: { x: 73, y: 89, rotate: -7 },
-    contact: { x: 50, y: 94, rotate: 3 },
+    about: { x: 22, y: 77, rotate: -13 },
+    blog: { x: 40, y: 74, rotate: -5 },
+    projects: { x: 60, y: 74, rotate: 5 },
+    resume: { x: 78, y: 77, rotate: 13 },
   },
   tablet: {
-    projects: { x: 20, y: 61, rotate: -13 },
-    blog: { x: 38, y: 47, rotate: -6 },
-    resume: { x: 59, y: 50, rotate: 7 },
-    about: { x: 78, y: 64, rotate: 13 },
-    contact: { x: 49, y: 81, rotate: -4 },
+    about: { x: 30, y: 61, rotate: -16 },
+    blog: { x: 43, y: 55, rotate: -6 },
+    projects: { x: 57, y: 55, rotate: 6 },
+    resume: { x: 70, y: 61, rotate: 16 },
   },
   desktop: {
-    projects: { x: 18, y: 61, rotate: -15 },
-    blog: { x: 36, y: 47, rotate: -7 },
-    resume: { x: 57, y: 51, rotate: 6 },
-    about: { x: 76, y: 63, rotate: 14 },
-    contact: { x: 49, y: 82, rotate: -4 },
+    about: { x: 31, y: 60, rotate: -17 },
+    blog: { x: 44, y: 53, rotate: -6 },
+    projects: { x: 56, y: 53, rotate: 6 },
+    resume: { x: 69, y: 60, rotate: 17 },
   },
 };
 
@@ -367,30 +355,6 @@ export default function Home() {
       y + tableRect.top >= playZoneRect.top &&
       y + tableRect.top <= playZoneRect.bottom
     );
-  }
-
-  function resetSpread() {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    setCardPositions({});
-    setDraggingId(null);
-    setLiftingId(null);
-    setPlayingId(null);
-    setStackOrder(initialStackOrder);
-    setDragRotations({});
-    setCardOrigins({});
-    setCardRotations(createRandomRotations(getBreakpoint(window.innerWidth)));
-
-    if (mediaQuery.matches) {
-      setHasDealt(true);
-      setIsShuffling(false);
-      return;
-    }
-
-    setHasDealt(false);
-    setIsShuffling(true);
-    window.setTimeout(() => setHasDealt(true), 520);
-    window.setTimeout(() => setIsShuffling(false), 860);
   }
 
   function handlePointerDown(
@@ -655,6 +619,9 @@ export default function Home() {
                 isPlaying
                   ? "is-playing z-50 shadow-[0_34px_90px_rgba(255,253,248,0.18)] brightness-110"
                   : "",
+                hasDealt && !isDragging && !isLifting && !isPlaying
+                  ? "is-idle"
+                  : "",
               ].join(" ")}
               draggable={false}
               href={card.to}
@@ -671,6 +638,7 @@ export default function Home() {
                   "--card-rotate": `${rotate}deg`,
                   "--card-origin-x": cardOrigin ? `${cardOrigin.x}px` : "50%",
                   "--card-origin-y": cardOrigin ? `${cardOrigin.y}px` : "50%",
+                  "--idle-index": index,
                   zIndex: isPlaying ? 80 : isDragging ? 70 : 20 + stackIndex,
                   transitionDelay:
                     hasDealt || storedPosition ? "0ms" : `${index * 95}ms`,
@@ -703,16 +671,6 @@ export default function Home() {
             </a>
           );
         })}
-
-        <div className="absolute right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
-          <button
-            className="rounded-full border border-white/30 bg-white/12 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
-            onClick={resetSpread}
-            type="button"
-          >
-            Shuffle again
-          </button>
-        </div>
       </section>
     </main>
   );

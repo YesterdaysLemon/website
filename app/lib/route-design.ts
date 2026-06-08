@@ -1,4 +1,9 @@
-export type RouteDesignId = "about" | "projects" | "blog" | "resume" | "contact";
+export type RouteDesignId =
+  | "about"
+  | "projects"
+  | "blog"
+  | "resume"
+  | "contact";
 export type SuitName = "spade" | "heart" | "club" | "diamond";
 
 export type RouteDesign = {
@@ -9,6 +14,7 @@ export type RouteDesign = {
   suit: string;
   suitName: SuitName;
   accent: string;
+  underConstruction?: boolean;
 };
 
 export const routeDesigns = {
@@ -38,6 +44,7 @@ export const routeDesigns = {
     suit: "\u2665",
     suitName: "heart",
     accent: "var(--heart)",
+    underConstruction: true,
   },
   resume: {
     id: "resume",

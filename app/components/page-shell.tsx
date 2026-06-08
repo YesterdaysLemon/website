@@ -6,6 +6,10 @@ import {
   routeDesigns,
   type RouteDesignId,
 } from "~/lib/route-design";
+import {
+  shouldShowUnderConstructionOverlay,
+  UnderConstructionOverlay,
+} from "./under-construction-overlay";
 
 type PageShellProps = {
   routeId: RouteDesignId;
@@ -24,6 +28,8 @@ export function PageShell({
 }: PageShellProps) {
   const route = routeDesigns[routeId];
   const footerContact = routeDesigns.contact;
+  const showUnderConstructionOverlay =
+    shouldShowUnderConstructionOverlay(route);
 
   return (
     <div
@@ -34,7 +40,7 @@ export function PageShell({
         <header className="border-line flex flex-col gap-9 border-b pb-9">
           <div className="bg-warm-card border-line z-40 flex flex-col gap-4 rounded-[var(--radius)] border px-4 py-4 shadow-[0_14px_38px_rgba(21,25,24,0.035)] sm:sticky sm:top-5 sm:flex-row sm:items-start sm:justify-between sm:px-5">
             <NavLink
-              className="text-muted hover:text-ink text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper focus-visible:outline-none"
+              className="text-muted hover:text-ink focus-visible:ring-offset-paper text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:outline-none"
               to="/"
               end
             >
@@ -108,7 +114,21 @@ export function PageShell({
           </div>
         </header>
 
-        <main className="flex-1 py-10">{children}</main>
+        <main className="relative flex-1 py-10">
+          <div
+            className={
+              showUnderConstructionOverlay
+                ? "under-construction-page-content"
+                : undefined
+            }
+            aria-hidden={showUnderConstructionOverlay ? true : undefined}
+          >
+            {children}
+          </div>
+          {showUnderConstructionOverlay ? (
+            <UnderConstructionOverlay route={route} />
+          ) : null}
+        </main>
 
         <footer className="border-line text-muted flex flex-col gap-3 border-t py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>Alireza Afshan 2026</p>
