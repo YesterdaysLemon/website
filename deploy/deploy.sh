@@ -65,6 +65,12 @@ ATTEMPT=1
 while [ "$ATTEMPT" -le 20 ]; do
   if curl --fail --silent --output /dev/null "$HEALTH_URL"; then
     ENDED_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+    docker image ls "$IMAGE_NAME" --format "{{.Repository}}:{{.Tag}}" |
+      while IFS= read -r image; do
+        if [ "$image" != "$NEW_IMAGE" ]; then
+          docker image rm "$image" >/dev/null 2>&1 || true
+        fi
+      done
     log "deploy_success sha=$CURRENT_SHA image=$NEW_IMAGE started_at=$STARTED_AT ended_at=$ENDED_AT"
     exit 0
   fi
