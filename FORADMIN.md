@@ -35,6 +35,8 @@ The deploy script now uses a candidate container before touching production:
 - Replace `website-app` on `127.0.0.1:3000`.
 - Health-check production.
 
+The preferred health path is `/healthz`.
+
 ## Failure Messages
 
 - `git_fetch_failed`, `git_checkout_failed`, or `git_reset_failed`: the repo could not update to the requested branch/SHA.
@@ -70,6 +72,7 @@ Public checks:
 
 ```bash
 curl -I https://alirezaafshan.com/
+curl -I https://alirezaafshan.com/healthz
 curl -I https://alirezaafshan.com/robots.txt
 ```
 

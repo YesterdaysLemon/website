@@ -7,6 +7,7 @@ const routes = [
   route("blog", "routes/blog.tsx"),
   route("blog/:slug", "routes/blog-post.tsx"),
   route("resume", "routes/resume.tsx"),
+  route("healthz", "routes/healthz.ts"),
 ];
 
 export default routes satisfies RouteConfig;
