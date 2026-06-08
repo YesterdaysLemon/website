@@ -1,44 +1,38 @@
 # Alireza Afshan Website
 
-Personal site built with React Router, TypeScript, Tailwind CSS, and Docker.
+Personal portfolio site for Alireza Afshan, built with React Router, TypeScript,
+Tailwind CSS, markdown-backed content, Docker, Caddy, and a signed deploy
+webhook.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Stack
 
-## Features
+- React Router SSR
+- TypeScript
+- Tailwind CSS
+- Markdown content with frontmatter
+- Docker production image
+- GitHub Actions validation and deploy webhook
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Local development
 
-## Getting Started
-
-### Installation
-
-Install the dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+The app runs at `http://localhost:5173`.
 
-## Building for Production
-
-Create a production build:
+Run checks before pushing:
 
 ```bash
+npm run typecheck
 npm run build
 ```
 
@@ -76,13 +70,9 @@ reverse proxy the public site to the app container's local port, for example
 `127.0.0.1:3000`, and proxy the deploy webhook URL to the local webhook service,
 for example `127.0.0.1:9000`.
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
 ## Content authoring
 
-This site now keeps authored content in-repo.
+Authored content lives in-repo.
 
 - Projects live in `content/projects/*.md`
 - Blog posts live in `content/blog/*.md`
@@ -132,4 +122,4 @@ flowchart TD
 
 ---
 
-Built with ❤️ using React Router.
+Maintained as a personal portfolio and deployment reference.
