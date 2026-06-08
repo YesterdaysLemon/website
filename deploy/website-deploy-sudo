@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -eu
+
+exec sudo -n /usr/local/sbin/website-deploy-run "$@"

@@ -99,3 +99,25 @@ uid=1000(node) gid=1000(node) groups=1000(node)
 - `codex` is intentionally unprivileged and should not have Docker access.
 - `ali` is the human admin user and should use `sudo` for Docker administration.
 - `website-deploy` runs the webhook and should only have narrow deploy sudo.
+
+## Tracked Versus Installed Deploy Files
+
+The repo tracks every non-secret deploy component:
+
+- `deploy/webhook-server.mjs`
+- `deploy/deploy.sh`
+- `deploy/website-deploy.service`
+- `deploy/website-deploy.env.example`
+- `deploy/website-deploy-run`
+- `deploy/website-deploy-sudo`
+
+The server installs privileged copies in root-owned locations:
+
+- `/etc/systemd/system/website-deploy.service`
+- `/opt/website/deploy/deploy.sh`
+- `/usr/local/sbin/website-deploy-run`
+- `/usr/local/bin/website-deploy-sudo`
+
+The secret-bearing env file is intentionally server-local:
+
+- `/etc/website-deploy.env`
