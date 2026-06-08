@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -9,6 +11,28 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+
+const glitchGlyphs = "!<>-_\\/[]{}--=+*^?#________";
+
+function scrambleText(text: string, amount: number) {
+  if (amount <= 0) {
+    return text;
+  }
+
+  return [...text]
+    .map((character) => {
+      if (character === " " || character === "'") {
+        return character;
+      }
+
+      if (Math.random() > amount) {
+        return character;
+      }
+
+      return glitchGlyphs[Math.floor(Math.random() * glitchGlyphs.length)];
+    })
+    .join("");
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,7 +47,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -63,17 +87,60 @@ export default function App() {
   return <Outlet />;
 }
 
+function NotFoundPage() {
+  const originalTitle = "you shouldn't be here";
+  const originalReturn = "return";
+  const scramble = 0.02;
+  const speed = 200;
+  const [title, setTitle] = useState(originalTitle);
+  const [returnText, setReturnText] = useState(originalReturn);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setTitle(scrambleText(originalTitle, scramble));
+      setReturnText(scrambleText(originalReturn, scramble * 0.75));
+    }, speed);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const glitchStyle = {
+    "--not-found-flicker": 0.4,
+    "--not-found-glow": 1,
+    "--not-found-shake": "2px",
+    "--not-found-split": "1px",
+  } as CSSProperties;
+
+  return (
+    <main className="not-found-void" style={glitchStyle}>
+      <div className="not-found-message">
+        <h1 className="not-found-glitch-text" data-text={originalTitle}>
+          {title}
+        </h1>
+        <a
+          className="not-found-glitch-text not-found-return"
+          data-text={originalReturn}
+          href="/"
+        >
+          {returnText}
+        </a>
+      </div>
+    </main>
+  );
+}
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return <NotFoundPage />;
+    }
+
     message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    details = error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
