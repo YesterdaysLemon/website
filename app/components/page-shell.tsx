@@ -71,7 +71,15 @@ export function PageShell({
             </nav>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_8rem] md:items-start">
+          <div
+            className={[
+              "grid gap-8 md:grid-cols-[minmax(0,1fr)_8rem] md:items-start",
+              showUnderConstructionOverlay
+                ? "under-construction-page-content"
+                : "",
+            ].join(" ")}
+            aria-hidden={showUnderConstructionOverlay ? true : undefined}
+          >
             <div className="max-w-3xl">
               {eyebrow ? (
                 <p className="text-muted mb-3 text-xs font-extrabold tracking-[0.28em] uppercase">
@@ -114,7 +122,7 @@ export function PageShell({
           </div>
         </header>
 
-        <main className="relative flex-1 py-10">
+        <main className="flex-1 py-10">
           <div
             className={
               showUnderConstructionOverlay
@@ -125,10 +133,11 @@ export function PageShell({
           >
             {children}
           </div>
-          {showUnderConstructionOverlay ? (
-            <UnderConstructionOverlay route={route} />
-          ) : null}
         </main>
+
+        {showUnderConstructionOverlay ? (
+          <UnderConstructionOverlay route={route} />
+        ) : null}
 
         <footer className="border-line text-muted flex flex-col gap-3 border-t py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>Alireza Afshan 2026</p>

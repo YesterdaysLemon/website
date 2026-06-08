@@ -479,26 +479,24 @@
   }
 
   .under-construction-overlay {
-    position: absolute;
-    inset: 2rem 0 auto;
+    position: fixed;
+    inset: 0;
     z-index: 30;
-    min-height: min(34rem, calc(100svh - 12rem));
     overflow: hidden;
-    border: 2px dashed color-mix(in srgb, var(--route-accent) 58%, var(--line));
-    border-radius: var(--radius);
     background:
       repeating-linear-gradient(
         135deg,
-        rgba(255, 211, 69, 0.28) 0 16px,
-        rgba(21, 25, 24, 0.16) 16px 32px
+        rgba(255, 211, 69, 0.18) 0 16px,
+        rgba(21, 25, 24, 0.1) 16px 32px
       ),
-      var(--warm-card);
-    box-shadow: 0 28px 80px rgba(21, 25, 24, 0.18);
+      rgba(231, 223, 208, 0.88);
+    pointer-events: auto;
   }
 
   .under-construction-stage {
     position: absolute;
     inset: 0;
+    pointer-events: none;
   }
 
   .under-construction-stage::before {
@@ -515,16 +513,19 @@
   }
 
   .under-construction-copy {
-    position: relative;
-    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    width: min(calc(100% - 2rem), 33rem);
     max-width: 33rem;
-    margin: 7rem auto;
     padding: 1.4rem;
     border: 1px solid color-mix(in srgb, var(--route-accent) 24%, var(--line));
     border-radius: var(--radius);
-    background: rgba(255, 253, 248, 0.9);
+    background: var(--card);
     color: var(--ink);
     text-align: center;
+    transform: translate(-50%, -50%);
     box-shadow: 0 22px 60px rgba(21, 25, 24, 0.16);
   }
 
@@ -554,51 +555,64 @@
 
   .under-construction-sprite {
     position: absolute;
-    z-index: 1;
+    top: var(--sprite-start-y);
+    left: var(--sprite-start-x);
+    z-index: 5;
     width: clamp(4.5rem, 14vw, 8.5rem);
     height: auto;
     image-rendering: auto;
-    transform: translate3d(var(--sprite-x), var(--sprite-y), 0)
-      rotate(var(--sprite-rotate));
+    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
     animation: under-construction-bounce var(--sprite-duration) linear infinite;
     animation-delay: var(--sprite-delay);
+    pointer-events: none;
+    will-change: transform;
   }
 
   .under-construction-sprite-1 {
-    --sprite-x: 9%;
-    --sprite-y: 11%;
+    --sprite-start-x: 8%;
+    --sprite-start-y: 18%;
+    --sprite-travel-x: 68vw;
+    --sprite-travel-y: 46vh;
     --sprite-rotate: -8deg;
     --sprite-duration: 8.4s;
     --sprite-delay: -1.7s;
   }
 
   .under-construction-sprite-2 {
-    --sprite-x: 74%;
-    --sprite-y: 10%;
+    --sprite-start-x: 73%;
+    --sprite-start-y: 14%;
+    --sprite-travel-x: -58vw;
+    --sprite-travel-y: 54vh;
     --sprite-rotate: 9deg;
     --sprite-duration: 9.7s;
     --sprite-delay: -4.2s;
   }
 
   .under-construction-sprite-3 {
-    --sprite-x: 8%;
-    --sprite-y: 71%;
+    --sprite-start-x: 12%;
+    --sprite-start-y: 72%;
+    --sprite-travel-x: 62vw;
+    --sprite-travel-y: -50vh;
     --sprite-rotate: 7deg;
     --sprite-duration: 10.1s;
     --sprite-delay: -6.5s;
   }
 
   .under-construction-sprite-4 {
-    --sprite-x: 75%;
-    --sprite-y: 68%;
+    --sprite-start-x: 78%;
+    --sprite-start-y: 68%;
+    --sprite-travel-x: -64vw;
+    --sprite-travel-y: -42vh;
     --sprite-rotate: -6deg;
     --sprite-duration: 8.8s;
     --sprite-delay: -3.1s;
   }
 
   .under-construction-sprite-5 {
-    --sprite-x: 42%;
-    --sprite-y: 78%;
+    --sprite-start-x: 45%;
+    --sprite-start-y: 9%;
+    --sprite-travel-x: 24vw;
+    --sprite-travel-y: 66vh;
     --sprite-rotate: 3deg;
     --sprite-duration: 11.2s;
     --sprite-delay: -8.3s;
@@ -617,23 +631,22 @@
 
 @keyframes under-construction-bounce {
   0% {
-    transform: translate3d(var(--sprite-x), var(--sprite-y), 0)
-      rotate(var(--sprite-rotate));
+    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
   }
   25% {
-    transform: translate3d(calc(100% - var(--sprite-x)), 18%, 0)
+    transform: translate3d(var(--sprite-travel-x), 14vh, 0)
       rotate(calc(var(--sprite-rotate) * -1));
   }
   50% {
-    transform: translate3d(66%, calc(100% - var(--sprite-y)), 0)
+    transform: translate3d(var(--sprite-travel-x), var(--sprite-travel-y), 0)
       rotate(var(--sprite-rotate));
   }
   75% {
-    transform: translate3d(14%, 45%, 0) rotate(calc(var(--sprite-rotate) * -1));
+    transform: translate3d(12vw, var(--sprite-travel-y), 0)
+      rotate(calc(var(--sprite-rotate) * -1));
   }
   100% {
-    transform: translate3d(var(--sprite-x), var(--sprite-y), 0)
-      rotate(var(--sprite-rotate));
+    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
   }
 }
 
@@ -692,8 +705,8 @@
   }
 
   .under-construction-sprite {
-    transform: translate3d(var(--sprite-x), var(--sprite-y), 0)
-      rotate(var(--sprite-rotate));
+    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
+    will-change: auto;
   }
 
   .playing-action-card.is-idle {
