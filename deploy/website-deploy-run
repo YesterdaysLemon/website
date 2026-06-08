@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+set -eu
+
+REQUESTED_SHA="${1:-}"
+
+case "$REQUESTED_SHA" in
+  ""|*[!0123456789abcdefABCDEF]*)
+    echo "website-deploy-run: expected a 40-character git SHA" >&2
+    exit 64
+    ;;
+esac
+
+if [ "${#REQUESTED_SHA}" -ne 40 ]; then
+  echo "website-deploy-run: expected a 40-character git SHA" >&2
+  exit 64
+fi
+
+export ENV_FILE="${ENV_FILE:-/etc/website-deploy.env}"
+exec /opt/website/deploy/deploy.sh "$REQUESTED_SHA"

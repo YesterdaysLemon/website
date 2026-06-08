@@ -91,6 +91,45 @@ This site now keeps authored content in-repo.
 
 Markdown entries use frontmatter plus body content. Image references should use site-relative paths such as `/images/blog/my-post/cover.svg`.
 
+## Copy replacement TODO
+
+Use this section as a working checklist when rewriting page copy.
+
+- Home page: replace the hero eyebrow in `app/routes/home.tsx` with the exact positioning you want visitors to remember.
+- Home cards: rewrite the card summaries for About, Blog, Projects, and Resume in `app/routes/home.tsx`.
+- About page: replace the page intro, profile paragraphs, and focus tags in `app/routes/about.tsx`.
+- Projects page: replace the page intro in `app/routes/projects.tsx`.
+- Project entries: rewrite the frontmatter summaries and markdown body sections in `content/projects/*.md`.
+- Blog index: replace the page intro in `app/routes/blog.tsx`.
+- Blog posts: rewrite titles, summaries, publish dates, tags, and bodies in `content/blog/*.md`.
+- Resume page: update the intro in `app/routes/resume.tsx` and the structured resume data in `app/content/resume.ts`.
+- Footer/contact: confirm the displayed footer email in `app/components/page-shell.tsx` and resume contact links in `app/content/resume.ts`.
+- Metadata: update route `meta()` titles and descriptions in each route after the visible copy is final.
+
+## System overview
+
+```mermaid
+flowchart TD
+  Visitor["Visitor browser"] --> DNS["DNS: alirezaafshan.com"]
+  DNS --> Caddy["Caddy on Ubuntu VPS\nTLS termination + reverse proxy"]
+  Caddy --> AppPort["127.0.0.1:3000"]
+  AppPort --> Container["Docker container\nReact Router SSR app"]
+  Container --> StaticAssets["Built assets in /app/build"]
+  Container --> Content["Markdown content in /app/content"]
+
+  Developer["Developer pushes to master"] --> GitHub["GitHub repository"]
+  GitHub --> Actions["GitHub Actions\nnpm ci + typecheck + build"]
+  Actions --> SignedWebhook["Signed deploy webhook request"]
+  SignedWebhook --> CaddyDeploy["Caddy /deploy route"]
+  CaddyDeploy --> Webhook["Webhook service\n127.0.0.1:9000"]
+  Webhook --> DeployScript["deploy/deploy.sh"]
+  DeployScript --> Pull["git fetch + reset to requested SHA"]
+  Pull --> BuildImage["docker build website-app:timestamp"]
+  BuildImage --> Restart["stop old container + run new container"]
+  Restart --> Health["curl health check /"]
+  Health --> AppPort
+```
+
 ---
 
 Built with ❤️ using React Router.

@@ -5,8 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=codex
-Group=codex
+User=website-deploy
+Group=website-deploy
 EnvironmentFile=/etc/website-deploy.env
 WorkingDirectory=/opt/website/app
 ExecStart=/usr/bin/node /opt/website/app/deploy/webhook-server.mjs

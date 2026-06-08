@@ -10,6 +10,7 @@ if [ -r "$ENV_FILE" ]; then
 fi
 
 REPO_DIR="${REPO_DIR:-/opt/website/app}"
+REPO_USER="${REPO_USER:-codex}"
 BRANCH="${DEPLOY_BRANCH:-${BRANCH:-master}}"
 IMAGE_NAME="${IMAGE_NAME:-website-app}"
 CONTAINER_NAME="${CONTAINER_NAME:-website-app}"
@@ -30,15 +31,24 @@ fail() {
   exit 1
 }
 
+run_git() {
+  if [ "$(id -u)" -eq 0 ] && [ -n "$REPO_USER" ] && id "$REPO_USER" >/dev/null 2>&1; then
+    sudo -u "$REPO_USER" -H git -C "$REPO_DIR" "$@"
+    return
+  fi
+
+  git -C "$REPO_DIR" "$@"
+}
+
 log "deploy_start branch=$BRANCH requested_sha=${REQUESTED_SHA:-latest} started_at=$STARTED_AT"
 
 cd "$REPO_DIR" || fail "repo_dir_not_found"
 
-git fetch origin "$BRANCH" || fail "git_fetch_failed"
-git checkout "$BRANCH" || fail "git_checkout_failed"
-git reset --hard "origin/$BRANCH" || fail "git_reset_failed"
+run_git fetch origin "$BRANCH" || fail "git_fetch_failed"
+run_git checkout "$BRANCH" || fail "git_checkout_failed"
+run_git reset --hard "origin/$BRANCH" || fail "git_reset_failed"
 
-CURRENT_SHA="$(git rev-parse HEAD)"
+CURRENT_SHA="$(run_git rev-parse HEAD)"
 
 if [ -n "$REQUESTED_SHA" ] && [ "$CURRENT_SHA" != "$REQUESTED_SHA" ]; then
   fail "sha_mismatch current=$CURRENT_SHA requested=$REQUESTED_SHA"

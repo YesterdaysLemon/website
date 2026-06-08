@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 const {
   DEPLOY_BRANCH = "master",
   DEPLOY_EVENT = "push",
-  DEPLOY_SCRIPT = "/opt/website/deploy/deploy.sh",
+  DEPLOY_SCRIPT = "/usr/local/bin/website-deploy-sudo",
   DEPLOY_WEBHOOK_SECRET,
   DEPLOY_WEBHOOK_HOST = "127.0.0.1",
   DEPLOY_WEBHOOK_PORT = "9000",
