@@ -82,7 +82,7 @@ const actionCards: ActionCard[] = [
     rank: "R",
     suit: "\u2663",
     to: "/resume",
-    summary: "Experience, education, and PDF.",
+    summary: "Experience, education, and skills.",
     accent: "var(--club)",
   },
   {
@@ -201,7 +201,11 @@ function createDragRotation(drag: DragState, breakpoint: Breakpoint) {
   const pickupTorque = torque * 42;
 
   return Number(
-    clamp(velocityTilt + accelerationTilt + pickupTorque, -maxTilt, maxTilt).toFixed(1),
+    clamp(
+      velocityTilt + accelerationTilt + pickupTorque,
+      -maxTilt,
+      maxTilt,
+    ).toFixed(1),
   );
 }
 
@@ -219,9 +223,14 @@ function createMomentumDropRotation(drag: DragState, breakpoint: Breakpoint) {
     -maxRotation * 0.34,
     maxRotation * 0.34,
   );
-  const angularSpin = clamp(drag.angularVelocity * 44, -maxRotation * 0.62, maxRotation * 0.62);
+  const angularSpin = clamp(
+    drag.angularVelocity * 44,
+    -maxRotation * 0.62,
+    maxRotation * 0.62,
+  );
   const carriedSpin = clamp(drag.startRotation * 0.34, -5, 5);
-  const directionBias = clamp(directionDegrees / 180, -1, 1) * 2.2 * speedWeight;
+  const directionBias =
+    clamp(directionDegrees / 180, -1, 1) * 2.2 * speedWeight;
 
   return Number(
     clamp(
@@ -587,125 +596,123 @@ export default function Home() {
         aria-label="Interactive card table navigation"
         className="absolute inset-0 overflow-hidden"
       >
-          <div className="pointer-events-none absolute left-4 top-5 z-10 max-w-[18rem] sm:left-8 sm:top-8 sm:max-w-md lg:max-w-lg">
-            <p className="mb-3 text-[0.65rem] font-bold tracking-[0.28em] text-white/62 uppercase sm:text-xs">
-              Software / DevOps / Information Systems
-            </p>
-            <h1 className="font-serif text-4xl leading-none text-white sm:text-6xl lg:text-7xl xl:text-8xl">
-              Alireza Afshan
-            </h1>
-          </div>
+        <div className="pointer-events-none absolute top-5 left-4 z-10 max-w-[18rem] sm:top-8 sm:left-8 sm:max-w-md lg:max-w-lg">
+          <p className="mb-3 text-[0.65rem] font-bold tracking-[0.28em] text-white/62 uppercase sm:text-xs">
+            Software / DevOps / Information Systems
+          </p>
+          <h1 className="font-serif text-4xl leading-none text-white sm:text-6xl lg:text-7xl xl:text-8xl">
+            Alireza Afshan
+          </h1>
+        </div>
 
-          <div
-            aria-hidden="true"
-            className={[
-              "card-deck-stack pointer-events-none absolute left-1/2 top-[78%] z-10 h-36 w-24 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 sm:top-[65%] sm:h-44 sm:w-28",
-              hasDealt ? "opacity-0" : "opacity-100",
-              isShuffling ? "is-shuffling" : "",
-            ].join(" ")}
-          >
-            <div className="deck-card -rotate-6" />
-            <div className="deck-card rotate-3" />
-            <div className="deck-card rotate-0" />
-          </div>
+        <div
+          aria-hidden="true"
+          className={[
+            "card-deck-stack pointer-events-none absolute top-[78%] left-1/2 z-10 h-36 w-24 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 sm:top-[65%] sm:h-44 sm:w-28",
+            hasDealt ? "opacity-0" : "opacity-100",
+            isShuffling ? "is-shuffling" : "",
+          ].join(" ")}
+        >
+          <div className="deck-card -rotate-6" />
+          <div className="deck-card rotate-3" />
+          <div className="deck-card rotate-0" />
+        </div>
 
-          {actionCards.map((card, index) => {
-            const storedPosition = cardPositions[card.id];
-            const spreadPosition = positions[card.id];
-            const isDragging = draggingId === card.id;
-            const isLifting = liftingId === card.id;
-            const isPlaying = playingId === card.id;
-            const stackIndex = stackOrder.indexOf(card.id);
-            const cardOrigin = cardOrigins[card.id];
-            const left = storedPosition
-              ? `${storedPosition.x}px`
-              : `${spreadPosition.x}%`;
-            const top = storedPosition
-              ? `${storedPosition.y}px`
-              : `${spreadPosition.y}%`;
-            const rotate = isPlaying
-              ? 0
-              : isDragging || isLifting
-                ? (dragRotations[card.id] ?? 0)
-                : cardRotations[card.id];
+        {actionCards.map((card, index) => {
+          const storedPosition = cardPositions[card.id];
+          const spreadPosition = positions[card.id];
+          const isDragging = draggingId === card.id;
+          const isLifting = liftingId === card.id;
+          const isPlaying = playingId === card.id;
+          const stackIndex = stackOrder.indexOf(card.id);
+          const cardOrigin = cardOrigins[card.id];
+          const left = storedPosition
+            ? `${storedPosition.x}px`
+            : `${spreadPosition.x}%`;
+          const top = storedPosition
+            ? `${storedPosition.y}px`
+            : `${spreadPosition.y}%`;
+          const rotate = isPlaying
+            ? 0
+            : isDragging || isLifting
+              ? (dragRotations[card.id] ?? 0)
+              : cardRotations[card.id];
 
-            return (
-              <a
-                aria-label={`Open ${card.title}`}
-                key={card.id}
-                className={[
-                  "playing-action-card absolute flex aspect-[2.5/3.5] w-[6.35rem] select-none flex-col justify-between rounded-[var(--radius)] border border-[var(--line)] bg-[var(--warm-card)] p-2.5 text-left text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.16)] outline-none transition-[filter,box-shadow] duration-200 [touch-action:none] sm:w-36 sm:p-4 md:w-40 lg:w-44",
-                  hasDealt
-                    ? "pointer-events-auto opacity-100"
-                    : "pointer-events-none opacity-0",
-                  isDragging
-                    ? "is-dragging z-40 cursor-grabbing brightness-105 shadow-[0_34px_80px_rgba(0,0,0,0.28)]"
-                    : isLifting
-                      ? "is-lifting z-40 cursor-grabbing brightness-105 shadow-[0_30px_74px_rgba(0,0,0,0.24)]"
-                    : "cursor-grab hover:brightness-105 hover:shadow-[0_28px_70px_rgba(0,0,0,0.24)] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#14382f]",
-                  isPlaying
-                    ? "is-playing z-50 brightness-110 shadow-[0_34px_90px_rgba(255,253,248,0.18)]"
-                    : "",
-                ].join(" ")}
-                draggable={false}
-                href={card.to}
-                onClick={(event) => handleCardClick(event, card)}
-                onPointerCancel={handlePointerUp}
-                onPointerDown={(event) => handlePointerDown(event, card.id)}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                style={{
+          return (
+            <a
+              aria-label={`Open ${card.title}`}
+              key={card.id}
+              className={[
+                "playing-action-card absolute flex aspect-[2.5/3.5] w-[6.35rem] [touch-action:none] flex-col justify-between rounded-[var(--radius)] border border-[var(--line)] bg-[var(--warm-card)] p-2.5 text-left text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.16)] transition-[filter,box-shadow] duration-200 outline-none select-none sm:w-36 sm:p-4 md:w-40 lg:w-44",
+                hasDealt
+                  ? "pointer-events-auto opacity-100"
+                  : "pointer-events-none opacity-0",
+                isDragging
+                  ? "is-dragging z-40 cursor-grabbing shadow-[0_34px_80px_rgba(0,0,0,0.28)] brightness-105"
+                  : isLifting
+                    ? "is-lifting z-40 cursor-grabbing shadow-[0_30px_74px_rgba(0,0,0,0.24)] brightness-105"
+                    : "cursor-grab hover:shadow-[0_28px_70px_rgba(0,0,0,0.24)] hover:brightness-105 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#14382f]",
+                isPlaying
+                  ? "is-playing z-50 shadow-[0_34px_90px_rgba(255,253,248,0.18)] brightness-110"
+                  : "",
+              ].join(" ")}
+              draggable={false}
+              href={card.to}
+              onClick={(event) => handleCardClick(event, card)}
+              onPointerCancel={handlePointerUp}
+              onPointerDown={(event) => handlePointerDown(event, card.id)}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              style={
+                {
                   left,
                   top,
                   "--route-accent": card.accent,
                   "--card-rotate": `${rotate}deg`,
-                  "--card-origin-x": cardOrigin
-                    ? `${cardOrigin.x}px`
-                    : "50%",
-                  "--card-origin-y": cardOrigin
-                    ? `${cardOrigin.y}px`
-                    : "50%",
+                  "--card-origin-x": cardOrigin ? `${cardOrigin.x}px` : "50%",
+                  "--card-origin-y": cardOrigin ? `${cardOrigin.y}px` : "50%",
                   zIndex: isPlaying ? 80 : isDragging ? 70 : 20 + stackIndex,
                   transitionDelay:
                     hasDealt || storedPosition ? "0ms" : `${index * 95}ms`,
-                } as CSSProperties}
-              >
-                <span className="flex items-start justify-between gap-2">
-                  <span className="font-serif text-3xl leading-none sm:text-4xl">
-                    {card.rank}
-                  </span>
-                  <span className="text-3xl leading-none sm:text-4xl">
-                    {card.suit}
-                  </span>
-                </span>
-
-                <span className="flex min-h-0 flex-1 items-center justify-center px-1 text-center">
-                  <span className="text-xs font-extrabold tracking-[0.18em] uppercase sm:text-sm">
-                    {card.title}
-                  </span>
-                </span>
-
-                <span className="flex items-end justify-between gap-2">
-                  <span className="rotate-180 text-3xl leading-none sm:text-4xl">
-                    {card.suit}
-                  </span>
-                  <span className="rotate-180 font-serif text-3xl leading-none sm:text-4xl">
-                    {card.rank}
-                  </span>
-                </span>
-              </a>
-            );
-          })}
-
-          <div className="absolute bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
-            <button
-              className="rounded-full border border-white/30 bg-white/12 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
-              onClick={resetSpread}
-              type="button"
+                } as CSSProperties
+              }
             >
-              Shuffle again
-            </button>
-          </div>
+              <span className="flex items-start justify-between gap-2">
+                <span className="font-serif text-3xl leading-none sm:text-4xl">
+                  {card.rank}
+                </span>
+                <span className="text-3xl leading-none sm:text-4xl">
+                  {card.suit}
+                </span>
+              </span>
+
+              <span className="flex min-h-0 flex-1 items-center justify-center px-1 text-center">
+                <span className="text-xs font-extrabold tracking-[0.18em] uppercase sm:text-sm">
+                  {card.title}
+                </span>
+              </span>
+
+              <span className="flex items-end justify-between gap-2">
+                <span className="rotate-180 text-3xl leading-none sm:text-4xl">
+                  {card.suit}
+                </span>
+                <span className="rotate-180 font-serif text-3xl leading-none sm:text-4xl">
+                  {card.rank}
+                </span>
+              </span>
+            </a>
+          );
+        })}
+
+        <div className="absolute right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
+          <button
+            className="rounded-full border border-white/30 bg-white/12 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+            onClick={resetSpread}
+            type="button"
+          >
+            Shuffle again
+          </button>
+        </div>
       </section>
     </main>
   );

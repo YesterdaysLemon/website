@@ -17,6 +17,8 @@ export type ProjectFrontmatter = {
 export type ProjectEntry = ProjectFrontmatter & {
   slug: string;
   body: string;
+  personalNotes: string;
+  aiSummary: string;
   href: string;
 };
 
@@ -157,6 +159,37 @@ function normalizeDateString(value: unknown, context: string): string {
   return ensureIsoDate(value, context);
 }
 
+function splitProjectBody(body: string): {
+  personalNotes: string;
+  aiSummary: string;
+} {
+  const markerPattern = /<!--\s*(personal-notes|ai-summary)\s*-->/g;
+  const matches = Array.from(body.matchAll(markerPattern));
+
+  if (matches.length === 0) {
+    return {
+      personalNotes: "",
+      aiSummary: body.trim(),
+    };
+  }
+
+  const sections = new Map<string, string>();
+
+  for (const [index, match] of matches.entries()) {
+    const markerName = match[1];
+    const sectionStart = (match.index ?? 0) + match[0].length;
+    const nextMatch = matches[index + 1];
+    const sectionEnd = nextMatch?.index ?? body.length;
+
+    sections.set(markerName, body.slice(sectionStart, sectionEnd).trim());
+  }
+
+  return {
+    personalNotes: sections.get("personal-notes") ?? "",
+    aiSummary: sections.get("ai-summary") ?? "",
+  };
+}
+
 function ensureIsoDate(value: string, context: string): string {
   const date = new Date(value);
 
@@ -210,6 +243,7 @@ export async function getProjects(): Promise<ProjectEntry[]> {
     "projects",
     ({ slug, frontmatter, body }) => {
       const context = `content/projects/${slug}.md`;
+      const projectBody = splitProjectBody(body);
 
       return {
         slug,
@@ -223,6 +257,8 @@ export async function getProjects(): Promise<ProjectEntry[]> {
         coverImage: readOptionalString(frontmatter, "coverImage"),
         order: readOptionalNumber(frontmatter, "order"),
         body,
+        personalNotes: projectBody.personalNotes,
+        aiSummary: projectBody.aiSummary,
         href: `/projects?project=${slug}`,
       };
     },

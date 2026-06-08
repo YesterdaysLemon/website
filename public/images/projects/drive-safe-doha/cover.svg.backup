@@ -1,0 +1,9 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#F6F2E9"/>
+  <rect x="84" y="84" width="1432" height="732" rx="40" fill="#FFFDF8" stroke="#D8D2C5" stroke-width="4"/>
+  <path d="M220 628C332 470 455 391 589 391C687 391 776 439 856 534C927 617 1001 658 1079 658C1201 658 1307 578 1396 418" stroke="#172B4D" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="475" cy="390" r="42" fill="#172B4D"/>
+  <circle cx="1079" cy="658" r="42" fill="#172B4D"/>
+  <text x="220" y="238" fill="#172B4D" font-family="Georgia, serif" font-size="68">Drive Safe Doha</text>
+  <text x="220" y="312" fill="#5B615F" font-family="Arial, sans-serif" font-size="28">React Native · Firebase · verification flow</text>
+</svg>

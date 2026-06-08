@@ -14,7 +14,13 @@ export type ResumeEducation = {
   location?: string;
   start: string;
   end: string;
+  summary?: string;
   notes: string[];
+};
+
+export type ResumeSkillGroup = {
+  label: string;
+  details: string[];
 };
 
 export type ResumeData = {
@@ -23,16 +29,12 @@ export type ResumeData = {
   summary: string;
   location: string;
   email: string;
-  phone: string;
+  websiteUrl: string;
   githubUrl: string;
-  pdfPath: string;
+  linkedInUrl: string;
   experience: ResumeRole[];
   education: ResumeEducation[];
-  skills: {
-    technical: string[];
-    languages: string[];
-    additional: string[];
-  };
+  skills: ResumeSkillGroup[];
   certifications: {
     title: string;
     issuer: string;
@@ -42,113 +44,166 @@ export type ResumeData = {
 
 export const resumeData: ResumeData = {
   name: "Alireza Afshan",
-  role: "Software and Systems Engineer",
+  role: "Junior Software Developer | Systems & DevOps",
   summary:
-    "Software and systems engineering student with hands-on experience leading mobile, backend, and DevOps-focused projects in academic and government-aligned settings.",
-  location: "Doha, Qatar",
-  email: "mail@alirezaafshan.com",
-  phone: "+974 5089 1117",
+    "Recent Information Systems graduate with honors and hands-on experience building full-stack, mobile, and backend systems. Skilled in developing APIs, containerizing services, maintaining CI/CD workflows, and working across software, infrastructure, and hardware-adjacent environments. Brings a strong foundation in programming, databases, Linux, networking, and systems design, supported by prior academic training in mathematics and astronomy. Seeking entry-level software development, backend, systems, or DevOps opportunities.",
+  location: "Las Vegas, NV - relocating June 15, 2026",
+  email: "alirezaafshan4@gmail.com",
+  websiteUrl: "https://alirezaafshan.com",
   githubUrl: "https://github.com/YesterdaysLemon",
-  pdfPath: "/resume/Alireza_Afshanv4.pdf",
+  linkedInUrl: "https://www.linkedin.com/in/alireza-afshan",
   experience: [
     {
-      title: "Lead Developer",
-      organization: "Mobile App Project - Drive Safe",
+      title: "Lead Developer - CentraID Capstone Project",
+      organization: "University of Doha for Science and Technology",
+      location: "Doha, Qatar",
+      start: "September 2025",
+      end: "May 2026",
+      summary:
+        "Completed prototype attendance verification system for university classrooms, combining mobile software, access point software, backend APIs, and containerized deployment infrastructure.",
+      highlights: [
+        "Led backend architecture and implementation for a custom attendance platform using TypeScript, NestJS, PostgreSQL, Docker, and REST APIs.",
+        "Built and maintained the CI/CD pipeline, including automated test execution before merges to the main branch.",
+        "Containerized backend services and supporting infrastructure, preparing the prototype for deployment.",
+        "Developed Python access point software with local SQLite storage and helped consolidate RFID integration into the reader workflow.",
+        "Supported React Native and Expo mobile development, including secure on-device storage with Expo SecureStore.",
+        "Led GitHub onboarding, version control practices, technical documentation, and development guides for a six-person team.",
+        "Presented and defended the completed prototype to a three-judge panel; project was accepted and received an A.",
+      ],
+    },
+    {
+      title: "Software & IT Intern",
+      organization: "Drabzin Co.",
+      location: "Doha, Qatar",
+      start: "February 2026",
+      end: "April 2026",
+      summary:
+        "Developed internal software and provided technical support for a CNC factory and door/gate manufacturing business.",
+      highlights: [
+        "Built a Python-based image preparation tool to help designers clean and transform worksite photos before use in design workflows.",
+        "Created an interface for perspective transformations, AI-assisted debris removal, automated output handling, and folder-based image export.",
+        "Built a small web app to demonstrate the workflow and assisted with IT support, hardware troubleshooting, and machine configuration.",
+      ],
+    },
+    {
+      title: "Lead Developer - Drive Safe",
+      organization: "Mobile App Proof of Concept",
       location: "Doha, Qatar",
       start: "December 2024",
       end: "April 2025",
       summary:
-        "Worked with a colleague on a proof of concept for the Qatar Ministry of Education focused on restricting unauthorized access to a vehicle.",
+        "Mobile proof of concept for vehicle access verification in a Ministry of Education-aligned academic project.",
       highlights: [
-        "Built a React Native mobile interface.",
-        "Used Firebase for cloud data management.",
-        "Implemented photo-based verification as part of the access flow.",
+        "Built a React Native mobile proof of concept for vehicle access verification with Firebase-backed data handling.",
+        "Developed photo-based verification features to help prevent unauthorized vehicle use in a Ministry of Education-aligned academic project.",
       ],
     },
     {
-      title: "Lead Developer",
-      organization: "Mobile App Project - QR Attendance Verification",
+      title: "Lead Developer - QR Attendance Verification",
+      organization: "Mobile App Proof of Concept",
       location: "Doha, Qatar",
       start: "March 2025",
       end: "April 2025",
       summary:
-        "Adapted the Drive Safe architecture into a second proof of concept for verifying student attendance with QR codes.",
+        "Mobile attendance verification proof of concept using QR-code-based workflows.",
       highlights: [
-        "Reused and extended the existing React Native application structure.",
-        "Used Firebase for cloud data management.",
-        "Handled QR code generation, device permissions, and mobile workflows.",
-      ],
-    },
-    {
-      title: "Lead Developer",
-      organization: "UDST Capstone Project - CentraID",
-      location: "Doha, Qatar",
-      start: "September 2025",
-      end: "Expected May 2026",
-      summary:
-        "Contributing to a hybrid RFID and mobile attendance system with a student team, with emphasis on architecture, platform choices, and delivery pipeline work.",
-      highlights: [
-        "Contributed to software architecture and microservice planning.",
-        "Helped choose the project technology stack and evaluate new features such as Wi-Fi RTT.",
-        "Set up CI/CD workflows and containerized backend services with Docker.",
+        "Built a React Native and Firebase mobile proof of concept for QR-based student attendance verification.",
+        "Adapted architecture from the Drive Safe project and implemented QR code generation and mobile permission handling.",
       ],
     },
   ],
   education: [
     {
-      institution: "University of Arizona",
-      degree: "Bachelor of Science in Mathematics (incomplete)",
-      location: "Tucson, Arizona",
-      start: "September 2018",
-      end: "May 2022",
+      institution: "University of Doha for Science and Technology",
+      degree: "BS in Information Systems",
+      location: "Doha, Qatar",
+      start: "January 2023",
+      end: "May 2026",
+      summary: "Graduated with honors.",
       notes: [
-        "Completed coursework through year three before interruption.",
-        "Relevant coursework included astronomy and mathematics.",
+        "Relevant coursework: Software Engineering, DevOps, Systems Design, Linux, Networking, System Administration, Databases, Java, JavaScript, Python.",
       ],
     },
     {
-      institution: "University of Doha for Science and Technology",
-      degree: "Bachelor of Science in Information Systems",
-      location: "Doha, Qatar",
-      start: "January 2023",
-      end: "Expected May 2026",
+      institution: "University of Arizona",
+      degree: "Mathematics and Astronomy coursework",
+      location: "Tucson, AZ",
+      start: "September 2018",
+      end: "May 2022",
+      summary:
+        "Completed coursework through junior-level studies before transferring academic focus to Information Systems.",
       notes: [
-        "Coursework includes software engineering, DevOps, systems design, Linux, networking, and system administration.",
-        "Primary languages and tools across coursework include Java, JavaScript, and Python.",
+        "Developed mathematical thinking and analytical problem-solving skills through coursework in differential equations, linear algebra, vector calculus, astronomy, and related quantitative subjects.",
       ],
     },
   ],
-  skills: {
-    technical: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Node.js",
-      "Express",
-      "TypeScript",
-      "React",
-      "React Native",
-      "Tailwind CSS",
-      "Java",
-      "Python",
-      "MySQL",
-      "MongoDB",
-      "Redis",
-      "Git",
-      "GitHub",
-      "Docker",
-    ],
-    languages: ["English (native)", "Farsi (conversational)"],
-    additional: [
-      "Object-oriented programming",
-      "Database management",
-      "Hardware testing and soldering",
-      "Public speaking",
-      "Custom keyboards",
-      "Botany",
-      "Guitar",
-    ],
-  },
+  skills: [
+    {
+      label: "Languages",
+      details: [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Java",
+        "SQL",
+        "HTML",
+        "CSS",
+      ],
+    },
+    {
+      label: "Frameworks & Tools",
+      details: [
+        "NestJS",
+        "Node.js",
+        "Express",
+        "React",
+        "React Native",
+        "Expo",
+        "Tailwind",
+      ],
+    },
+    {
+      label: "Databases",
+      details: ["PostgreSQL", "MySQL", "SQLite", "MongoDB", "Firebase"],
+    },
+    {
+      label: "DevOps & Systems",
+      details: [
+        "Docker",
+        "Git",
+        "GitHub",
+        "GitHub Actions",
+        "CI/CD",
+        "Linux",
+        "REST APIs",
+      ],
+    },
+    {
+      label: "Concepts",
+      details: [
+        "Object-Oriented Programming",
+        "Software Architecture",
+        "Systems Design",
+        "Networking",
+        "Database Design",
+      ],
+    },
+    {
+      label: "Hardware & Systems",
+      details: [
+        "RFID systems",
+        "Access point software",
+        "Soldering",
+        "Hardware testing",
+        "Firmware",
+        "Keyboards",
+      ],
+    },
+    {
+      label: "Spoken Languages",
+      details: ["English", "Farsi"],
+    },
+  ],
   certifications: [
     {
       title: "Cybersecurity Foundation",
@@ -157,7 +212,7 @@ export const resumeData: ResumeData = {
     },
     {
       title: "Certificate of Recognition",
-      issuer: "Ministry of Higher Education, Scientific Research Competition",
+      issuer: "Ministry of Higher Education Scientific Research Competition",
       date: "April 2025",
     },
   ],

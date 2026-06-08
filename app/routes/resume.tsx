@@ -8,7 +8,8 @@ export function meta({}: Route.MetaArgs) {
     { title: "resume | alireza afshan" },
     {
       name: "description",
-      content: "Experience, education, skills, and PDF resume.",
+      content:
+        "Experience, education, skills, certifications, and contact links.",
     },
   ];
 }
@@ -17,7 +18,7 @@ export default function Resume() {
   return (
     <PageShell
       eyebrow="Resume"
-      intro="The web version is the primary view here. The PDF is still available if you prefer the one-page format."
+      intro="Experience, education, skills, certifications, and contact links for software, systems, and DevOps-focused roles."
       routeId="resume"
       title={resumeData.name}
     >
@@ -49,7 +50,7 @@ export default function Resume() {
                       </h3>
                       <p className="text-muted mt-1 text-sm">
                         {role.organization}
-                        {role.location ? ` · ${role.location}` : ""}
+                        {role.location ? ` - ${role.location}` : ""}
                       </p>
                     </div>
                     <p className="text-muted text-sm">
@@ -89,13 +90,18 @@ export default function Resume() {
                       </h3>
                       <p className="text-muted mt-1 text-sm">
                         {item.degree}
-                        {item.location ? ` · ${item.location}` : ""}
+                        {item.location ? ` - ${item.location}` : ""}
                       </p>
                     </div>
                     <p className="text-muted text-sm">
                       {item.start} - {item.end}
                     </p>
                   </div>
+                  {item.summary ? (
+                    <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
+                      {item.summary}
+                    </p>
+                  ) : null}
                   <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
                     {item.notes.map((note) => (
                       <li key={note} className="flex gap-3">
@@ -117,83 +123,21 @@ export default function Resume() {
                 </h2>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 xl:col-span-2">
-                <div>
-                  <h3 className="text-muted text-sm font-semibold tracking-[0.18em] uppercase">
-                    Technical
-                  </h3>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {resumeData.skills.technical.map((skill) => (
-                      <span
-                        key={skill}
-                        className="archive-tag text-sm"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                {resumeData.skills.map((group) => (
+                  <div key={group.label}>
+                    <h3 className="text-muted text-sm font-semibold tracking-[0.18em] uppercase">
+                      {group.label}
+                    </h3>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {group.details.map((skill) => (
+                        <span key={skill} className="archive-tag text-sm">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <h3 className="text-muted text-sm font-semibold tracking-[0.18em] uppercase">
-                    Languages
-                  </h3>
-                  <ul className="text-muted mt-4 space-y-2 text-sm leading-7">
-                    {resumeData.skills.languages.map((language) => (
-                      <li key={language}>{language}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <h3 className="text-muted text-sm font-semibold tracking-[0.18em] uppercase">
-                    Additional
-                  </h3>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {resumeData.skills.additional.map((skill) => (
-                      <span
-                        key={skill}
-                        className="archive-tag text-sm"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
-            </div>
-          </section>
-
-          <section className="archive-card p-6 sm:p-8">
-            <h2 className="font-serif text-3xl text-[var(--route-accent)]">
-              PDF Version
-            </h2>
-            <p className="text-muted mt-4 max-w-2xl text-sm leading-7 sm:text-base">
-              The PDF remains the downloadable version if you need the original
-              one-page format.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                className="archive-button archive-button-primary"
-                href={resumeData.pdfPath}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Open PDF
-              </a>
-              <a
-                className="archive-button archive-button-secondary"
-                download
-                href={resumeData.pdfPath}
-              >
-                Download PDF
-              </a>
-            </div>
-            <div className="border-line bg-paper mt-6 overflow-hidden rounded-[var(--radius)] border">
-              <iframe
-                className="h-[72vh] w-full"
-                src={resumeData.pdfPath}
-                title="Alireza Afshan resume PDF"
-              />
             </div>
           </section>
         </section>
@@ -211,7 +155,14 @@ export default function Resume() {
               >
                 {resumeData.email}
               </a>
-              <p>{resumeData.phone}</p>
+              <a
+                className="archive-inline-link block"
+                href={resumeData.websiteUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Website
+              </a>
               <a
                 className="archive-inline-link block"
                 href={resumeData.githubUrl}
@@ -219,6 +170,14 @@ export default function Resume() {
                 target="_blank"
               >
                 GitHub
+              </a>
+              <a
+                className="archive-inline-link block"
+                href={resumeData.linkedInUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                LinkedIn
               </a>
             </div>
           </section>
