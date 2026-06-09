@@ -37,7 +37,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Notes"
-      intro="Short posts, working notes, and things worth writing down while building and learning."
+      intro="Writing about the systems, tools, and decisions behind the work I build."
       routeId="blog"
       title="Blog"
     >
