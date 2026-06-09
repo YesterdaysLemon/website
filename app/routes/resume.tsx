@@ -18,7 +18,7 @@ export default function Resume() {
   return (
     <PageShell
       eyebrow="Resume"
-      intro="Experience, education, skills, certifications, and contact links for software, systems, and DevOps-focused roles."
+      intro="A role-focused snapshot of my experience across software development, systems, and delivery."
       routeId="resume"
       title={resumeData.name}
     >
