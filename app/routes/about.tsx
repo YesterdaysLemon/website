@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "About Alireza Afshan, a software and systems engineer working across applications, delivery, and information systems.",
+        "About Alireza Afshan, a software and systems engineer preparing for a June 2026 move to Las Vegas.",
     },
   ];
 }
@@ -18,7 +18,7 @@ export default function About() {
   return (
     <PageShell
       eyebrow="About"
-      intro="A short profile for the person behind the projects, notes, and systems work."
+      intro="A quick overview of my background, current focus, and where I am headed next."
       routeId="about"
       title="Alireza Afshan"
     >
@@ -35,7 +35,10 @@ export default function About() {
               systems, delivery pipelines, and the practical side of taking an
               idea from implementation to something people can use.
             </p>
-            <p className="text-muted">Based in Doha, Qatar.</p>
+            <p className="text-muted">
+              Currently preparing for a move to Las Vegas, Nevada on June 15,
+              2026.
+            </p>
           </div>
         </section>
 

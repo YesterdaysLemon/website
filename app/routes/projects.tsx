@@ -49,7 +49,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="A few projects pulled from markdown files. The goal is not to list everything, only the work that says something useful."
+      intro="Selected software and systems work from school, internships, and independent builds."
       routeId="projects"
       title="Projects"
     >
