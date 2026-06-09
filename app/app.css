@@ -680,67 +680,15 @@
 
   .under-construction-sprite {
     position: absolute;
-    top: var(--sprite-start-y);
-    left: var(--sprite-start-x);
+    top: 0;
+    left: 0;
     z-index: 5;
     width: clamp(4.5rem, 14vw, 8.5rem);
     height: auto;
     image-rendering: auto;
-    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
-    animation: under-construction-bounce var(--sprite-duration) linear infinite;
-    animation-delay: var(--sprite-delay);
+    transform: translate3d(0, 0, 0);
     pointer-events: none;
     will-change: transform;
-  }
-
-  .under-construction-sprite-1 {
-    --sprite-start-x: 8%;
-    --sprite-start-y: 18%;
-    --sprite-travel-x: 68vw;
-    --sprite-travel-y: 46vh;
-    --sprite-rotate: -8deg;
-    --sprite-duration: 8.4s;
-    --sprite-delay: -1.7s;
-  }
-
-  .under-construction-sprite-2 {
-    --sprite-start-x: 73%;
-    --sprite-start-y: 14%;
-    --sprite-travel-x: -58vw;
-    --sprite-travel-y: 54vh;
-    --sprite-rotate: 9deg;
-    --sprite-duration: 9.7s;
-    --sprite-delay: -4.2s;
-  }
-
-  .under-construction-sprite-3 {
-    --sprite-start-x: 12%;
-    --sprite-start-y: 72%;
-    --sprite-travel-x: 62vw;
-    --sprite-travel-y: -50vh;
-    --sprite-rotate: 7deg;
-    --sprite-duration: 10.1s;
-    --sprite-delay: -6.5s;
-  }
-
-  .under-construction-sprite-4 {
-    --sprite-start-x: 78%;
-    --sprite-start-y: 68%;
-    --sprite-travel-x: -64vw;
-    --sprite-travel-y: -42vh;
-    --sprite-rotate: -6deg;
-    --sprite-duration: 8.8s;
-    --sprite-delay: -3.1s;
-  }
-
-  .under-construction-sprite-5 {
-    --sprite-start-x: 45%;
-    --sprite-start-y: 9%;
-    --sprite-travel-x: 24vw;
-    --sprite-travel-y: 66vh;
-    --sprite-rotate: 3deg;
-    --sprite-duration: 11.2s;
-    --sprite-delay: -8.3s;
   }
 }
 
@@ -751,27 +699,6 @@
   }
   50% {
     translate: 0 -0.38rem;
-  }
-}
-
-@keyframes under-construction-bounce {
-  0% {
-    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
-  }
-  25% {
-    transform: translate3d(var(--sprite-travel-x), 14vh, 0)
-      rotate(calc(var(--sprite-rotate) * -1));
-  }
-  50% {
-    transform: translate3d(var(--sprite-travel-x), var(--sprite-travel-y), 0)
-      rotate(var(--sprite-rotate));
-  }
-  75% {
-    transform: translate3d(12vw, var(--sprite-travel-y), 0)
-      rotate(calc(var(--sprite-rotate) * -1));
-  }
-  100% {
-    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
   }
 }
 
@@ -893,7 +820,7 @@
   }
 
   .under-construction-sprite {
-    transform: translate3d(0, 0, 0) rotate(var(--sprite-rotate));
+    transform: translate3d(0, 0, 0);
     will-change: auto;
   }
 
