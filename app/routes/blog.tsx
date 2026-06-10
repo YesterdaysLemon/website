@@ -20,7 +20,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Notes on software, systems, delivery, and maintaining a small site.",
+        "my incessant yapping.",
     },
   ];
 }
@@ -37,7 +37,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Notes"
-      intro="Writing about the systems, tools, and decisions behind the work I build."
+      intro="Where I can yap into the void."
       routeId="blog"
       title="Blog"
     >

@@ -18,7 +18,7 @@ export default function Resume() {
   return (
     <PageShell
       eyebrow="Resume"
-      intro="A role-focused snapshot of my experience across software development, systems, and delivery."
+      intro="Basically my resume, but on the internet and with more words and details."
       routeId="resume"
       title={resumeData.name}
     >

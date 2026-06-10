@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
     { title: "projects | alireza afshan" },
     {
       name: "description",
-      content: "Selected work spanning applications, systems, and delivery.",
+      content: "oooh shiny projects.",
     },
   ];
 }
@@ -49,7 +49,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="Selected software and systems work from school, internships, and independent builds."
+      intro="Selected works from school, internships, and independent builds. Still a WIP as I add more projects and details over time."
       routeId="projects"
       title="Projects"
     >
