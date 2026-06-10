@@ -332,12 +332,7 @@ export function UnderConstructionOverlay({
           {route.rank}
           {route.suit} / Under Construction
         </p>
-        <h2>Still wiring this page together</h2>
-        <p>
-          The {route.label.toLowerCase()} archive is getting polished up. The
-          rest of the site is open while this corner stays behind the caution
-          tape.
-        </p>
+        <h2>gimmie a sec :3</h2>
       </div>
     </aside>
   );
