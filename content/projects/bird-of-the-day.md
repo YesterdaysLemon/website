@@ -9,8 +9,8 @@ tags:
   - APIs
   - Docker
   - GitHub Actions
-repoUrl: https://github.com/YesterdaysLemon/birdoftheday
 liveUrl: https://birds.alirezaafshan.com/
+coverImage: images/projects/birdoftheday/bird.png
 order: 3
 ---
 

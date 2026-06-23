@@ -10,6 +10,7 @@ tags:
   - Mobile
   - Cloud Database
 order: 5
+coverImage: images/projects/drive-safe-doha/cover.svg
 ---
 
 <!-- personal-notes -->
