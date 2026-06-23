@@ -332,7 +332,7 @@ export function UnderConstructionOverlay({
           {route.rank}
           {route.suit} / Under Construction
         </p>
-        <h2>gimmie a sec :3</h2>
+        <h2>gimmie a sec plz :3</h2>
       </div>
     </aside>
   );
