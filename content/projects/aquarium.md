@@ -11,7 +11,7 @@ tags:
   - WebGL
 repoUrl: https://github.com/YesterdaysLemon/aquarium
 liveUrl: https://fish.alirezaafshan.com/
-coverImage: public/images/projects/aquarium/aquarium.png
+coverImage: images/projects/aquarium/aquarium.png
 order: 2
 ---
 
