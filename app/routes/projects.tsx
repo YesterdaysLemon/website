@@ -81,7 +81,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                     {getArchiveMarker("projects", index)}
                   </span>
                   {project.status ? (
-                    <span className="archive-tag max-w-[7.5rem] text-right text-[0.68rem] tracking-[0.14em] uppercase">
+                    <span className="archive-tag project-status-tag">
                       {project.status}
                     </span>
                   ) : null}
