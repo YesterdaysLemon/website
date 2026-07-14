@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "About Alireza Afshan, who barfs up their life story in a desperate attempt to get a job in software engineering.",
+        "A little background on Alireza Afshan, the scenic route into software, and the systems that keep turning into side quests.",
     },
   ];
 }
@@ -18,50 +18,44 @@ export default function About() {
   return (
     <PageShell
       eyebrow="About"
-      intro="It all began when I was a young..."
+      intro="A little background, a few detours, and why I keep building things."
       routeId="about"
       title="Alireza Afshan"
     >
       <div className="grid gap-8 lg:grid-cols-[0.7fr_0.3fr]">
         <section className="archive-card p-6 sm:p-8">
           <div className="max-w-3xl space-y-5 text-base leading-8 sm:text-lg">
-            <p className="text-muted">Hiya!</p>
             <p className="text-muted">
-              This is my a place where I can share a little bit about myself for
-              others but also a place where I can write some of my own ideas and
-              thoughts down. You can check out my resume page for details about
-              my employability generally, (if thats you're kinda thing), but you
-              can check my projects page and blog for things that I've worked on
-              or am working one currently.
+              Hiya! I&apos;m Alireza, a software developer with an Information
+              Systems degree and a tendency to turn small ideas into full
+              systems.
             </p>
             <p className="text-muted">
-              This website is also an exercise in building a personal website, blog, 
-              hosting, and doing all that from scratch. I gotta put my computer science
-              degree to use somehow.
+              This site is part portfolio, part playground, and part proof that
+              I can, in fact, keep a VPS alive. The resume has the tidy version,
+              Projects has the serious write-ups, and Showcase has the live
+              weird little things.
             </p>
             <p className="text-muted">
-              Before comp-sci stuff I was a student at the University of Arizona, where
-              I did some astronomy before switching to mathematics. Life got in the way 
-              (turns out undiagnosed ADHD shows up at around this time in life for a lot of people), so I 
-              couldn't finish the either degree. So I had to leave the country for a while and figure out what was
-              destroying my life and fix it pronto.
-              </p>
-            <p className="text-muted">
-              I basically had to restart university from scratch,
-              so I went to the University of Doha for Science and Technology, where the only degree kinda 
-              even remotely similar to what I was doing before was information systems in their college
-              of computing. 
-              </p>
-            <p className="text-muted">
-              It was a fine program. I learned a lot, especially in the systems design
-              and software design space. I ended up speed running in about 3 years, which was easy
-              because I have a general aptitude for learning and technical stuff (and stimulants help a lot too).
-              I graduated in 2026 with a bachelor's degree in information systems, and now I'm making my way back to the states
-              and trying to get a job in the software engineering space.
+              Before the software stuff, I studied astronomy and mathematics at
+              the University of Arizona. Life took a fairly aggressive detour,
+              including finally getting an ADHD diagnosis, so I stepped away,
+              regrouped, and later restarted my degree in Doha.
             </p>
             <p className="text-muted">
-              Based in Las Vegas, Nevada as of June 2026, but I'm open to remote work and opportunities in other locations as well.
-              (PLEASE SOME SF BAY AREA JOBS HIRE ME REMOTE I'M DESPERATE BUT I'M CRACKED I PROMISE.)
+              The closest fit at the University of Doha for Science and
+              Technology was Information Systems, which turned out to be a good
+              home for my particular mix of interests: software design,
+              databases, networking, Linux, deployment, and hardware-adjacent
+              projects. I finished the degree with honors in May 2026 after
+              speed-running it in about three years.
+            </p>
+            <p className="text-muted">
+              I&apos;m now based in Las Vegas and looking for junior software,
+              backend, systems, or DevOps work. Remote is great, relocation is
+              on the table, and I especially like work where code has to survive
+              contact with real infrastructure, real users, or slightly cursed
+              hardware.
             </p>
           </div>
         </section>
@@ -85,6 +79,14 @@ export default function About() {
                 target="_blank"
               >
                 GitHub
+              </a>
+              <a
+                className="archive-inline-link block"
+                href={resumeData.linkedInUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                LinkedIn
               </a>
             </div>
           </section>
@@ -112,8 +114,8 @@ export default function About() {
                 "AI Safety",
                 "Rationality",
                 "Thinking too much",
-                "Not thinking enough"
-                ].map((item) => (
+                "Not thinking enough",
+              ].map((item) => (
                 <span key={item} className="archive-tag text-sm">
                   {item}
                 </span>

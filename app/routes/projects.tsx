@@ -12,7 +12,8 @@ export function meta({}: Route.MetaArgs) {
     { title: "projects | alireza afshan" },
     {
       name: "description",
-      content: "oooh shiny projects.",
+      content:
+        "Full-stack apps, mobile prototypes, deployment tooling, and a few projects that got slightly out of hand.",
     },
   ];
 }
@@ -49,7 +50,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="Selected works from school, internships, and independent builds. Still a WIP as I add more projects and details over time."
+      intro="A mix of school projects, infrastructure, and side quests that got a little out of hand. Open a card for the honest version and the technical details."
       routeId="projects"
       title="Projects"
     >
@@ -101,7 +102,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
               ) : null}
 
               <div className="archive-inline-link mt-6 w-fit text-sm font-bold">
-                Open notes
+                Open project
               </div>
             </div>
           </Link>
@@ -160,7 +161,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                       rel="noreferrer"
                       target="_blank"
                     >
-                      Repository
+                      View code
                     </a>
                   ) : null}
                   {selectedProject.liveUrl ? (
@@ -170,22 +171,22 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                       rel="noreferrer"
                       target="_blank"
                     >
-                      Live link
+                      Open live site
                     </a>
                   ) : null}
                 </div>
               ) : null}
 
               <section className="project-personal-notes-panel mb-6">
-                <h3 className="project-section-label">Personal notes</h3>
+                <h3 className="project-section-label">My notes</h3>
                 {selectedProject.personalNotes ? (
                   <MarkdownContent>
                     {selectedProject.personalNotes}
                   </MarkdownContent>
                 ) : (
                   <p className="text-muted text-sm leading-7 italic sm:text-base">
-                    Personal notes are not written yet. I&apos;ll add my own
-                    reflections here later.
+                    I have not written the behind-the-scenes bit for this one
+                    yet.
                   </p>
                 )}
               </section>
@@ -194,7 +195,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 <section className="project-ai-summary-panel">
                   <div className="project-ai-summary-label">
                     <span className="project-ai-summary-badge">01</span>
-                    AI-generated summary
+                    Technical summary
                   </div>
                   <MarkdownContent>{selectedProject.aiSummary}</MarkdownContent>
                 </section>

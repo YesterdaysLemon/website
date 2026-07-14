@@ -75,23 +75,26 @@ for example `127.0.0.1:9000`.
 Authored content lives in-repo.
 
 - Projects live in `content/projects/*.md`
-- Blog posts live in `content/blog/*.md`
-- Project and blog images live in `public/images/...`
+- The Showcase page pulls its live links from project `liveUrl` frontmatter
+- Archived blog posts remain in `content/blog/*.md`, but are no longer routed publicly
+- Project images live in `public/images/projects/...`
 - The resume page content lives in `app/content/resume.ts`
 
-Markdown entries use frontmatter plus body content. Image references should use site-relative paths such as `/images/blog/my-post/cover.svg`.
+Project markdown uses frontmatter plus `personal-notes` and `ai-summary` body
+sections. Image references should use site-relative paths such as
+`/images/projects/my-project/cover.png`.
 
-## Copy replacement TODO
+## Copy maintenance notes
 
-Use this section as a working checklist when rewriting page copy.
+Use this section as a quick map when refreshing page copy.
 
 - Home page: replace the hero eyebrow in `app/routes/home.tsx` with the exact positioning you want visitors to remember.
-- Home cards: rewrite the card summaries for About, Blog, Projects, and Resume in `app/routes/home.tsx`.
+- Home cards: rewrite the card summaries for About, Showcase, Projects, and Resume in `app/routes/home.tsx`.
 - About page: replace the page intro, profile paragraphs, and focus tags in `app/routes/about.tsx`.
 - Projects page: replace the page intro in `app/routes/projects.tsx`.
 - Project entries: rewrite the frontmatter summaries and markdown body sections in `content/projects/*.md`.
-- Blog index: replace the page intro in `app/routes/blog.tsx`.
-- Blog posts: rewrite titles, summaries, publish dates, tags, and bodies in `content/blog/*.md`.
+- Showcase page: update live-site copy and the construction crew in `app/routes/showcase.tsx`.
+- Archived blog URLs redirect to Showcase through `app/routes/blog.tsx` and `app/routes/blog-post.tsx`.
 - Resume page: update the intro in `app/routes/resume.tsx` and the structured resume data in `app/content/resume.ts`.
 - Footer/contact: confirm the displayed footer email in `app/components/page-shell.tsx` and resume contact links in `app/content/resume.ts`.
 - Metadata: update route `meta()` titles and descriptions in each route after the visible copy is final.

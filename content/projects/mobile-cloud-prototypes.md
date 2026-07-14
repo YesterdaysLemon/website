@@ -1,6 +1,6 @@
 ---
 title: React Native Cloud Prototypes
-summary: Pair of Expo and Firebase mobile proofs of concept covering vehicle approval and QR attendance workflows.
+summary: "Two Expo/Firebase prototypes: one for vehicle access approvals and one for QR-based classroom attendance."
 year: 2025
 status: Proofs of concept
 tags:
@@ -10,10 +10,14 @@ tags:
   - Mobile
   - Cloud Database
 order: 5
-coverImage: images/projects/drive-safe-doha/cover.svg
+coverImage: /images/projects/drive-safe-doha/cover.svg
 ---
 
 <!-- personal-notes -->
+
+These were my first serious passes at taking a mobile workflow all the way from a phone screen to cloud-backed state. Drive Safe handled photo-based vehicle approvals; the attendance prototype swapped that flow for teacher-generated QR codes and student check-ins.
+
+They are proofs of concept, not production security systems, and their Firebase backends are intentionally switched off now. The useful part was learning the loop: permissions, routing, role-specific screens, uploads, live database updates, and all the small failure states that appear once an app leaves a single device.
 
 <!-- ai-summary -->
 

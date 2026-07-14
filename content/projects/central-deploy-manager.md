@@ -1,6 +1,6 @@
 ---
 title: Central Deploy Manager
-summary: Signed webhook and Docker rollout manager for deploying multiple small web apps on one VPS behind Caddy subdomains.
+summary: "The deployment plumbing behind this site and its smaller siblings: signed webhooks, health-checked Docker rollouts, and Caddy routing on one VPS."
 year: 2026
 status: Live infrastructure
 tags:
@@ -10,11 +10,15 @@ tags:
   - GitHub Actions
   - VPS
 repoUrl: https://github.com/YesterdaysLemon/deploy-manager
-coverImage: images/projects/central-deploy-manager/central-deploy.png
+coverImage: /images/projects/central-deploy-manager/central-deploy.png
 order: 1
 ---
 
 <!-- personal-notes -->
+
+I built this because copying a slightly different deployment setup into every tiny side project was getting old fast. I wanted each app to own its code and Dockerfile while one boring, predictable service handled the dangerous bit on the server.
+
+Now a new app mostly needs a health endpoint, a small config file, and a webhook secret. The manager builds a candidate container, checks that it is alive, and only then swaps it into production. It is not the flashiest project here, but it is the reason the flashier ones can live on their own subdomains without me manually babysitting every deploy.
 
 <!-- ai-summary -->
 

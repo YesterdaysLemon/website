@@ -1,6 +1,6 @@
 ---
 title: CentraID
-summary: Full-stack capstone attendance platform connecting a NestJS/PostgreSQL backend, Expo mobile app, and Raspberry Pi reader service for classroom check-ins.
+summary: A six-person capstone connecting a NestJS/PostgreSQL backend, an Expo mobile app, and a classroom reader service for verified check-ins.
 year: 2026
 status: Completed prototype
 tags:
@@ -14,6 +14,12 @@ coverImage: /images/projects/centraid/cover.svg
 ---
 
 <!-- personal-notes -->
+
+CentraID was the big one: six people, three codebases, physical readers, mobile apps, a backend, and a deadline that did not care how many moving pieces we had.
+
+My strongest ownership was the backend, reader integration, deployment setup, and the documentation that kept everyone pointed in roughly the same direction. I liked the awkward boundaries most—where a phone had to talk to a reader, the reader had to survive spotty connectivity, and the backend still had to decide whether an attendance event made sense.
+
+We finished the prototype, presented it to a three-judge panel, received an A, and left with a much better understanding of why “full stack” sometimes means “please also configure this Raspberry Pi.”
 
 <!-- ai-summary -->
 

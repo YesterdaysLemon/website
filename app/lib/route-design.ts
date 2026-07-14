@@ -1,7 +1,7 @@
 export type RouteDesignId =
   | "about"
   | "projects"
-  | "blog"
+  | "showcase"
   | "resume"
   | "contact";
 export type SuitName = "spade" | "heart" | "club" | "diamond";
@@ -36,15 +36,14 @@ export const routeDesigns = {
     suitName: "spade",
     accent: "var(--spade)",
   },
-  blog: {
-    id: "blog",
-    to: "/blog",
-    label: "Blog",
-    rank: "B",
+  showcase: {
+    id: "showcase",
+    to: "/showcase",
+    label: "Showcase",
+    rank: "S",
     suit: "\u2665",
     suitName: "heart",
     accent: "var(--heart)",
-    underConstruction: true,
   },
   resume: {
     id: "resume",
@@ -69,7 +68,7 @@ export const routeDesigns = {
 export const archiveNavItems = [
   routeDesigns.about,
   routeDesigns.projects,
-  routeDesigns.blog,
+  routeDesigns.showcase,
   routeDesigns.resume,
 ];
 

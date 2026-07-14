@@ -4,7 +4,7 @@ import type { Route } from "./+types/home";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
-type CardId = "about" | "blog" | "projects" | "resume";
+type CardId = "about" | "showcase" | "projects" | "resume";
 type Breakpoint = "mobile" | "tablet" | "desktop";
 
 type ActionCard = {
@@ -68,12 +68,12 @@ const actionCards: ActionCard[] = [
     accent: "var(--diamond)",
   },
   {
-    id: "blog",
-    title: "Blog",
-    rank: "B",
+    id: "showcase",
+    title: "Showcase",
+    rank: "S",
     suit: "\u2665",
-    to: "/blog",
-    summary: "Notes on software and delivery.",
+    to: "/showcase",
+    summary: "Live experiments and weird little side quests.",
     accent: "var(--heart)",
   },
   {
@@ -82,7 +82,7 @@ const actionCards: ActionCard[] = [
     rank: "P",
     suit: "\u2660",
     to: "/projects",
-    summary: "Selected work, systems, and builds.",
+    summary: "The useful details behind the things I build.",
     accent: "var(--spade)",
   },
   {
@@ -91,7 +91,7 @@ const actionCards: ActionCard[] = [
     rank: "R",
     suit: "\u2663",
     to: "/resume",
-    summary: "Experience, education, and skills.",
+    summary: "Experience, skills, and the tidy version of events.",
     accent: "var(--club)",
   },
 ];
@@ -99,19 +99,19 @@ const actionCards: ActionCard[] = [
 const spreadPositions: Record<Breakpoint, Record<CardId, SpreadPosition>> = {
   mobile: {
     about: { x: 22, y: 77, rotate: -13 },
-    blog: { x: 40, y: 74, rotate: -5 },
+    showcase: { x: 40, y: 74, rotate: -5 },
     projects: { x: 60, y: 74, rotate: 5 },
     resume: { x: 78, y: 77, rotate: 13 },
   },
   tablet: {
     about: { x: 30, y: 61, rotate: -16 },
-    blog: { x: 43, y: 55, rotate: -6 },
+    showcase: { x: 43, y: 55, rotate: -6 },
     projects: { x: 57, y: 55, rotate: 6 },
     resume: { x: 70, y: 61, rotate: 16 },
   },
   desktop: {
     about: { x: 31, y: 60, rotate: -17 },
-    blog: { x: 44, y: 53, rotate: -6 },
+    showcase: { x: 44, y: 53, rotate: -6 },
     projects: { x: 56, y: 53, rotate: 6 },
     resume: { x: 69, y: 60, rotate: 17 },
   },
@@ -125,7 +125,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Software and systems engineer working across application development, delivery, and information systems.",
+        "Software developer building full-stack apps, deployment tooling, and the occasional weird little web experiment.",
     },
   ];
 }
@@ -562,7 +562,7 @@ export default function Home() {
       >
         <div className="pointer-events-none absolute top-5 left-4 z-10 max-w-[18rem] sm:top-8 sm:left-8 sm:max-w-md lg:max-w-lg">
           <p className="mb-3 text-[0.65rem] font-bold tracking-[0.28em] text-white/62 uppercase sm:text-xs">
-            Software / DevOps / Information Systems
+            Software / Systems / Small Web Experiments
           </p>
           <h1 className="font-serif text-4xl leading-none text-white sm:text-6xl lg:text-7xl xl:text-8xl">
             Alireza Afshan

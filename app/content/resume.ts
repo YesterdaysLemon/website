@@ -44,17 +44,31 @@ export type ResumeData = {
 
 export const resumeData: ResumeData = {
   name: "Alireza Afshan",
-  role: "Junior Software Developer | Systems & DevOps",
+  role: "Junior Software Developer | Backend, Systems & DevOps",
   summary:
-    "Recent Information Systems graduate with honors and hands-on experience building full-stack, mobile, and backend systems. Skilled in developing APIs, containerizing services, maintaining CI/CD workflows, and working across software, infrastructure, and hardware-adjacent environments. Brings a strong foundation in programming, databases, Linux, networking, and systems design, supported by prior academic training in mathematics and astronomy. Seeking entry-level software development, backend, systems, or DevOps opportunities.",
-  location: "Las Vegas, NV - relocating June 15, 2026",
-  email: "alirezaafshan4@gmail.com",
+    "Information Systems graduate with honors who likes working where software meets systems. I have built full-stack and mobile apps, designed REST APIs, worked with PostgreSQL and SQLite, containerized services with Docker, and maintained CI/CD workflows. Recent work includes a multi-part attendance platform, internal image tooling for a manufacturing business, and the deployment setup behind the small web apps on this site. I am looking for junior software, backend, systems, or DevOps roles.",
+  location: "Las Vegas, NV | open to remote work and relocation",
+  email: "mail@alirezaafshan.com",
   websiteUrl: "https://alirezaafshan.com",
   githubUrl: "https://github.com/YesterdaysLemon",
   linkedInUrl: "https://www.linkedin.com/in/alireza-afshan",
   experience: [
     {
-      title: "Lead Developer - CentraID Capstone Project",
+      title: "Independent Software & Infrastructure Projects",
+      organization: "Personal projects",
+      location: "Las Vegas, NV",
+      start: "May 2026",
+      end: "Present",
+      summary:
+        "Building and self-hosting a small collection of web experiments, including this portfolio, Aquarium, and Bird of the Day.",
+      highlights: [
+        "Built a signed webhook deployment manager that runs health-checked Docker rollouts with rollback support across multiple apps on one VPS behind Caddy.",
+        "Built a React and Three.js browser aquarium and a React and Express bird site backed by eBird and Wikipedia data.",
+        "Automated deployments through GitHub Actions while keeping API keys, webhook secrets, and server configuration out of application repositories.",
+      ],
+    },
+    {
+      title: "Backend & Systems Lead - CentraID Capstone",
       organization: "University of Doha for Science and Technology",
       location: "Doha, Qatar",
       start: "September 2025",
@@ -159,6 +173,8 @@ export const resumeData: ResumeData = {
         "React",
         "React Native",
         "Expo",
+        "Three.js",
+        "Vite",
         "Tailwind",
       ],
     },
@@ -175,6 +191,9 @@ export const resumeData: ResumeData = {
         "GitHub Actions",
         "CI/CD",
         "Linux",
+        "Caddy",
+        "nginx",
+        "VPS deployment",
         "REST APIs",
       ],
     },

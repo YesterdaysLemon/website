@@ -1,8 +1,8 @@
 ---
 title: Aquarium
-summary: Interactive Three.js aquarium scene deployed as a static Dockerized web app on a dedicated subdomain.
+summary: A small 3D aquarium for the browser, built with React and Three.js and deployed like a real app because apparently I cannot leave anything simple.
 year: 2026
-status: Live
+status: Live and swimming
 tags:
   - React
   - Three.js
@@ -11,11 +11,15 @@ tags:
   - WebGL
 repoUrl: https://github.com/YesterdaysLemon/aquarium
 liveUrl: https://fish.alirezaafshan.com/
-coverImage: images/projects/aquarium/aquarium.png
+coverImage: /images/projects/aquarium/aquarium.png
 order: 2
 ---
 
 <!-- personal-notes -->
+
+This started as “what if I put a little fish tank on a subdomain?” and then immediately became a lesson in 3D assets, camera behavior, lighting, performance, and how much personality a low-poly fish can have.
+
+It is one of my favorite kinds of project: technically useful, completely unnecessary, and pleasant to leave open in a tab. It also gave me a good excuse to run the whole delivery path for a static app instead of stopping at a local demo.
 
 <!-- ai-summary -->
 
