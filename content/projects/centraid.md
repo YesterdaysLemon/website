@@ -9,7 +9,7 @@ tags:
   - Docker
   - RFID
   - CI/CD
-order: 4
+order: 6
 coverImage: /images/projects/centraid/cover.svg
 ---
 

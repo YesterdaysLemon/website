@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, PointerEvent, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
 
 import {
@@ -30,6 +31,66 @@ export function PageShell({
   const footerContact = routeDesigns.contact;
   const showUnderConstructionOverlay =
     shouldShowUnderConstructionOverlay(route);
+  const headerCardRef = useRef<HTMLButtonElement | null>(null);
+  const spinTimerRef = useRef<number | null>(null);
+  const [isCardSpinning, setIsCardSpinning] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (spinTimerRef.current !== null) {
+        window.clearTimeout(spinTimerRef.current);
+      }
+    };
+  }, []);
+
+  function handleCardPointerMove(event: PointerEvent<HTMLButtonElement>) {
+    if (isCardSpinning || event.pointerType === "touch") {
+      return;
+    }
+
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const pointerX = (event.clientX - rect.left) / rect.width;
+    const pointerY = (event.clientY - rect.top) / rect.height;
+    const rotateX = (0.5 - pointerY) * 11;
+    const rotateY = (pointerX - 0.5) * 13;
+
+    card.style.setProperty("--header-card-tilt-x", `${rotateX.toFixed(2)}deg`);
+    card.style.setProperty("--header-card-tilt-y", `${rotateY.toFixed(2)}deg`);
+    card.style.setProperty("--header-card-glow-x", `${pointerX * 100}%`);
+    card.style.setProperty("--header-card-glow-y", `${pointerY * 100}%`);
+  }
+
+  function resetHeaderCardTilt() {
+    const card = headerCardRef.current;
+
+    if (!card) {
+      return;
+    }
+
+    card.style.setProperty("--header-card-tilt-x", "0deg");
+    card.style.setProperty("--header-card-tilt-y", "0deg");
+    card.style.setProperty("--header-card-glow-x", "50%");
+    card.style.setProperty("--header-card-glow-y", "50%");
+  }
+
+  function spinHeaderCard() {
+    if (isCardSpinning) {
+      return;
+    }
+
+    resetHeaderCardTilt();
+    setIsCardSpinning(true);
+
+    if (spinTimerRef.current !== null) {
+      window.clearTimeout(spinTimerRef.current);
+    }
+
+    spinTimerRef.current = window.setTimeout(() => {
+      setIsCardSpinning(false);
+      spinTimerRef.current = null;
+    }, 780);
+  }
 
   return (
     <div
@@ -97,9 +158,18 @@ export function PageShell({
               ) : null}
             </div>
 
-            <div
-              aria-hidden="true"
-              className="border-line bg-card hidden aspect-[2.5/3.5] rounded-[var(--radius)] border p-4 text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.08)] md:flex md:flex-col md:justify-between"
+            <button
+              aria-label={`Spin the ${route.label} card`}
+              className={[
+                "header-playing-card border-line bg-card hidden aspect-[2.5/3.5] rounded-[var(--radius)] border p-4 text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.08)] md:flex md:flex-col md:justify-between",
+                isCardSpinning ? "is-spinning" : "",
+              ].join(" ")}
+              onClick={spinHeaderCard}
+              onPointerLeave={resetHeaderCardTilt}
+              onPointerMove={handleCardPointerMove}
+              ref={headerCardRef}
+              title="Give the card a spin"
+              type="button"
             >
               <div className="flex items-start justify-between gap-2">
                 <span className="font-serif text-4xl leading-none">
@@ -118,7 +188,7 @@ export function PageShell({
                   {route.rank}
                 </span>
               </div>
-            </div>
+            </button>
           </div>
         </header>
 
