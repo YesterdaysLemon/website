@@ -4,7 +4,7 @@ import type { Route } from "./+types/home";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
-type CardId = "about" | "showcase" | "projects" | "resume";
+type CardId = "about" | "showcase" | "projects" | "resume" | "joker";
 type Breakpoint = "mobile" | "tablet" | "desktop";
 
 type ActionCard = {
@@ -77,6 +77,15 @@ const actionCards: ActionCard[] = [
     accent: "var(--heart)",
   },
   {
+    id: "joker",
+    title: "Wildcard",
+    rank: "★",
+    suit: "✦",
+    to: "/showcase#micro-experiments",
+    summary: "Something small, strange, and chosen at random.",
+    accent: "#8a5a12",
+  },
+  {
     id: "projects",
     title: "Projects",
     rank: "P",
@@ -98,24 +107,35 @@ const actionCards: ActionCard[] = [
 
 const spreadPositions: Record<Breakpoint, Record<CardId, SpreadPosition>> = {
   mobile: {
-    about: { x: 22, y: 77, rotate: -13 },
-    showcase: { x: 40, y: 74, rotate: -5 },
-    projects: { x: 60, y: 74, rotate: 5 },
-    resume: { x: 78, y: 77, rotate: 13 },
+    about: { x: 13, y: 78, rotate: -15 },
+    showcase: { x: 32, y: 74, rotate: -7 },
+    joker: { x: 50, y: 72, rotate: 0 },
+    projects: { x: 68, y: 74, rotate: 7 },
+    resume: { x: 87, y: 78, rotate: 15 },
   },
   tablet: {
-    about: { x: 30, y: 61, rotate: -16 },
-    showcase: { x: 43, y: 55, rotate: -6 },
-    projects: { x: 57, y: 55, rotate: 6 },
-    resume: { x: 70, y: 61, rotate: 16 },
+    about: { x: 22, y: 62, rotate: -17 },
+    showcase: { x: 36, y: 56, rotate: -8 },
+    joker: { x: 50, y: 53, rotate: 0 },
+    projects: { x: 64, y: 56, rotate: 8 },
+    resume: { x: 78, y: 62, rotate: 17 },
   },
   desktop: {
-    about: { x: 31, y: 60, rotate: -17 },
-    showcase: { x: 44, y: 53, rotate: -6 },
-    projects: { x: 56, y: 53, rotate: 6 },
-    resume: { x: 69, y: 60, rotate: 17 },
+    about: { x: 25, y: 61, rotate: -18 },
+    showcase: { x: 38, y: 55, rotate: -8 },
+    joker: { x: 50, y: 52, rotate: 0 },
+    projects: { x: 62, y: 55, rotate: 8 },
+    resume: { x: 75, y: 61, rotate: 18 },
   },
 };
+
+const jokerDestinations = [
+  "/showcase#micro-experiments",
+  "/projects?project=wurmkickflip",
+  "/projects?project=aquarium",
+  "/projects?project=bird-of-the-day",
+  "/projects?project=central-deploy-manager",
+] as const;
 
 const initialStackOrder = actionCards.map((card) => card.id);
 
@@ -125,7 +145,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Software developer building full-stack apps, deployment tooling, and the occasional weird little web experiment.",
+        "Software developer building public tools, secure AI workflows, deployment infrastructure, and the occasional weird little web experiment.",
     },
   ];
 }
@@ -238,6 +258,8 @@ export default function Home() {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>("desktop");
   const [hasDealt, setHasDealt] = useState(false);
   const [isShuffling, setIsShuffling] = useState(true);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [showPlayHint, setShowPlayHint] = useState(false);
   const [draggingId, setDraggingId] = useState<CardId | null>(null);
   const [liftingId, setLiftingId] = useState<CardId | null>(null);
   const [playingId, setPlayingId] = useState<CardId | null>(null);
@@ -289,7 +311,27 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    if (hasInteracted) {
+      setShowPlayHint(false);
+      return;
+    }
+
+    const hintTimer = window.setTimeout(() => {
+      setShowPlayHint(true);
+    }, 1450);
+
+    return () => window.clearTimeout(hintTimer);
+  }, [hasInteracted]);
+
   function navigateToCard(card: ActionCard) {
+    if (card.id === "joker") {
+      const destination =
+        jokerDestinations[Math.floor(Math.random() * jokerDestinations.length)];
+      navigate(destination);
+      return;
+    }
+
     if (isMailLink(card.to)) {
       window.location.href = card.to;
       return;
@@ -365,6 +407,9 @@ export default function Home() {
       return;
     }
 
+    setHasInteracted(true);
+    resetCardTilt(event.currentTarget);
+
     const tableRect = tableRef.current?.getBoundingClientRect();
 
     if (!tableRect) {
@@ -421,7 +466,41 @@ export default function Home() {
     const drag = dragRef.current;
     const tableRect = tableRef.current?.getBoundingClientRect();
 
-    if (!drag || !tableRect || drag.pointerId !== event.pointerId) {
+    if (!drag) {
+      if (event.pointerType !== "touch" && !playingId) {
+        const cardRect = event.currentTarget.getBoundingClientRect();
+        const pointerX = clamp(
+          (event.clientX - cardRect.left) / cardRect.width,
+          0,
+          1,
+        );
+        const pointerY = clamp(
+          (event.clientY - cardRect.top) / cardRect.height,
+          0,
+          1,
+        );
+
+        event.currentTarget.style.setProperty(
+          "--home-card-tilt-x",
+          `${((0.5 - pointerY) * 16).toFixed(2)}deg`,
+        );
+        event.currentTarget.style.setProperty(
+          "--home-card-tilt-y",
+          `${((pointerX - 0.5) * 20).toFixed(2)}deg`,
+        );
+        event.currentTarget.style.setProperty(
+          "--home-card-glow-x",
+          `${(pointerX * 100).toFixed(1)}%`,
+        );
+        event.currentTarget.style.setProperty(
+          "--home-card-glow-y",
+          `${(pointerY * 100).toFixed(1)}%`,
+        );
+      }
+      return;
+    }
+
+    if (!tableRect || drag.pointerId !== event.pointerId) {
       return;
     }
 
@@ -489,6 +568,7 @@ export default function Home() {
       drag.hasMoved && isInsidePlayZone(finalPosition.x, finalPosition.y);
 
     dragRef.current = null;
+    resetCardTilt(event.currentTarget);
     setLiftingId(null);
     setDraggingId(null);
     setDragRotations((current) => {
@@ -527,15 +607,26 @@ export default function Home() {
     event: MouseEvent<HTMLAnchorElement>,
     card: ActionCard,
   ) {
+    setHasInteracted(true);
+
     if (suppressClickRef.current || playingId) {
       event.preventDefault();
       return;
     }
 
+    resetCardTilt(event.currentTarget);
+
     if (!isMailLink(card.to)) {
       event.preventDefault();
       navigateToCard(card);
     }
+  }
+
+  function resetCardTilt(card: HTMLAnchorElement) {
+    card.style.setProperty("--home-card-tilt-x", "0deg");
+    card.style.setProperty("--home-card-tilt-y", "0deg");
+    card.style.setProperty("--home-card-glow-x", "50%");
+    card.style.setProperty("--home-card-glow-y", "50%");
   }
 
   return (
@@ -555,6 +646,21 @@ export default function Home() {
         ].join(" ")}
         ref={playZoneRef}
       />
+
+      <div
+        aria-hidden="true"
+        className={[
+          "card-play-hint",
+          showPlayHint ? "is-visible" : "",
+          draggingId ? "is-active" : "",
+        ].join(" ")}
+      >
+        <span className="card-play-hint-arrow">↑</span>
+        <span>
+          <strong>Pick a card.</strong>
+          <small>Or drag one into the light to play it.</small>
+        </span>
+      </div>
 
       <section
         aria-label="Interactive card table navigation"
@@ -619,6 +725,7 @@ export default function Home() {
                 isPlaying
                   ? "is-playing z-50 shadow-[0_34px_90px_rgba(255,253,248,0.18)] brightness-110"
                   : "",
+                card.id === "joker" ? "is-joker" : "",
                 hasDealt && !isDragging && !isLifting && !isPlaying
                   ? "is-idle"
                   : "",
@@ -628,6 +735,7 @@ export default function Home() {
               onClick={(event) => handleCardClick(event, card)}
               onPointerCancel={handlePointerUp}
               onPointerDown={(event) => handlePointerDown(event, card.id)}
+              onPointerLeave={(event) => resetCardTilt(event.currentTarget)}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               style={

@@ -1,31 +1,22 @@
-import type { CSSProperties } from "react";
 import type { Route } from "./+types/showcase";
 
 import { Link } from "react-router";
 
+import { ConstructionMicroLab } from "~/components/construction-micro-lab";
 import { PageShell } from "~/components/page-shell";
 import { getProjects } from "~/lib/content.server";
 import { getArchiveMarker } from "~/lib/route-design";
-
-const constructionCrew = [
-  "verycoolskullwithhardhatandshovelslikeajollyroger.gif",
-  "undrkunstuksonwithhammer.gif",
-  "skullpoppingoutofholewithconstructiondebris.gif",
-  "pinupcalanderladywithunderconstructionsign.gif",
-  "manusingjackhammerwithdifficulty.gif",
-  "manhammeringwhileonhandsandknees.gif",
-  "mamaqsood_anwarconstruct.gif",
-  "gears2.gif",
-  "gears1.gif",
-  "anthropromorphisedhammerhittinganthronail.gif",
-  "animeworkerswithsign.gif",
-  "angryworkerholdingsigndoyouhaveaproblemwiththat.gif",
-] as const;
 
 const liveProjectCopy: Record<
   string,
   { eyebrow: string; description: string; cta: string }
 > = {
+  "job-application-batch-builder": {
+    eyebrow: "Public plugin + companion site",
+    description:
+      "An evidence-first Codex workflow for researching live roles and producing truthful, tailored application batches—with the privacy and support pages a real plugin needs.",
+    cta: "Visit the plugin site",
+  },
   aquarium: {
     eyebrow: "Now swimming",
     description:
@@ -46,7 +37,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Live web experiments, strange little builds, and whatever Alireza is tinkering with next.",
+        "Live web tools, public plugins, strange little builds, and whatever Alireza is tinkering with next.",
     },
   ];
 }
@@ -158,6 +149,7 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
         <section
           aria-labelledby="construction-title"
           className="archive-card showcase-construction-zone overflow-hidden"
+          id="micro-experiments"
         >
           <div className="showcase-caution-tape" aria-hidden="true">
             Under construction · Please stand clear · Under construction ·
@@ -173,36 +165,17 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                 className="mt-2 font-serif text-3xl text-[var(--route-accent)] sm:text-4xl"
                 id="construction-title"
               >
-                The tiny construction crew
+                The crew&apos;s tiny internet
               </h2>
               <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
-                These little guys used to block the blog. The blog is gone,
-                they&apos;ve been promoted, and now they live here. Please enjoy
-                them while I pretend there is a schedule.
+                These little guys used to ricochet around unfinished pages.
+                They&apos;ve been promoted again, and now they operate several
+                tiny, poorly regulated web systems. Push the buttons. Management
+                has accepted the risk.
               </p>
             </div>
 
-            <div className="showcase-crew-grid" aria-hidden="true">
-              {constructionCrew.map((asset, index) => (
-                <div
-                  className="showcase-crew-member"
-                  key={asset}
-                  style={
-                    {
-                      "--crew-delay": `${(index % 6) * -0.45}s`,
-                      "--crew-rotate": `${(index % 2 === 0 ? -1 : 1) * ((index % 3) + 1.5)}deg`,
-                    } as CSSProperties
-                  }
-                >
-                  <img
-                    alt=""
-                    decoding="async"
-                    loading="lazy"
-                    src={`/under-construction/${asset}`}
-                  />
-                </div>
-              ))}
-            </div>
+            <ConstructionMicroLab />
           </div>
         </section>
 

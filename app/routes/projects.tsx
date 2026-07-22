@@ -2,6 +2,7 @@ import type { Route } from "./+types/projects";
 import { useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 
+import { DeploymentPipeline } from "~/components/deployment-pipeline";
 import { MarkdownContent } from "~/components/markdown-content";
 import { PageShell } from "~/components/page-shell";
 import { getProjects } from "~/lib/content.server";
@@ -13,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Full-stack apps, mobile prototypes, deployment tooling, and a few projects that got slightly out of hand.",
+        "Public developer tools, secure AI workflows, full-stack apps, deployment infrastructure, and a few experiments that got slightly out of hand.",
     },
   ];
 }
@@ -50,7 +51,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="A mix of school projects, infrastructure, and side quests that got a little out of hand. Open a card for the honest version and the technical details."
+      intro="Public tools, infrastructure, product experiments, and a few side quests that got pleasantly out of hand. Open a card for the honest version and the technical details."
       routeId="projects"
       title="Projects"
     >
@@ -121,7 +122,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             to="/projects"
           />
 
-          <div className="border-line bg-warm-card relative z-10 flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[var(--radius)] border shadow-[0_40px_120px_rgba(0,0,0,0.2)]">
+          <div className="border-line bg-warm-card relative z-10 flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[var(--radius)] border shadow-[0_40px_120px_rgba(0,0,0,0.2)]">
             <div className="border-line flex items-start justify-between gap-6 border-b px-6 py-5 sm:px-8">
               <div>
                 <p className="text-muted text-xs font-semibold tracking-[0.24em] uppercase">
@@ -175,6 +176,10 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                     </a>
                   ) : null}
                 </div>
+              ) : null}
+
+              {selectedProject.slug === "central-deploy-manager" ? (
+                <DeploymentPipeline />
               ) : null}
 
               <section className="project-personal-notes-panel mb-6">
