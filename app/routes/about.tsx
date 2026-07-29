@@ -3,6 +3,52 @@ import type { Route } from "./+types/about";
 import { PageShell } from "~/components/page-shell";
 import { resumeData } from "~/content/resume";
 
+const focusAreas = [
+  {
+    title: "Developer tools that earn trust",
+    description:
+      "Typed outputs, bounded automation, human gates, and evidence another engineer can inspect.",
+  },
+  {
+    title: "Backend systems that survive contact",
+    description:
+      "APIs, data models, background work, and deployment paths designed around real failure modes.",
+  },
+  {
+    title: "Reproducible interactive systems",
+    description:
+      "Simulations and games with deterministic state, causal controls, replay, and honest authored boundaries.",
+  },
+  {
+    title: "Evidence-gated open research",
+    description:
+      "Exact finite checkpoints, independent verification, and unresolved questions that stay labeled unresolved.",
+  },
+] as const;
+
+const curiosityAreas = [
+  {
+    title: "Mathematical structure",
+    description:
+      "Graph theory, combinatorics, astronomy, and patterns with teeth.",
+  },
+  {
+    title: "Living systems",
+    description:
+      "Botany, connectomes, animal behavior, and simulated creatures.",
+  },
+  {
+    title: "Games as systems",
+    description:
+      "Card games, board games, video games, D&D, and delightful rules.",
+  },
+  {
+    title: "Human questions",
+    description:
+      "Philosophy, rationality, geopolitics, AI alignment, and safety.",
+  },
+] as const;
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "about | alireza afshan" },
@@ -23,7 +69,7 @@ export default function About() {
       title="Alireza Afshan"
     >
       <div className="grid gap-8 lg:grid-cols-[0.7fr_0.3fr]">
-        <section className="archive-card p-6 sm:p-8">
+        <section className="archive-card self-start p-6 sm:p-8">
           <div className="max-w-3xl space-y-5 text-base leading-8 sm:text-lg">
             <p className="text-muted">
               Hiya! I&apos;m Alireza, a software developer with an Information
@@ -52,15 +98,15 @@ export default function About() {
             </p>
             <p className="text-muted">
               I&apos;m now based in Las Vegas and looking for junior software,
-              backend, systems, or DevOps work. Remote is great, relocation is
-              on the table, and I especially like work where code has to survive
-              contact with real infrastructure, real users, or slightly cursed
-              hardware.
+              backend, systems, developer tooling, or DevOps work. Remote is
+              great, relocation is on the table, and I especially like work
+              where code has to survive contact with real infrastructure, real
+              users, uncertain evidence, or slightly cursed hardware.
             </p>
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside>
           <section className="archive-card p-6">
             <h2 className="font-serif text-2xl text-[var(--route-accent)]">
               Contact
@@ -90,39 +136,50 @@ export default function About() {
               </a>
             </div>
           </section>
-
-          <section className="archive-card p-6">
-            <h2 className="font-serif text-2xl text-[var(--route-accent)]">
-              Interests
-            </h2>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {[
-                "Information Systems",
-                "Software Engineering",
-                "Systems Design",
-                "Mathematics",
-                "Philosophy",
-                "Astronomy",
-                "Botany",
-                "Music",
-                "Geopolitical Strategy",
-                "Card Games",
-                "Board Games",
-                "Video Games",
-                "D&D",
-                "AI Alignment",
-                "AI Safety",
-                "Rationality",
-                "Thinking too much",
-                "Not thinking enough",
-              ].map((item) => (
-                <span key={item} className="archive-tag text-sm">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </section>
         </aside>
+      </div>
+
+      <div className="mt-8 grid gap-8 lg:grid-cols-[0.62fr_0.38fr]">
+        <section className="archive-card p-6 sm:p-8">
+          <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
+            Current focus
+          </p>
+          <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+            Problems I like working on
+          </h2>
+          <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
+            The common thread is inspectability: systems should explain what
+            they did, what they know, and where their confidence stops.
+          </p>
+          <div className="about-focus-list">
+            {focusAreas.map((item, index) => (
+              <article className="about-focus-item" key={item.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="archive-card p-6 sm:p-8">
+          <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
+            Off-duty inputs
+          </p>
+          <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+            Curiosities that leak into the work
+          </h2>
+          <div className="about-curiosity-list">
+            {curiosityAreas.map((item) => (
+              <article key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     </PageShell>
   );

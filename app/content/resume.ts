@@ -20,6 +20,7 @@ export type ResumeEducation = {
 
 export type ResumeSkillGroup = {
   label: string;
+  summary: string;
   details: string[];
 };
 
@@ -155,90 +156,70 @@ export const resumeData: ResumeData = {
   ],
   skills: [
     {
-      label: "Languages",
+      label: "Backend & data systems",
+      summary:
+        "Services and data flows that stay understandable after the demo is over.",
       details: [
-        "TypeScript",
-        "JavaScript",
-        "Python",
-        "Java",
-        "SQL",
-        "HTML",
-        "CSS",
+        "TypeScript and Node.js API design",
+        "Python automation and research tooling",
+        "PostgreSQL and SQLite data modeling",
+        "Background jobs and external integrations",
       ],
     },
     {
-      label: "Frameworks & Tools",
+      label: "Frontend & interactive systems",
+      summary:
+        "Interfaces for ordinary workflows, strange simulations, and everything between.",
       details: [
-        "NestJS",
-        "Node.js",
-        "Express",
-        "Next.js",
-        "Fastify",
-        "React",
-        "React Native",
-        "Expo",
-        "Godot",
-        "Three.js",
-        "Vite",
-        "Tailwind",
+        "React, Next.js, Vite, and Tailwind",
+        "React Native and Expo mobile apps",
+        "Three.js and React Three Fiber scenes",
+        "Godot and GDScript game prototypes",
       ],
     },
     {
-      label: "Databases",
-      details: ["PostgreSQL", "MySQL", "SQLite", "MongoDB", "Firebase"],
-    },
-    {
-      label: "DevOps & Systems",
+      label: "Delivery & infrastructure",
+      summary:
+        "Small production systems with explicit checks, rollback paths, and boring secrets.",
       details: [
-        "Docker",
-        "Git",
-        "GitHub",
-        "GitHub Actions",
-        "CI/CD",
-        "Linux",
-        "Caddy",
-        "nginx",
-        "VPS deployment",
-        "REST APIs",
+        "Dockerized services and local environments",
+        "GitHub Actions, CodeQL, and CI/CD",
+        "Linux VPS operations with Caddy and nginx",
+        "Signed webhooks, health checks, and rollback",
       ],
     },
     {
-      label: "Testing & Delivery",
+      label: "Verification & quality",
+      summary:
+        "Tests and evidence designed to reveal failure, not decorate a release.",
       details: [
-        "Pytest",
-        "Playwright",
-        "TypeScript",
-        "Ruff",
-        "CodeQL",
-        "Deterministic replay",
-        "Evidence-gated evaluation",
-        "Human-in-the-loop workflows",
+        "Pytest, Playwright, and integration suites",
+        "Static typing, Ruff, and structured validation",
+        "Deterministic fixtures and checksummed replay",
+        "Evidence-gated evaluation and provenance",
       ],
     },
     {
-      label: "Concepts",
+      label: "AI-assisted developer tooling",
+      summary:
+        "Early-career, hands-on work making model-assisted workflows more inspectable and bounded.",
       details: [
-        "Object-Oriented Programming",
-        "Software Architecture",
-        "Systems Design",
-        "Networking",
-        "Database Design",
+        "Provider-neutral model orchestration",
+        "Typed outputs and capability-limited context",
+        "Human approval and release gates",
+        "Safe path, budget, and evidence controls",
       ],
     },
     {
-      label: "Hardware & Systems",
+      label: "Systems & collaboration",
+      summary:
+        "The connective tissue between code, hardware, documentation, and the people using it.",
       details: [
-        "RFID systems",
-        "Access point software",
-        "Soldering",
-        "Hardware testing",
-        "Firmware",
-        "Keyboards",
+        "Networking, Linux, and systems design",
+        "RFID readers and offline access points",
+        "Technical documentation and Git onboarding",
+        "English and Farsi",
       ],
-    },
-    {
-      label: "Spoken Languages",
-      details: ["English", "Farsi"],
     },
   ],
   certifications: [

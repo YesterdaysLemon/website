@@ -138,6 +138,161 @@
     padding: 0.35rem 0.55rem;
   }
 
+  .capability-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .capability-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.15rem;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 20%, var(--line));
+    border-radius: var(--radius);
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--route-accent) 5%, var(--card)),
+        var(--card) 58%
+      ),
+      var(--card);
+  }
+
+  .capability-card::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3.5rem;
+    height: 3px;
+    content: "";
+    background: var(--route-accent);
+    opacity: 0.74;
+  }
+
+  .capability-card-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .capability-card-heading > span {
+    flex: 0 0 auto;
+    color: var(--route-accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+
+  .capability-card h3 {
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.15;
+  }
+
+  .capability-card > p {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.65;
+  }
+
+  .capability-card ul {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--route-accent) 13%, var(--line));
+  }
+
+  .capability-card li {
+    position: relative;
+    padding-left: 0.85rem;
+    color: var(--ink);
+    font-size: 0.76rem;
+    font-weight: 650;
+    line-height: 1.45;
+  }
+
+  .capability-card li::before {
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 999px;
+    content: "";
+    background: var(--route-accent);
+    opacity: 0.72;
+  }
+
+  .about-focus-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .about-focus-item {
+    display: grid;
+    grid-template-columns: 1.85rem minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 1rem;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 17%, var(--line));
+    border-radius: var(--small-radius);
+    background: color-mix(in srgb, var(--route-accent) 3%, var(--card));
+  }
+
+  .about-focus-item > span {
+    color: var(--route-accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.62rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    line-height: 1.65;
+  }
+
+  .about-focus-item h3,
+  .about-curiosity-list h3 {
+    color: var(--ink);
+    font-size: 0.86rem;
+    font-weight: 780;
+    line-height: 1.35;
+  }
+
+  .about-focus-item p,
+  .about-curiosity-list p {
+    margin-top: 0.3rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .about-curiosity-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .about-curiosity-list article {
+    padding-left: 0.8rem;
+    border-left: 2px solid
+      color-mix(in srgb, var(--route-accent) 55%, var(--line));
+  }
+
+  @media (min-width: 720px) {
+    .capability-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-focus-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .project-status-tag {
     max-width: 8.75rem;
     justify-content: center;

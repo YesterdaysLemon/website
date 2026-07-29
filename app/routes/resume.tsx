@@ -116,28 +116,34 @@ export default function Resume() {
           </section>
 
           <section className="archive-card p-6 sm:p-8">
-            <div className="flex flex-col gap-8 xl:grid xl:grid-cols-3">
-              <div>
-                <h2 className="font-serif text-3xl text-[var(--route-accent)]">
-                  Skills
-                </h2>
-              </div>
-              <div className="grid gap-6 sm:grid-cols-2 xl:col-span-2">
-                {resumeData.skills.map((group) => (
-                  <div key={group.label}>
-                    <h3 className="text-muted text-sm font-semibold tracking-[0.18em] uppercase">
-                      {group.label}
-                    </h3>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {group.details.map((skill) => (
-                        <span key={skill} className="archive-tag text-sm">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+            <div className="max-w-3xl">
+              <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
+                How I work
+              </p>
+              <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+                Capabilities, with context
+              </h2>
+              <p className="text-muted mt-3 text-sm leading-7 sm:text-base">
+                Tools matter, but the useful part is what I can connect,
+                validate, and hand to another person with a straight face.
+              </p>
+            </div>
+
+            <div className="capability-grid">
+              {resumeData.skills.map((group, index) => (
+                <article className="capability-card" key={group.label}>
+                  <div className="capability-card-heading">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <h3>{group.label}</h3>
                   </div>
-                ))}
-              </div>
+                  <p>{group.summary}</p>
+                  <ul>
+                    {group.details.map((skill) => (
+                      <li key={skill}>{skill}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
             </div>
           </section>
         </section>
