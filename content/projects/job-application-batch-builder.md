@@ -13,7 +13,7 @@ tags:
 repoUrl: https://github.com/YesterdaysLemon/job-application-batch-builder
 liveUrl: https://job-application-batch-builder.alirezaafshan4.chatgpt.site
 coverImage: /images/projects/job-application-batch-builder/site-preview.png
-order: 2
+order: 9
 ---
 
 <!-- personal-notes -->

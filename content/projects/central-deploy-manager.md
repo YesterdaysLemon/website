@@ -11,7 +11,7 @@ tags:
   - VPS
 repoUrl: https://github.com/YesterdaysLemon/deploy-manager
 coverImage: /images/projects/central-deploy-manager/central-deploy.png
-order: 3
+order: 10
 ---
 
 <!-- personal-notes -->

@@ -31,6 +31,15 @@ const liveProjectCopy: Record<
   },
 };
 
+const workbenchOrder = [
+  "wurmkickflip",
+  "celegans-sim",
+  "open-mathematics-lab",
+  "aviary",
+  "astralbound-first-duel",
+  "retainerproof",
+] as const;
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "showcase | alireza afshan" },
@@ -47,9 +56,10 @@ export async function loader() {
 
   return {
     liveProjects: projects.filter((project) => project.liveUrl),
-    workbenchProjects: projects.filter(
-      (project) => project.status?.toLowerCase() === "under construction",
-    ),
+    workbenchProjects: workbenchOrder.flatMap((slug) => {
+      const project = projects.find((entry) => entry.slug === slug);
+      return project ? [project] : [];
+    }),
   };
 }
 
@@ -59,7 +69,7 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Things I made"
-      intro="A little pile of live experiments, weird side quests, and things I probably spent too long deploying."
+      intro="Live experiments, private prototypes, reproducible research, and weird side quests that acquired real test suites."
       routeId="showcase"
       title="Showcase"
     >
@@ -185,25 +195,40 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
             className="archive-card p-6 sm:p-8"
           >
             <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
-              Not ready for the internet yet
+              Fresh from the Codex workbench
             </p>
             <h2
               className="mt-2 font-serif text-3xl text-[var(--route-accent)] sm:text-4xl"
               id="workbench-title"
             >
-              Still on the workbench
+              Current builds and research
             </h2>
+            <p className="text-muted mt-4 max-w-3xl text-sm leading-7 sm:text-base">
+              A deliberately mixed shelf: public repositories you can inspect,
+              private builds I can describe, and open research that stays
+              labeled unresolved until the evidence says otherwise.
+            </p>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {workbenchProjects.map((project) => (
                 <article
-                  className="border-line bg-card rounded-[var(--radius)] border p-5"
+                  className="border-line bg-card flex h-full flex-col rounded-[var(--radius)] border p-5"
                   key={project.slug}
                 >
-                  <h3 className="font-serif text-2xl text-[var(--route-accent)]">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="archive-tag">
+                      {project.repoUrl ? "Public repo" : "Private build"}
+                    </span>
+                    {project.status ? (
+                      <span className="text-muted text-right text-xs font-semibold">
+                        {project.status}
+                      </span>
+                    ) : null}
+                  </div>
+                  <h3 className="mt-4 font-serif text-2xl text-[var(--route-accent)]">
                     {project.title}
                   </h3>
-                  <p className="text-muted mt-3 text-sm leading-7">
+                  <p className="text-muted mt-3 flex-1 text-sm leading-7">
                     {project.summary}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3">
@@ -214,7 +239,7 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                         rel="noreferrer"
                         target="_blank"
                       >
-                        Peek at the repo <span aria-hidden="true">↗</span>
+                        Inspect the repo <span aria-hidden="true">↗</span>
                       </a>
                     ) : null}
                     <Link

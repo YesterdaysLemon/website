@@ -1,28 +1,28 @@
 ---
 title: Wurmkickflip
-summary: An extremely serious physics experiment about teaching a worm to ride a skateboard. The physics works; the worm remains a work in progress.
+summary: A deterministic neural-worm terrarium with contact-driven boarding, randomized Seed Forge worlds, causal control lanes, and checksummed replay—plus one unapologetically scripted aerial kickflip.
 year: 2026
-status: Under construction
+status: Public research playground
 tags:
   - React
   - Three.js
-  - Rapier
-  - ONNX Runtime
+  - Recurrent controller
+  - Deterministic replay
   - Python
 repoUrl: https://github.com/YesterdaysLemon/wurmkickflip
-order: 8
+order: 3
 ---
 
 <!-- personal-notes -->
 
-This started with a very reasonable question: could I teach a simulated worm to do a kickflip? It has since become a browser physics lab with procedural terrain, several questionable creatures, a skateboard, and a training setup waiting in the wings.
+This started with a very reasonable question: could I teach a simulated worm to do a kickflip? It has since become a browser-native terrarium where a 16-segment worm has finite food and water, an evolved recurrent crawl controller, a skateboard, and a small laboratory for asking whether the controller is actually responsible for what visitors see.
 
-The default controller is still a scripted muscle wave, so I am not claiming the worm has achieved machine intelligence or even basic coordination. That is what makes it fun. The scene works, the parts flop around convincingly, and there is a clear path for testing trained policies without pretending the experiment is further along than it is.
+The honesty boundary is part of the project. Crawling, seeking, and boarding are neural and contact-driven. Eating poses, dismounting, board routing, and the aerial stunt are authored. The result is more interesting than pretending the entire routine was learned: the browser can compare the live controller against zero-command and frozen-controller lanes, replay the same randomized worlds, and show exactly where control changes hands.
 
 <!-- ai-summary -->
 
-Wurmkickflip is a React, Three.js, and Rapier prototype for experimenting with physics creatures riding a skateboard in a small procedural terrarium.
+Wurmkickflip is a React and Three.js simulation built around a deterministic 60 Hz terrarium runtime. A tracked 16-neuron recurrent policy emits dorsal and ventral commands for a free articulated chain, whose motion emerges from internal forces, constraints, terrain friction, and contact.
 
-The browser app includes selectable creature shapes, terrain presets, rigid-body skateboard parts, and deterministic muscle-wave control. It also defines an observation and action contract for optional ONNX Runtime policies through WebAssembly or WebGPU, while keeping scripted control as the fast and reliable default.
+Seed Forge varies 14 world, terrain, actuator, noise, spawn, and skateboard channels from a reproducible seed. Forge Trials evaluates held-out worlds across neural, zero-command, and frozen-controller lanes and preserves checksummed heat replays for inspection. The live exhibit and headless evaluation share the same episode engine.
 
-A separate Python 3.11 training workspace provides Gymnasium and Stable Baselines3 scaffolding, ONNX export and validation, and an evolution experiment for creature and controller parameters. The learned-controller side is still experimental; the current public repo is best understood as a working physics playground with a deliberately unfinished training path.
+These are finite compact-plant evaluations, not evidence of a learned kickflip, biological realism, or transfer to a real soft body. The scripted aerial boundary is visible in the UI and documentation.

@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Experience, education, skills, certifications, and contact links.",
+        "Backend, systems, developer tooling, research software, infrastructure, and contact links.",
     },
   ];
 }
@@ -18,7 +18,7 @@ export default function Resume() {
   return (
     <PageShell
       eyebrow="Resume"
-      intro="The reasonably tidy version of what I have built, learned, and been trusted with so far."
+      intro="The reasonably tidy version of what I have built, verified, learned, and been trusted with so far."
       routeId="resume"
       title={resumeData.name}
     >

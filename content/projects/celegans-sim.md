@@ -1,0 +1,27 @@
+---
+title: C. elegans Connectome Simulator
+summary: A private scientific-computing build connecting 302 graded-potential neurons to 95 body-wall muscles, an inextensible low-Reynolds-number body, and a browser viewer for watching the closed loop.
+year: 2026
+status: Private simulation prototype
+tags:
+  - Python
+  - Scientific computing
+  - Connectomics
+  - Biomechanics
+  - Browser visualization
+order: 4
+---
+
+<!-- personal-notes -->
+
+This is the sort of project that begins with “could I simulate the whole worm?” and only later admits that the word “whole” has become a systems-design problem.
+
+The model closes the loop from a chemical and physical world, through sensory neurons and the reconstructed connectome, into individual muscle cells and an inextensible body moving through a viscous medium. The browser is deliberately just the viewer; the simulation remains the project.
+
+It is a private work in progress, and it is not presented as a biologically complete digital animal or an OpenWorm result. The value so far is in making every subsystem explicit enough to measure, test, and replace.
+
+<!-- ai-summary -->
+
+The simulator is a Python scientific-computing system with a browser front end. It models 302 predominantly non-spiking neurons using graded membrane dynamics and anatomically derived chemical and gap-junction connectivity. Motor output drives 95 body-wall muscle cells, which generate bending moments for an inextensible body in a zero-Reynolds-number environment.
+
+The world includes food, chemical and thermal gradients, obstacles, and proprioceptive feedback. Headless runs, diagnostic kymographs, gait metrics, and subsystem timing make the closed loop inspectable without the viewer.

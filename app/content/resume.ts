@@ -44,9 +44,9 @@ export type ResumeData = {
 
 export const resumeData: ResumeData = {
   name: "Alireza Afshan",
-  role: "Junior Software Developer | Backend, Systems & DevOps",
+  role: "Junior Software Developer | Backend, Systems & Developer Tooling",
   summary:
-    "Information Systems graduate with honors who likes working where software meets systems. I have built full-stack and mobile apps, designed REST APIs, worked with PostgreSQL and SQLite, containerized services with Docker, and maintained CI/CD workflows. Recent work includes a multi-part attendance platform, internal image tooling for a manufacturing business, and the deployment setup behind the small web apps on this site. I am looking for junior software, backend, systems, or DevOps roles.",
+    "Information Systems graduate with honors who likes working where software meets systems. I build backend services, developer tools, simulations, and small full-stack products, with an emphasis on deterministic tests, inspectable evidence, safe automation, and honest system boundaries. Recent work spans a security-first AI delivery harness, reproducible computational research, browser-based physics and biology experiments, and the deployment infrastructure behind the small apps on this site. I am looking for junior software, backend, systems, developer tooling, or DevOps roles.",
   location: "Las Vegas, NV | open to remote work and relocation",
   email: "mail@alirezaafshan.com",
   websiteUrl: "https://alirezaafshan.com",
@@ -54,17 +54,19 @@ export const resumeData: ResumeData = {
   linkedInUrl: "https://www.linkedin.com/in/alireza-afshan",
   experience: [
     {
-      title: "Independent Software & Infrastructure Projects",
+      title: "Independent Software, Research & Infrastructure Projects",
       organization: "Personal projects",
       location: "Las Vegas, NV",
       start: "May 2026",
       end: "Present",
       summary:
-        "Building and self-hosting a small collection of web experiments, including this portfolio, Aquarium, and Bird of the Day.",
+        "Building and validating developer tools, simulations, research software, and self-hosted web products across public and private repositories.",
       highlights: [
+        "Built ForgeWard, a provider-neutral Python CLI that coordinates model-assisted software work through typed outputs, path and budget controls, deterministic checks, inspectable evidence, and explicit human approval gates.",
+        "Developed verifier-first computational research repositories for open graph and number theory problems; published exact finite or conditional checkpoints while keeping every global problem explicitly unresolved.",
+        "Built deterministic interactive systems including a recurrent-controller worm terrarium with causal controls and replayable evaluation, a connectome-driven C. elegans simulation, and a tested Godot card-duel vertical slice.",
+        "Built production-shaped product prototypes including RetainerProof, a multi-tenant client value ledger with background jobs, source-backed evidence, and a Dockerized demo environment.",
         "Built a signed webhook deployment manager that runs health-checked Docker rollouts with rollback support across multiple apps on one VPS behind Caddy.",
-        "Built a React and Three.js browser aquarium and a React and Express bird site backed by eBird and Wikipedia data.",
-        "Automated deployments through GitHub Actions while keeping API keys, webhook secrets, and server configuration out of application repositories.",
       ],
     },
     {
@@ -170,9 +172,12 @@ export const resumeData: ResumeData = {
         "NestJS",
         "Node.js",
         "Express",
+        "Next.js",
+        "Fastify",
         "React",
         "React Native",
         "Expo",
+        "Godot",
         "Three.js",
         "Vite",
         "Tailwind",
@@ -195,6 +200,19 @@ export const resumeData: ResumeData = {
         "nginx",
         "VPS deployment",
         "REST APIs",
+      ],
+    },
+    {
+      label: "Testing & Delivery",
+      details: [
+        "Pytest",
+        "Playwright",
+        "TypeScript",
+        "Ruff",
+        "CodeQL",
+        "Deterministic replay",
+        "Evidence-gated evaluation",
+        "Human-in-the-loop workflows",
       ],
     },
     {

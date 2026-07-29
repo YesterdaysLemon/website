@@ -51,10 +51,24 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="Public tools, infrastructure, product experiments, and a few side quests that got pleasantly out of hand. Open a card for the honest version and the technical details."
+      intro="A curated cross-section of public tools, private product builds, simulations, infrastructure, and evidence-gated research. Open a card for the honest version, including what is still experimental or unresolved."
       routeId="projects"
       title="Projects"
     >
+      <div className="archive-card mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
+            July 2026 refresh
+          </p>
+          <p className="text-ink mt-2 max-w-3xl text-sm leading-7 sm:text-base">
+            Selected from the work that best shows how I build: concrete
+            systems, explicit limits, reproducible checks, and enough whimsy to
+            keep the machinery interesting.
+          </p>
+        </div>
+        <span className="archive-tag w-fit">Public + private work</span>
+      </div>
+
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project, index) => (
           <Link

@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -32,7 +32,7 @@ const paceLabels = ["Union pace", "Regular hustle", "Deadline mode"] as const;
 const paceSpeeds = [48, 82, 128] as const;
 
 type BouncingBody = {
-  element: HTMLImageElement;
+  element: HTMLButtonElement;
   height: number;
   radius: number;
   rotation: number;
@@ -45,8 +45,15 @@ type BouncingBody = {
 
 function SiteScreensaver() {
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const spriteRefs = useRef<Array<HTMLImageElement | null>>([]);
+  const spriteRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const bodiesRef = useRef<BouncingBody[]>([]);
   const [pace, setPace] = useState(1);
+  const [isShiftActive, setIsShiftActive] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [lastHit, setLastHit] = useState<number | null>(null);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -166,6 +173,7 @@ function SiteScreensaver() {
         renderBody(body);
         return [body];
       });
+      bodiesRef.current = bodies;
     };
 
     const start = () => {
@@ -209,49 +217,150 @@ function SiteScreensaver() {
       window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
       motionPreference.removeEventListener("change", start);
+      bodiesRef.current = [];
     };
   }, [pace]);
+
+  useEffect(() => {
+    if (!isShiftActive) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setTimeLeft((current) => {
+        if (current <= 1) {
+          window.clearInterval(timer);
+          setIsShiftActive(false);
+          setStreak(0);
+          return 0;
+        }
+
+        return current - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [isShiftActive]);
+
+  useEffect(() => {
+    if (!isShiftActive && score > 0) {
+      setBestScore((current) => Math.max(current, score));
+    }
+  }, [isShiftActive, score]);
+
+  function startShift() {
+    setScore(0);
+    setStreak(0);
+    setTimeLeft(20);
+    setLastHit(null);
+    setIsShiftActive(true);
+  }
+
+  function inspectWorker(event: MouseEvent<HTMLButtonElement>, index: number) {
+    event.stopPropagation();
+
+    if (!isShiftActive) {
+      return;
+    }
+
+    const body = bodiesRef.current[index];
+
+    if (body) {
+      body.velocityX =
+        Math.sign(body.velocityX || 1) *
+        Math.min(Math.abs(body.velocityX) * 1.08, 220);
+      body.velocityY =
+        Math.sign(body.velocityY || 1) *
+        Math.min(Math.abs(body.velocityY) * 1.08, 220);
+      body.rotation += 17;
+    }
+
+    setScore((current) => current + 10 + Math.min(streak, 5) * 3);
+    setStreak((current) => current + 1);
+    setLastHit(index);
+  }
+
+  const shiftMessage = isShiftActive
+    ? `${timeLeft}s left · keep the inspection streak alive`
+    : score > 0
+      ? `Shift complete · ${score} points logged`
+      : "Start a 20-second shift, then catch the crew";
 
   return (
     <article className="micro-lab-card micro-lab-screensaver">
       <div className="micro-lab-card-heading">
         <span>01</span>
         <div>
-          <p>Tiny system</p>
-          <h3>Site screensaver</h3>
+          <p>Tiny score attack</p>
+          <h3>Crew safety audit</h3>
         </div>
       </div>
 
       <div
-        aria-label="Three construction workers bouncing around a tiny screen"
+        aria-label="Catch the moving construction workers during a timed safety audit"
         className="micro-bounce-stage"
+        onClick={() => {
+          if (isShiftActive) {
+            setStreak(0);
+          }
+        }}
         ref={stageRef}
       >
         {bouncingCrew.map((sprite, index) => (
-          <img
-            alt=""
-            className="micro-bounce-sprite"
+          <button
+            aria-label={`Inspect worker ${index + 1}`}
+            className={[
+              "micro-bounce-target",
+              lastHit === index ? "is-hit" : "",
+            ].join(" ")}
+            disabled={!isShiftActive}
             key={sprite.asset}
+            onAnimationEnd={() => {
+              if (lastHit === index) {
+                setLastHit(null);
+              }
+            }}
+            onClick={(event) => inspectWorker(event, index)}
             ref={(element) => {
               spriteRefs.current[index] = element;
             }}
-            src={assetPath(sprite.asset)}
-          />
+            type="button"
+          >
+            <img alt="" src={assetPath(sprite.asset)} />
+          </button>
         ))}
-        <span className="micro-screen-corner">NO SIGNAL · STILL DEPLOYING</span>
+        <div aria-live="polite" className="micro-game-scoreboard">
+          <span>{score.toString().padStart(3, "0")} pts</span>
+          <span>{streak > 1 ? `combo ×${streak}` : "find the crew"}</span>
+        </div>
+        <span className="micro-screen-corner">
+          20 SECOND SAFETY AUDIT · MISSES BREAK COMBO
+        </span>
       </div>
 
       <div className="micro-lab-controls">
-        <p>{paceLabels[pace]}</p>
-        <button
-          className="micro-lab-button"
-          onClick={() =>
-            setPace((current) => (current + 1) % paceLabels.length)
-          }
-          type="button"
-        >
-          Change pace
-        </button>
+        <div className="micro-game-copy">
+          <p aria-live="polite">{shiftMessage}</p>
+          <span>Best this visit: {bestScore}</span>
+        </div>
+        <div className="micro-lab-actions">
+          <button
+            className="micro-lab-button"
+            onClick={() =>
+              setPace((current) => (current + 1) % paceLabels.length)
+            }
+            type="button"
+          >
+            {paceLabels[pace]}
+          </button>
+          <button
+            className="micro-lab-button micro-lab-button-primary"
+            onClick={startShift}
+            type="button"
+          >
+            {isShiftActive ? "Restart" : "Start shift"}
+          </button>
+        </div>
       </div>
     </article>
   );
