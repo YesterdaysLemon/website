@@ -200,34 +200,58 @@
     line-height: 1.65;
   }
 
-  .capability-card ul {
-    display: grid;
-    gap: 0.55rem;
+  .poker-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin-top: 1rem;
     padding-top: 0.9rem;
     border-top: 1px solid
       color-mix(in srgb, var(--route-accent) 13%, var(--line));
   }
 
-  .capability-card li {
-    position: relative;
-    padding-left: 0.85rem;
+  .poker-chip {
+    --chip-color: var(--spade);
+
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.9rem;
+    padding: 0.28rem 0.58rem;
+    border: 4px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--card), var(--warm-card)) padding-box,
+      repeating-conic-gradient(
+          from -8deg,
+          var(--chip-color) 0deg 13deg,
+          color-mix(in srgb, var(--chip-color) 12%, var(--card)) 13deg 20deg,
+          var(--chip-color) 20deg 34deg
+        )
+        border-box;
     color: var(--ink);
-    font-size: 0.76rem;
-    font-weight: 650;
-    line-height: 1.45;
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--chip-color) 18%, var(--line)),
+      0 2px 4px rgba(21, 25, 24, 0.08);
+    font-size: 0.7rem;
+    font-weight: 760;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
   }
 
-  .capability-card li::before {
-    position: absolute;
-    top: 0.55em;
-    left: 0;
-    width: 0.28rem;
-    height: 0.28rem;
-    border-radius: 999px;
-    content: "";
-    background: var(--route-accent);
-    opacity: 0.72;
+  .poker-chip:nth-child(4n + 1) {
+    --chip-color: var(--club);
+  }
+
+  .poker-chip:nth-child(4n + 2) {
+    --chip-color: var(--heart);
+  }
+
+  .poker-chip:nth-child(4n + 3) {
+    --chip-color: var(--diamond);
+  }
+
+  .poker-chip:nth-child(4n) {
+    --chip-color: var(--spade);
   }
 
   .about-focus-list {
@@ -281,6 +305,12 @@
     padding-left: 0.8rem;
     border-left: 2px solid
       color-mix(in srgb, var(--route-accent) 55%, var(--line));
+  }
+
+  .about-chip-list {
+    margin-top: 0.7rem;
+    padding-top: 0;
+    border-top: 0;
   }
 
   @media (min-width: 720px) {

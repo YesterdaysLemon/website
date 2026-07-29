@@ -117,10 +117,7 @@ export default function Resume() {
 
           <section className="archive-card p-6 sm:p-8">
             <div className="max-w-3xl">
-              <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
-                How I work
-              </p>
-              <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+              <h2 className="font-serif text-3xl text-[var(--route-accent)]">
                 Capabilities, with context
               </h2>
               <p className="text-muted mt-3 text-sm leading-7 sm:text-base">
@@ -137,9 +134,14 @@ export default function Resume() {
                     <h3>{group.label}</h3>
                   </div>
                   <p>{group.summary}</p>
-                  <ul>
+                  <ul
+                    aria-label={`${group.label} tools and technologies`}
+                    className="poker-chip-list"
+                  >
                     {group.details.map((skill) => (
-                      <li key={skill}>{skill}</li>
+                      <li className="poker-chip" key={skill}>
+                        {skill}
+                      </li>
                     ))}
                   </ul>
                 </article>

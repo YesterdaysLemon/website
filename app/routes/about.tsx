@@ -29,23 +29,29 @@ const focusAreas = [
 const curiosityAreas = [
   {
     title: "Mathematical structure",
-    description:
-      "Graph theory, combinatorics, astronomy, and patterns with teeth.",
+    description: "I like patterns most when they push back.",
+    items: ["Graph theory", "Combinatorics", "Astronomy"],
   },
   {
     title: "Living systems",
-    description:
-      "Botany, connectomes, animal behavior, and simulated creatures.",
+    description: "Complex behavior from small rules never gets old.",
+    items: ["Botany", "Connectomes", "Animal behavior", "Simulated creatures"],
   },
   {
     title: "Games as systems",
-    description:
-      "Card games, board games, video games, D&D, and delightful rules.",
+    description: "Rules, feedback, surprise, and a little friendly chaos.",
+    items: ["Card games", "Board games", "Video games", "D&D"],
   },
   {
     title: "Human questions",
-    description:
-      "Philosophy, rationality, geopolitics, AI alignment, and safety.",
+    description: "The messy problems where technical choices become social.",
+    items: [
+      "Philosophy",
+      "Rationality",
+      "Geopolitics",
+      "AI alignment",
+      "AI safety",
+    ],
   },
 ] as const;
 
@@ -141,10 +147,7 @@ export default function About() {
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[0.62fr_0.38fr]">
         <section className="archive-card p-6 sm:p-8">
-          <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
-            Current focus
-          </p>
-          <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+          <h2 className="font-serif text-3xl text-[var(--route-accent)]">
             Problems I like working on
           </h2>
           <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
@@ -165,10 +168,7 @@ export default function About() {
         </section>
 
         <section className="archive-card p-6 sm:p-8">
-          <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
-            Off-duty inputs
-          </p>
-          <h2 className="mt-2 font-serif text-3xl text-[var(--route-accent)]">
+          <h2 className="font-serif text-3xl text-[var(--route-accent)]">
             Curiosities that leak into the work
           </h2>
           <div className="about-curiosity-list">
@@ -176,6 +176,16 @@ export default function About() {
               <article key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
+                <ul
+                  aria-label={`${item.title} interests`}
+                  className="poker-chip-list about-chip-list"
+                >
+                  {item.items.map((interest) => (
+                    <li className="poker-chip" key={interest}>
+                      {interest}
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
