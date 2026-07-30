@@ -3,6 +3,13 @@ import type { Route } from "./+types/resume";
 import { PageShell } from "~/components/page-shell";
 import { resumeData } from "~/content/resume";
 
+const capabilitySuits = [
+  { name: "club", symbol: "♣" },
+  { name: "heart", symbol: "♥" },
+  { name: "diamond", symbol: "♦" },
+  { name: "spade", symbol: "♠" },
+] as const;
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "resume | alireza afshan" },
@@ -118,34 +125,44 @@ export default function Resume() {
           <section className="archive-card p-6 sm:p-8">
             <div className="max-w-3xl">
               <h2 className="font-serif text-3xl text-[var(--route-accent)]">
-                Capabilities, with context
+                Tools I actually use
               </h2>
               <p className="text-muted mt-3 text-sm leading-7 sm:text-base">
-                Tools matter, but the useful part is what I can connect,
-                validate, and hand to another person with a straight face.
+                Most of these show up in the projects above. The rest come from
+                school, internships, or keeping my own little corner of the
+                internet alive.
               </p>
             </div>
 
             <div className="capability-grid">
-              {resumeData.skills.map((group, index) => (
-                <article className="capability-card" key={group.label}>
-                  <div className="capability-card-heading">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <h3>{group.label}</h3>
-                  </div>
-                  <p>{group.summary}</p>
-                  <ul
-                    aria-label={`${group.label} tools and technologies`}
-                    className="poker-chip-list"
+              {resumeData.skills.map((group, index) => {
+                const suit = capabilitySuits[index % capabilitySuits.length];
+
+                return (
+                  <article
+                    className={`capability-ledger-row capability-suit-${suit.name}`}
+                    key={group.label}
                   >
-                    {group.details.map((skill) => (
-                      <li className="poker-chip" key={skill}>
-                        {skill}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
+                    <div aria-hidden="true" className="capability-suit-rail">
+                      {suit.symbol}
+                    </div>
+                    <div className="capability-ledger-copy">
+                      <h3>{group.label}</h3>
+                      <p>{group.summary}</p>
+                    </div>
+                    <ul
+                      aria-label={`${group.label} tools and technologies`}
+                      className="capability-token-list"
+                    >
+                      {group.details.map((skill) => (
+                        <li className="capability-token" key={skill}>
+                          {skill}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
             </div>
           </section>
         </section>

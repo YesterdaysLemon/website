@@ -140,64 +140,108 @@
 
   .capability-grid {
     display: grid;
-    gap: 1rem;
+    gap: 0.7rem;
     margin-top: 1.75rem;
+    container-type: inline-size;
   }
 
-  .capability-card {
-    position: relative;
+  .capability-ledger-row {
+    --capability-suit: var(--club);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     overflow: hidden;
-    padding: 1.15rem;
-    border: 1px solid color-mix(in srgb, var(--route-accent) 20%, var(--line));
-    border-radius: var(--radius);
-    background:
-      linear-gradient(
-        145deg,
-        color-mix(in srgb, var(--route-accent) 5%, var(--card)),
-        var(--card) 58%
-      ),
-      var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--small-radius);
+    background: var(--card);
   }
 
-  .capability-card::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 3.5rem;
-    height: 3px;
-    content: "";
-    background: var(--route-accent);
-    opacity: 0.74;
+  .capability-suit-club {
+    --capability-suit: var(--club);
   }
 
-  .capability-card-heading {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+  .capability-suit-heart {
+    --capability-suit: var(--heart);
   }
 
-  .capability-card-heading > span {
-    flex: 0 0 auto;
-    color: var(--route-accent);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.65rem;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    line-height: 1.8;
+  .capability-suit-diamond {
+    --capability-suit: var(--diamond);
   }
 
-  .capability-card h3 {
+  .capability-suit-spade {
+    --capability-suit: var(--spade);
+  }
+
+  .capability-suit-rail {
+    display: grid;
+    min-height: 2.35rem;
+    place-items: center;
+    background: var(--capability-suit);
+    color: var(--card);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+  }
+
+  .capability-ledger-copy {
+    align-self: center;
+    padding: 1rem 1.1rem;
+  }
+
+  .capability-ledger-copy h3 {
     color: var(--ink);
     font-family: var(--font-serif);
-    font-size: 1.3rem;
+    font-size: 1.18rem;
     line-height: 1.15;
   }
 
-  .capability-card > p {
-    margin-top: 0.75rem;
+  .capability-ledger-copy p {
+    margin-top: 0.35rem;
     color: var(--muted);
-    font-size: 0.78rem;
-    line-height: 1.65;
+    font-size: 0.72rem;
+    line-height: 1.55;
+  }
+
+  .capability-token-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 0.48rem;
+    margin: 0;
+    padding: 1rem 1.1rem;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .capability-token {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.34rem 0.7rem;
+    border-color: var(--capability-suit);
+    border-style: solid;
+    border-width: 1px 4px;
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 2px var(--warm-card);
+    font-size: 0.68rem;
+    font-weight: 750;
+    line-height: 1.2;
+  }
+
+  @container (min-width: 36rem) {
+    .capability-ledger-row {
+      grid-template-columns: 2.45rem minmax(11rem, 0.38fr) minmax(0, 1fr);
+    }
+
+    .capability-suit-rail {
+      min-height: 8rem;
+    }
+
+    .capability-token-list {
+      border-top: 0;
+      border-left: 1px solid var(--line);
+    }
   }
 
   .poker-chip-list {
@@ -314,10 +358,6 @@
   }
 
   @media (min-width: 720px) {
-    .capability-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .about-focus-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
