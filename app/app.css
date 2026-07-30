@@ -217,9 +217,7 @@
     align-items: center;
     min-height: 2rem;
     padding: 0.34rem 0.7rem;
-    border-color: var(--capability-suit);
-    border-style: solid;
-    border-width: 1px 4px;
+    border: 2px solid var(--capability-suit);
     border-radius: 999px;
     background: var(--card);
     color: var(--ink);

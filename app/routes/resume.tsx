@@ -70,7 +70,7 @@ export default function Resume() {
                   <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
                     {role.highlights.map((highlight) => (
                       <li key={highlight} className="flex gap-3">
-                        <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[var(--route-accent)]" />
+                        <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -112,7 +112,7 @@ export default function Resume() {
                   <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
                     {item.notes.map((note) => (
                       <li key={note} className="flex gap-3">
-                        <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[var(--route-accent)]" />
+                        <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
                         <span>{note}</span>
                       </li>
                     ))}
