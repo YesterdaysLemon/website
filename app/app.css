@@ -258,22 +258,12 @@
     display: inline-flex;
     align-items: center;
     min-height: 1.9rem;
-    padding: 0.28rem 0.58rem;
-    border: 4px solid transparent;
+    padding: 0.34rem 0.68rem;
+    border: 2px solid var(--chip-color);
     border-radius: 999px;
-    background:
-      linear-gradient(var(--card), var(--warm-card)) padding-box,
-      repeating-conic-gradient(
-          from -8deg,
-          var(--chip-color) 0deg 13deg,
-          color-mix(in srgb, var(--chip-color) 12%, var(--card)) 13deg 20deg,
-          var(--chip-color) 20deg 34deg
-        )
-        border-box;
+    background: var(--card);
     color: var(--ink);
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--chip-color) 18%, var(--line)),
-      0 2px 4px rgba(21, 25, 24, 0.08);
+    box-shadow: 0 1px 2px rgba(21, 25, 24, 0.07);
     font-size: 0.7rem;
     font-weight: 760;
     letter-spacing: 0.01em;
@@ -298,18 +288,19 @@
 
   .about-focus-list {
     display: grid;
-    gap: 0.75rem;
+    gap: 0;
     margin-top: 1.25rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--route-accent) 17%, var(--line));
   }
 
   .about-focus-item {
     display: grid;
     grid-template-columns: 1.85rem minmax(0, 1fr);
     gap: 0.65rem;
-    padding: 1rem;
-    border: 1px solid color-mix(in srgb, var(--route-accent) 17%, var(--line));
-    border-radius: var(--small-radius);
-    background: color-mix(in srgb, var(--route-accent) 3%, var(--card));
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--route-accent) 17%, var(--line));
   }
 
   .about-focus-item > span {
@@ -358,6 +349,39 @@
   @media (min-width: 720px) {
     .about-focus-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-focus-item {
+      padding: 1rem;
+    }
+
+    .about-focus-item:nth-child(odd) {
+      border-right: 1px solid
+        color-mix(in srgb, var(--route-accent) 17%, var(--line));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .about-curiosity-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .about-focus-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .about-focus-item,
+    .about-focus-item:nth-child(odd) {
+      border-right: 1px solid
+        color-mix(in srgb, var(--route-accent) 17%, var(--line));
+      border-bottom: 0;
+    }
+
+    .about-focus-item:last-child {
+      border-right: 0;
     }
   }
 
