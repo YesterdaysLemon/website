@@ -17,7 +17,7 @@ order: 2
 
 I wanted to see what a long-running Codex research program looked like when the interesting part was not a dramatic answer, but whether each small claim could survive an independent replay.
 
-That produced three public research repositories: [Conway-99](https://github.com/YesterdaysLemon/conway-99-research), an [Erdős \(2^k3^\ell m+1\) cover search](https://github.com/YesterdaysLemon/erdos-2-3-cover-search), and work on the [Krenn–Gu monochromatic quantum-graph conjecture](https://github.com/YesterdaysLemon/open-graph-theory-with-prize). They contain exact certificates, adversarial verifiers, frozen checkpoints, and a large number of carefully scoped dead ends.
+That produced three public research repositories: [Conway-99](https://github.com/YesterdaysLemon/conway-99-research), an [Erdős \(2^k3^\ell m+1\) cover search](https://github.com/YesterdaysLemon/erdos-2-3-cover-search), and work on the [Krenn–Gu monochromatic quantum-graph conjecture](https://github.com/YesterdaysLemon/krenn-gu-research). They contain exact certificates, adversarial verifiers, frozen checkpoints, and a large number of carefully scoped dead ends.
 
 None of the three global problems is solved. That sentence is not fine print; it is a design requirement. The useful outcome is a public record of finite obstructions, conditional bounds, analytic reductions, failed branches, and the machinery needed to check them without trusting the discovery process.
 

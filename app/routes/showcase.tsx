@@ -32,12 +32,12 @@ const liveProjectCopy: Record<
 };
 
 const workbenchOrder = [
-  "wurmkickflip",
   "celegans-sim",
   "open-mathematics-lab",
-  "aviary",
-  "astralbound-first-duel",
   "retainerproof",
+  "forgeward",
+  "wurmkickflip",
+  "aviary",
 ] as const;
 
 export function meta({}: Route.MetaArgs) {
@@ -69,7 +69,7 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
   return (
     <PageShell
       eyebrow="Things I made"
-      intro="Live experiments, private prototypes, reproducible research, and weird side quests that acquired real test suites."
+      intro="Small public sites up front; serious tools, simulations, and unresolved research behind them. Most of it acquired a test suite somewhere along the way."
       routeId="showcase"
       title="Showcase"
     >
@@ -195,7 +195,7 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
             className="archive-card p-6 sm:p-8"
           >
             <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
-              Fresh from the Codex workbench
+              Recently active on the workbench
             </p>
             <h2
               className="mt-2 font-serif text-3xl text-[var(--route-accent)] sm:text-4xl"
@@ -204,8 +204,8 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
               Current builds and research
             </h2>
             <p className="text-muted mt-4 max-w-3xl text-sm leading-7 sm:text-base">
-              A deliberately mixed shelf: public repositories you can inspect,
-              private builds I can describe, and open research that stays
+              A deliberately mixed shelf: public repositories with receipts,
+              private builds with clear boundaries, and open research that stays
               labeled unresolved until the evidence says otherwise.
             </p>
 

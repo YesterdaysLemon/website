@@ -1,8 +1,8 @@
 ---
 title: C. elegans Connectome Simulator
-summary: A private scientific-computing build connecting 302 graded-potential neurons to 95 body-wall muscles, an inextensible low-Reynolds-number body, and a browser viewer for watching the closed loop.
+summary: A private scientific-computing lab running 302 graded-potential neurons, 95 body-wall muscles, an inextensible low-Reynolds-number body, and a browser viewer as one closed loop.
 year: 2026
-status: Private simulation prototype
+status: Private simulation lab
 tags:
   - Python
   - Scientific computing

@@ -64,7 +64,7 @@ const actionCards: ActionCard[] = [
     rank: "A",
     suit: "\u2666",
     to: "/about",
-    summary: "Profile, focus, and context.",
+    summary: "The crooked route here and the rabbit holes that stuck.",
     accent: "var(--diamond)",
   },
   {
@@ -73,7 +73,8 @@ const actionCards: ActionCard[] = [
     rank: "S",
     suit: "\u2665",
     to: "/showcase",
-    summary: "Live experiments and weird little side quests.",
+    summary:
+      "Live experiments, tiny websites, and the permanent construction crew.",
     accent: "var(--heart)",
   },
   {
@@ -82,7 +83,7 @@ const actionCards: ActionCard[] = [
     rank: "★",
     suit: "✦",
     to: "/showcase#micro-experiments",
-    summary: "Something small, strange, and chosen at random.",
+    summary: "A random rabbit hole from somewhere in the workbench.",
     accent: "#8a5a12",
   },
   {
@@ -91,7 +92,7 @@ const actionCards: ActionCard[] = [
     rank: "P",
     suit: "\u2660",
     to: "/projects",
-    summary: "The useful details behind the things I build.",
+    summary: "The useful details, honest limits, and receipts behind the work.",
     accent: "var(--spade)",
   },
   {
@@ -100,7 +101,7 @@ const actionCards: ActionCard[] = [
     rank: "R",
     suit: "\u2663",
     to: "/resume",
-    summary: "Experience, skills, and the tidy version of events.",
+    summary: "Experience, skills, and the reasonably tidy version of events.",
     accent: "var(--club)",
   },
 ];
@@ -130,11 +131,13 @@ const spreadPositions: Record<Breakpoint, Record<CardId, SpreadPosition>> = {
 };
 
 const jokerDestinations = [
+  "/about-blackjack-lab.html",
   "/showcase#micro-experiments",
   "/projects?project=wurmkickflip",
-  "/projects?project=aquarium",
-  "/projects?project=bird-of-the-day",
-  "/projects?project=central-deploy-manager",
+  "/projects?project=celegans-sim",
+  "/projects?project=forgeward",
+  "/projects?project=open-mathematics-lab",
+  "/projects?project=job-application-batch-builder",
 ] as const;
 
 const initialStackOrder = actionCards.map((card) => card.id);
@@ -145,7 +148,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Software developer building public tools, secure AI workflows, deployment infrastructure, and the occasional weird little web experiment.",
+        "Software developer building inspectable tools, backend systems, simulations, research software, and carefully weird web experiments.",
     },
   ];
 }
@@ -668,7 +671,7 @@ export default function Home() {
       >
         <div className="pointer-events-none absolute top-5 left-4 z-10 max-w-[18rem] sm:top-8 sm:left-8 sm:max-w-md lg:max-w-lg">
           <p className="mb-3 text-[0.65rem] font-bold tracking-[0.28em] text-white/62 uppercase sm:text-xs">
-            Software / Systems / Small Web Experiments
+            Software / Systems / Carefully Weird Experiments
           </p>
           <h1 className="font-serif text-4xl leading-none text-white sm:text-6xl lg:text-7xl xl:text-8xl">
             Alireza Afshan
@@ -711,6 +714,7 @@ export default function Home() {
           return (
             <a
               aria-label={`Open ${card.title}`}
+              aria-description={card.summary}
               key={card.id}
               className={[
                 "playing-action-card absolute flex aspect-[2.5/3.5] w-[6.35rem] [touch-action:none] flex-col justify-between rounded-[var(--radius)] border border-[var(--line)] bg-[var(--warm-card)] p-2.5 text-left text-[var(--route-accent)] shadow-[0_18px_42px_rgba(21,25,24,0.16)] transition-[filter,box-shadow] duration-200 outline-none select-none sm:w-36 sm:p-4 md:w-40 lg:w-44",
@@ -732,6 +736,7 @@ export default function Home() {
               ].join(" ")}
               draggable={false}
               href={card.to}
+              title={card.summary}
               onClick={(event) => handleCardClick(event, card)}
               onPointerCancel={handlePointerUp}
               onPointerDown={(event) => handlePointerDown(event, card.id)}

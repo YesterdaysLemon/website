@@ -47,7 +47,7 @@ export const resumeData: ResumeData = {
   name: "Alireza Afshan",
   role: "Junior Software Developer | Backend, Systems & Developer Tooling",
   summary:
-    "Information Systems graduate with honors who likes working where software meets systems. I build backend services, developer tools, simulations, and small full-stack products, with an emphasis on deterministic tests, inspectable evidence, safe automation, and honest system boundaries. Recent work spans a security-first AI delivery harness, reproducible computational research, browser-based physics and biology experiments, and the deployment infrastructure behind the small apps on this site. I am looking for junior software, backend, systems, developer tooling, or DevOps roles.",
+    "Information Systems graduate with honors who likes working where software meets systems. I build backend services, developer tools, simulations, and small full-stack products, then take them through deterministic tests, CI, containers, and deployment. Recent work spans secure AI tooling, connectome-driven simulation, verifier-first computational research, and the infrastructure behind the small apps on this site. I am looking for junior backend, systems, developer tooling, or DevOps roles.",
   location: "Las Vegas, NV | open to remote work and relocation",
   email: "mail@alirezaafshan.com",
   websiteUrl: "https://alirezaafshan.com",
@@ -65,7 +65,7 @@ export const resumeData: ResumeData = {
       highlights: [
         "Built ForgeWard, a provider-neutral Python CLI that coordinates model-assisted software work through typed outputs, path and budget controls, deterministic checks, inspectable evidence, and explicit human approval gates.",
         "Developed verifier-first computational research repositories for open graph and number theory problems; published exact finite or conditional checkpoints while keeping every global problem explicitly unresolved.",
-        "Built deterministic interactive systems including a recurrent-controller worm terrarium with causal controls and replayable evaluation, a connectome-driven C. elegans simulation, and a tested Godot card-duel vertical slice.",
+        "Built and evaluated interactive systems including a recurrent-controller worm terrarium with causal controls, a connectome-driven C. elegans simulation, and a reproducible batched-drone training harness.",
         "Built production-shaped product prototypes including RetainerProof, a multi-tenant client value ledger with background jobs, source-backed evidence, and a Dockerized demo environment.",
         "Built a signed webhook deployment manager that runs health-checked Docker rollouts with rollback support across multiple apps on one VPS behind Caddy.",
       ],
@@ -241,6 +241,7 @@ export const resumeData: ResumeData = {
         "Connectomics",
         "Biomechanics",
         "Recurrent controllers",
+        "Reinforcement learning",
         "Deterministic simulation",
         "Offline evaluation",
         "Data provenance",

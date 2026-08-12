@@ -1,5 +1,7 @@
 import type { Route } from "./+types/about";
 
+import { Link } from "react-router";
+
 import { PageShell } from "~/components/page-shell";
 import { resumeData } from "~/content/resume";
 
@@ -7,7 +9,7 @@ const focusAreas = [
   {
     title: "Developer tools",
     description:
-      "Tools that make complicated work easier to inspect and harder to mess up.",
+      "Small systems that make complicated work easier to inspect and harder to fake.",
   },
   {
     title: "Backend & infrastructure",
@@ -22,7 +24,7 @@ const focusAreas = [
   {
     title: "Open-ended research",
     description:
-      "Hard questions, finite checkpoints, and clear labels on whatever is still unknown.",
+      "Hard questions, finite checkpoints, and bright labels on whatever is still unknown.",
   },
 ] as const;
 
@@ -124,7 +126,7 @@ export default function About() {
   return (
     <PageShell
       eyebrow="About"
-      intro="A few notes on how I got here, what I like making, and the rabbit holes I keep falling into."
+      intro="The slightly crooked route here, the systems I like making, and the rabbit holes that keep becoming repositories."
       routeId="about"
       title="Alireza Afshan"
     >
@@ -133,7 +135,7 @@ export default function About() {
           <div className="max-w-3xl space-y-5 text-base leading-8 sm:text-lg">
             <p className="text-muted">
               Hiya! I&apos;m Alireza, a software developer with a habit of
-              letting small ideas turn into entire projects.
+              letting small questions turn into entire systems.
             </p>
             <p className="text-muted">
               I started out studying astronomy and mathematics at the University
@@ -164,8 +166,8 @@ export default function About() {
                 Las Vegas, Nevada
               </p>
               <p>
-                Looking for junior software, backend, systems, tooling, or
-                DevOps work.
+                Looking for a junior role where backend, systems, tooling, or
+                slightly cursed hardware overlap.
               </p>
               <p>Open to remote work or relocation.</p>
               <div className="mt-5 space-y-3 border-t border-[var(--line)] pt-4">
@@ -220,12 +222,32 @@ export default function About() {
         </section>
 
         <section className="archive-card p-6 sm:p-8" id="curiosities">
-          <h2 className="font-serif text-3xl text-[var(--route-accent)]">
-            Things I keep coming back to
-          </h2>
-          <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
-            Some become projects. Some just eat an afternoon.
-          </p>
+          <div className="about-curiosity-heading">
+            <div>
+              <h2 className="font-serif text-3xl text-[var(--route-accent)]">
+                Things I keep coming back to
+              </h2>
+              <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
+                Some become projects. Some just eat an afternoon.
+              </p>
+            </div>
+
+            <Link className="interest-deck-link" to="/about-blackjack-lab.html">
+              <span className="interest-deck-suits" aria-hidden="true">
+                <span>♣</span>
+                <span>♥</span>
+                <span>♦</span>
+                <span>♠</span>
+              </span>
+              <span>
+                <small>52 interests · one deck</small>
+                <strong>Play interest blackjack</strong>
+              </span>
+              <span className="interest-deck-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </Link>
+          </div>
           <div className="about-curiosity-list">
             {curiosityAreas.map((item) => (
               <article key={item.title}>

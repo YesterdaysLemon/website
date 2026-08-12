@@ -1,12 +1,53 @@
 import type { Route } from "./+types/projects";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 
 import { DeploymentPipeline } from "~/components/deployment-pipeline";
 import { MarkdownContent } from "~/components/markdown-content";
 import { PageShell } from "~/components/page-shell";
-import { getProjects } from "~/lib/content.server";
+import { getProjects, type ProjectEntry } from "~/lib/content.server";
 import { getArchiveMarker } from "~/lib/route-design";
+
+type ProjectView = "all" | "live" | "open" | "private" | "research";
+
+const projectViews: { id: ProjectView; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "live", label: "Live" },
+  { id: "open", label: "Open source" },
+  { id: "private", label: "Private" },
+  { id: "research", label: "Research" },
+];
+
+const researchProjectSlugs = new Set([
+  "open-mathematics-lab",
+  "wurmkickflip",
+  "celegans-sim",
+  "puffer-drone",
+  "market-research-evidence-factory",
+]);
+
+function matchesProjectView(project: ProjectEntry, view: ProjectView) {
+  switch (view) {
+    case "live":
+      return Boolean(project.liveUrl);
+    case "open":
+      return Boolean(project.repoUrl);
+    case "private":
+      return project.status?.toLowerCase().includes("private") ?? false;
+    case "research":
+      return researchProjectSlugs.has(project.slug);
+    default:
+      return true;
+  }
+}
+
+function getProjectKind(project: ProjectEntry) {
+  if (project.liveUrl) return "Live site";
+  if (researchProjectSlugs.has(project.slug)) return "Research file";
+  if (project.repoUrl) return "Open repository";
+  if (project.status?.toLowerCase().includes("private")) return "Private build";
+  return "Project file";
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -27,16 +68,25 @@ export async function loader() {
 
 export default function Projects({ loaderData }: Route.ComponentProps) {
   const { projects } = loaderData;
+  const [projectView, setProjectView] = useState<ProjectView>("all");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const selectedSlug = searchParams.get("project");
   const selectedProject =
     projects.find((project) => project.slug === selectedSlug) ?? null;
+  const filteredProjects = useMemo(
+    () =>
+      projects.filter((project) => matchesProjectView(project, projectView)),
+    [projectView, projects],
+  );
 
   useEffect(() => {
     if (!selectedProject) {
       return;
     }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -45,87 +95,154 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
     }
 
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [navigate, selectedProject]);
 
   return (
     <PageShell
       eyebrow="Selected work"
-      intro="A curated cross-section of public tools, private product builds, simulations, infrastructure, and evidence-gated research. Open a card for the honest version, including what is still experimental or unresolved."
+      intro="Tools, products, simulations, infrastructure, and evidence-gated research—with the honest limits left in."
       routeId="projects"
       title="Projects"
     >
-      <div className="archive-card mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+      <section
+        className="archive-card project-index-toolbar mb-6 p-5"
+        aria-labelledby="project-index-title"
+      >
+        <div className="project-index-copy">
           <p className="text-muted text-xs font-extrabold tracking-[0.22em] uppercase">
-            July 2026 refresh
+            August 2026 refresh
           </p>
-          <p className="text-ink mt-2 max-w-3xl text-sm leading-7 sm:text-base">
-            Selected from the work that best shows how I build: concrete
-            systems, explicit limits, reproducible checks, and enough whimsy to
-            keep the machinery interesting.
+          <h2 className="sr-only" id="project-index-title">
+            Filter the project index
+          </h2>
+          <p className="text-ink mt-2 max-w-2xl text-sm leading-7 sm:text-base">
+            {projects.length} selected projects, filed by what you can actually
+            inspect.
           </p>
         </div>
-        <span className="archive-tag w-fit">Public + private work</span>
-      </div>
+
+        <div className="project-filter-wrap">
+          <div
+            aria-label="Filter projects"
+            className="project-filter-list"
+            role="group"
+          >
+            {projectViews.map((view) => {
+              const count = projects.filter((project) =>
+                matchesProjectView(project, view.id),
+              ).length;
+
+              return (
+                <button
+                  aria-pressed={projectView === view.id}
+                  className="project-filter-button"
+                  key={view.id}
+                  onClick={() => setProjectView(view.id)}
+                  type="button"
+                >
+                  <span>{view.label}</span>
+                  <span aria-hidden="true">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+          <p aria-live="polite" className="project-filter-count">
+            Showing {filteredProjects.length} of {projects.length}
+          </p>
+        </div>
+      </section>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((project, index) => (
-          <Link
-            key={project.slug}
-            className="archive-card archive-card-link group flex h-full flex-col p-5"
-            to={project.href}
-          >
-            {project.coverImage ? (
-              <img
-                alt=""
-                className="project-cover-image mb-5 aspect-[16/10] w-full object-contain p-3"
-                src={project.coverImage}
-              />
-            ) : null}
+        {filteredProjects.map((project) => {
+          const projectIndex = projects.findIndex(
+            (entry) => entry.slug === project.slug,
+          );
+          const marker = getArchiveMarker("projects", projectIndex);
 
-            <div className="flex flex-1 flex-col">
-              <div className="mb-3 flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <h2 className="font-serif text-2xl leading-tight text-[var(--route-accent)]">
-                    {project.title}
-                  </h2>
-                  <p className="text-muted mt-1 text-sm">{project.year}</p>
-                </div>
-                <div className="flex shrink-0 flex-col items-end gap-2">
-                  <span className="archive-marker text-xl">
-                    {getArchiveMarker("projects", index)}
-                  </span>
-                  {project.status ? (
-                    <span className="archive-tag project-status-tag">
-                      {project.status}
+          return (
+            <Link
+              key={project.slug}
+              className="archive-card archive-card-link project-index-card group flex h-full flex-col p-5"
+              to={project.href}
+            >
+              <div aria-hidden="true" className="project-card-visual">
+                {project.coverImage ? (
+                  <img
+                    alt=""
+                    className="project-cover-image h-full w-full object-contain p-3"
+                    src={project.coverImage}
+                  />
+                ) : (
+                  <>
+                    <span className="project-card-watermark">{marker}</span>
+                    <span className="project-card-kind">
+                      {getProjectKind(project)}
                     </span>
-                  ) : null}
-                </div>
+                    <span className="project-card-topic">
+                      {project.tags?.slice(0, 2).join(" / ") ?? "Selected work"}
+                    </span>
+                  </>
+                )}
               </div>
 
-              <p className="text-muted text-sm leading-7">{project.summary}</p>
-
-              {project.tags?.length ? (
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="archive-tag">
-                      {tag}
-                    </span>
-                  ))}
+              <div className="flex flex-1 flex-col pt-5">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <h2 className="font-serif text-2xl leading-tight text-[var(--route-accent)]">
+                      {project.title}
+                    </h2>
+                    <p className="text-muted mt-1 text-sm">{project.year}</p>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <span className="archive-marker text-xl">{marker}</span>
+                    {project.status ? (
+                      <span className="archive-tag project-status-tag">
+                        {project.status}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
-              ) : null}
 
-              <div className="archive-inline-link mt-6 w-fit text-sm font-bold">
-                Open project
+                <p className="text-muted text-sm leading-7">
+                  {project.summary}
+                </p>
+
+                {project.tags?.length ? (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="archive-tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+
+                <div className="archive-inline-link mt-6 w-fit text-sm font-bold">
+                  Open project
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
+
+      {filteredProjects.length === 0 ? (
+        <div className="archive-card p-6 text-center">
+          <p className="text-muted text-sm leading-7">
+            Nothing in this drawer yet. The label may be more ambitious than the
+            filing cabinet.
+          </p>
+        </div>
+      ) : null}
 
       {selectedProject ? (
         <div
+          aria-describedby="project-dialog-summary"
+          aria-labelledby="project-dialog-title"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
           role="dialog"
@@ -142,15 +259,22 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 <p className="text-muted text-xs font-semibold tracking-[0.24em] uppercase">
                   {selectedProject.year}
                 </p>
-                <h2 className="mt-2 font-serif text-3xl leading-tight text-[var(--route-accent)] sm:text-4xl">
+                <h2
+                  className="mt-2 font-serif text-3xl leading-tight text-[var(--route-accent)] sm:text-4xl"
+                  id="project-dialog-title"
+                >
                   {selectedProject.title}
                 </h2>
-                <p className="text-muted mt-3 max-w-2xl text-sm leading-7 sm:text-base">
+                <p
+                  className="text-muted mt-3 max-w-2xl text-sm leading-7 sm:text-base"
+                  id="project-dialog-summary"
+                >
                   {selectedProject.summary}
                 </p>
               </div>
 
               <Link
+                autoFocus
                 className="archive-button archive-button-secondary"
                 to="/projects"
               >
