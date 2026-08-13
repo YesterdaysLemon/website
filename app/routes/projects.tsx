@@ -5,8 +5,9 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import { DeploymentPipeline } from "~/components/deployment-pipeline";
 import { MarkdownContent } from "~/components/markdown-content";
 import { PageShell } from "~/components/page-shell";
+import { TactilePill } from "~/components/tactile-pill";
 import { getProjects, type ProjectEntry } from "~/lib/content.server";
-import { getArchiveMarker } from "~/lib/route-design";
+import { getArchiveMarker, getArchiveSuit } from "~/lib/route-design";
 
 type ProjectView = "all" | "live" | "open" | "private" | "research";
 
@@ -74,6 +75,10 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   const selectedSlug = searchParams.get("project");
   const selectedProject =
     projects.find((project) => project.slug === selectedSlug) ?? null;
+  const selectedProjectIndex = selectedProject
+    ? projects.findIndex((project) => project.slug === selectedProject.slug)
+    : -1;
+  const selectedSuit = getArchiveSuit(Math.max(selectedProjectIndex, 0), 3);
   const filteredProjects = useMemo(
     () =>
       projects.filter((project) => matchesProjectView(project, projectView)),
@@ -109,7 +114,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
       title="Projects"
     >
       <section
-        className="archive-card project-index-toolbar mb-6 p-5"
+        className="suit-watermark-card suit-card suit-scope suit-spade archive-card project-index-toolbar mb-6 p-5"
         aria-labelledby="project-index-title"
       >
         <div className="project-index-copy">
@@ -131,22 +136,30 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             className="project-filter-list"
             role="group"
           >
-            {projectViews.map((view) => {
+            {projectViews.map((view, index) => {
               const count = projects.filter((project) =>
                 matchesProjectView(project, view.id),
               ).length;
+              const suit = getArchiveSuit(index, 3);
 
               return (
-                <button
-                  aria-pressed={projectView === view.id}
-                  className="project-filter-button"
+                <TactilePill
+                  className="project-filter-button suit-scope"
                   key={view.id}
-                  onClick={() => setProjectView(view.id)}
-                  type="button"
+                  onPressedChange={(pressed) =>
+                    setProjectView(pressed ? view.id : "all")
+                  }
+                  pressed={projectView === view.id}
+                  suit={suit.name}
                 >
-                  <span>{view.label}</span>
-                  <span aria-hidden="true">{count}</span>
-                </button>
+                  {view.label}
+                  <span
+                    aria-hidden="true"
+                    className="project-filter-chip-count"
+                  >
+                    {count}
+                  </span>
+                </TactilePill>
               );
             })}
           </div>
@@ -161,48 +174,63 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
           const projectIndex = projects.findIndex(
             (entry) => entry.slug === project.slug,
           );
-          const marker = getArchiveMarker("projects", projectIndex);
+          const suit = getArchiveSuit(projectIndex, 3);
+          const marker = getArchiveMarker(projectIndex, 3);
 
           return (
-            <Link
+            <article
               key={project.slug}
-              className="archive-card archive-card-link project-index-card group flex h-full flex-col p-5"
-              to={project.href}
+              className={`suit-card suit-scope suit-${suit.name} archive-card project-index-card group flex h-full flex-col p-5`}
             >
-              <div aria-hidden="true" className="project-card-visual">
-                {project.coverImage ? (
-                  <img
-                    alt=""
-                    className="project-cover-image h-full w-full object-contain p-3"
-                    src={project.coverImage}
-                  />
-                ) : (
-                  <>
-                    <span className="project-card-watermark">{marker}</span>
-                    <span className="project-card-kind">
-                      {getProjectKind(project)}
-                    </span>
-                    <span className="project-card-topic">
-                      {project.tags?.slice(0, 2).join(" / ") ?? "Selected work"}
-                    </span>
-                  </>
-                )}
-              </div>
+              <Link
+                aria-label={`Open ${project.title}`}
+                className="project-card-link project-card-visual-link"
+                to={project.href}
+              >
+                <div aria-hidden="true" className="project-card-visual">
+                  {project.coverImage ? (
+                    <img
+                      alt=""
+                      className="project-cover-image h-full w-full object-contain p-3"
+                      src={project.coverImage}
+                    />
+                  ) : (
+                    <>
+                      <span className="project-card-watermark">{marker}</span>
+                      <span className="project-card-kind">
+                        {getProjectKind(project)}
+                      </span>
+                      <span className="project-card-topic">
+                        {project.tags?.slice(0, 2).join(" / ") ??
+                          "Selected work"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </Link>
 
               <div className="flex flex-1 flex-col pt-5">
                 <div className="mb-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <h2 className="font-serif text-2xl leading-tight text-[var(--route-accent)]">
+                  <Link
+                    className="project-card-link project-card-title-link min-w-0"
+                    to={project.href}
+                  >
+                    <h2 className="suit-title text-ink font-serif text-2xl leading-tight">
                       {project.title}
                     </h2>
                     <p className="text-muted mt-1 text-sm">{project.year}</p>
-                  </div>
+                  </Link>
                   <div className="flex shrink-0 flex-col items-end gap-2">
-                    <span className="archive-marker text-xl">{marker}</span>
+                    <span aria-hidden="true" className="archive-marker text-xl">
+                      {marker}
+                    </span>
                     {project.status ? (
-                      <span className="archive-tag project-status-tag">
+                      <TactilePill
+                        className="project-chip project-status-tag"
+                        suit={suit.name}
+                      >
                         {project.status}
-                      </span>
+                      </TactilePill>
                     ) : null}
                   </div>
                 </div>
@@ -214,24 +242,31 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 {project.tags?.length ? (
                   <div className="mt-5 flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="archive-tag">
+                      <TactilePill
+                        className="project-chip"
+                        key={tag}
+                        suit={suit.name}
+                      >
                         {tag}
-                      </span>
+                      </TactilePill>
                     ))}
                   </div>
                 ) : null}
 
-                <div className="archive-inline-link mt-6 w-fit text-sm font-bold">
+                <Link
+                  className="archive-inline-link project-card-link project-card-cta mt-6 w-fit text-sm font-bold"
+                  to={project.href}
+                >
                   Open project
-                </div>
+                </Link>
               </div>
-            </Link>
+            </article>
           );
         })}
       </div>
 
       {filteredProjects.length === 0 ? (
-        <div className="archive-card p-6 text-center">
+        <div className="suit-watermark-card suit-card suit-scope suit-club archive-card p-6 text-center">
           <p className="text-muted text-sm leading-7">
             Nothing in this drawer yet. The label may be more ambitious than the
             filing cabinet.
@@ -253,8 +288,10 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             to="/projects"
           />
 
-          <div className="border-line bg-warm-card relative z-10 flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[var(--radius)] border shadow-[0_40px_120px_rgba(0,0,0,0.2)]">
-            <div className="border-line flex items-start justify-between gap-6 border-b px-6 py-5 sm:px-8">
+          <div
+            className={`suit-scope suit-${selectedSuit.name} archive-card relative z-10 flex max-h-[90svh] w-full max-w-5xl flex-col overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.2)]`}
+          >
+            <div className="border-line flex items-start justify-between gap-3 border-b px-6 py-5 sm:gap-6 sm:px-8">
               <div>
                 <p className="text-muted text-xs font-semibold tracking-[0.24em] uppercase">
                   {selectedProject.year}
@@ -265,12 +302,6 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 >
                   {selectedProject.title}
                 </h2>
-                <p
-                  className="text-muted mt-3 max-w-2xl text-sm leading-7 sm:text-base"
-                  id="project-dialog-summary"
-                >
-                  {selectedProject.summary}
-                </p>
               </div>
 
               <Link
@@ -283,6 +314,13 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             </div>
 
             <div className="overflow-y-auto px-6 py-6 sm:px-8">
+              <p
+                className="text-muted mb-6 max-w-2xl text-sm leading-7 sm:text-base"
+                id="project-dialog-summary"
+              >
+                {selectedProject.summary}
+              </p>
+
               {selectedProject.coverImage ? (
                 <img
                   alt=""

@@ -94,14 +94,15 @@ export function PageShell({
 
   return (
     <div
-      className="bg-paper text-ink min-h-screen"
+      className="archive-page text-ink min-h-screen"
+      data-route={routeId}
       style={{ "--route-accent": route.accent } as CSSProperties}
     >
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pt-5 pb-28 sm:px-8 sm:py-5 lg:px-10">
+      <div className="archive-page-content mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pt-5 sm:px-8 sm:py-5 lg:px-10">
         <header className="border-line flex flex-col gap-9 border-b pb-9">
           <div className="bg-warm-card border-line z-40 flex flex-col gap-4 rounded-[var(--radius)] border px-4 py-4 shadow-[0_14px_38px_rgba(21,25,24,0.035)] sm:sticky sm:top-5 sm:flex-row sm:items-start sm:justify-between sm:px-5">
             <NavLink
-              className="text-muted hover:text-ink focus-visible:ring-offset-paper text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="text-muted hover:text-ink focus-visible:ring-offset-paper inline-flex min-h-11 items-center text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-0"
               to="/"
               end
             >
@@ -110,7 +111,7 @@ export function PageShell({
 
             <nav
               aria-label="Main navigation"
-              className="border-line bg-warm-card/95 fixed right-4 bottom-4 left-4 z-50 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 rounded-[var(--radius)] border px-4 py-3 text-sm font-semibold shadow-[0_18px_44px_rgba(21,25,24,0.14)] backdrop-blur sm:static sm:z-auto sm:justify-start sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none"
+              className="archive-main-nav border-line bg-warm-card/95 fixed right-4 left-4 z-50 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 rounded-[var(--radius)] border px-4 py-3 text-sm font-semibold shadow-[0_18px_44px_rgba(21,25,24,0.14)] backdrop-blur sm:static sm:z-auto sm:justify-start sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none"
             >
               {archiveNavItems.map((item) => (
                 <NavLink
@@ -119,7 +120,7 @@ export function PageShell({
                   className={({ isActive }) =>
                     [
                       "archive-nav-link",
-                      "flex-1 text-center text-[0.95rem] font-extrabold sm:flex-none sm:text-left sm:text-sm sm:font-semibold",
+                      "inline-flex min-h-11 flex-1 items-center justify-center text-center text-[0.95rem] font-extrabold sm:min-h-0 sm:flex-none sm:justify-start sm:text-left sm:text-sm sm:font-semibold",
                       isActive ? "is-active" : "",
                     ].join(" ")
                   }

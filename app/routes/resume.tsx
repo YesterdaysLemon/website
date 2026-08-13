@@ -1,14 +1,9 @@
 import type { Route } from "./+types/resume";
 
 import { PageShell } from "~/components/page-shell";
+import { TactilePill } from "~/components/tactile-pill";
 import { resumeData } from "~/content/resume";
-
-const capabilitySuits = [
-  { name: "club", symbol: "♣" },
-  { name: "heart", symbol: "♥" },
-  { name: "diamond", symbol: "♦" },
-  { name: "spade", symbol: "♠" },
-] as const;
+import { archiveSuits, getArchiveSuit } from "~/lib/route-design";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -31,8 +26,8 @@ export default function Resume() {
     >
       <div className="grid gap-8 lg:grid-cols-[0.72fr_0.28fr]">
         <section className="space-y-8">
-          <div className="resume-color-card resume-suit-spade archive-card p-6 sm:p-8">
-            <p className="resume-color-title text-muted text-xs font-semibold tracking-[0.28em] uppercase">
+          <div className="suit-watermark-card suit-card suit-scope suit-spade archive-card p-6 sm:p-8">
+            <p className="suit-title text-muted text-xs font-semibold tracking-[0.28em] uppercase">
               {resumeData.role}
             </p>
             <p className="text-muted mt-4 max-w-3xl text-base leading-8 sm:text-lg">
@@ -40,89 +35,97 @@ export default function Resume() {
             </p>
           </div>
 
-          <section className="archive-card p-6 sm:p-8">
+          <section className="suit-watermark-card suit-scope suit-heart archive-card p-6 sm:p-8">
             <h2 className="font-serif text-3xl text-[var(--route-accent)]">
               Experience
             </h2>
             <div className="mt-6 space-y-8">
-              {resumeData.experience.map((role, index) => (
-                <article
-                  key={`${role.organization}-${role.start}`}
-                  className={`resume-entry resume-suit-${capabilitySuits[index % capabilitySuits.length].name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
-                >
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <h3 className="text-ink text-xl font-semibold">
-                        {role.title}
-                      </h3>
-                      <p className="text-muted mt-1 text-sm">
-                        {role.organization}
-                        {role.location ? ` - ${role.location}` : ""}
+              {resumeData.experience.map((role, index) => {
+                const suit = getArchiveSuit(index);
+
+                return (
+                  <article
+                    key={`${role.organization}-${role.start}`}
+                    className={`resume-entry suit-row suit-scope suit-${suit.name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="suit-title text-ink text-xl font-semibold">
+                          {role.title}
+                        </h3>
+                        <p className="text-muted mt-1 text-sm">
+                          {role.organization}
+                          {role.location ? ` - ${role.location}` : ""}
+                        </p>
+                      </div>
+                      <p className="text-muted text-sm">
+                        {role.start} - {role.end}
                       </p>
                     </div>
-                    <p className="text-muted text-sm">
-                      {role.start} - {role.end}
+                    <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
+                      {role.summary}
                     </p>
-                  </div>
-                  <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
-                    {role.summary}
-                  </p>
-                  <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
-                    {role.highlights.map((highlight) => (
-                      <li key={highlight} className="flex gap-3">
-                        <span className="resume-bullet mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
+                    <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
+                      {role.highlights.map((highlight) => (
+                        <li key={highlight} className="flex gap-3">
+                          <span className="suit-dot mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
             </div>
           </section>
 
-          <section className="archive-card p-6 sm:p-8">
+          <section className="suit-watermark-card suit-scope suit-diamond archive-card p-6 sm:p-8">
             <h2 className="font-serif text-3xl text-[var(--route-accent)]">
               Education
             </h2>
             <div className="mt-6 space-y-8">
-              {resumeData.education.map((item, index) => (
-                <article
-                  key={`${item.institution}-${item.start}`}
-                  className={`resume-entry resume-suit-${capabilitySuits[(index + 2) % capabilitySuits.length].name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
-                >
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <h3 className="text-ink text-xl font-semibold">
-                        {item.institution}
-                      </h3>
-                      <p className="text-muted mt-1 text-sm">
-                        {item.degree}
-                        {item.location ? ` - ${item.location}` : ""}
+              {resumeData.education.map((item, index) => {
+                const suit = getArchiveSuit(index, 2);
+
+                return (
+                  <article
+                    key={`${item.institution}-${item.start}`}
+                    className={`resume-entry suit-row suit-scope suit-${suit.name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="suit-title text-ink text-xl font-semibold">
+                          {item.institution}
+                        </h3>
+                        <p className="text-muted mt-1 text-sm">
+                          {item.degree}
+                          {item.location ? ` - ${item.location}` : ""}
+                        </p>
+                      </div>
+                      <p className="text-muted text-sm">
+                        {item.start} - {item.end}
                       </p>
                     </div>
-                    <p className="text-muted text-sm">
-                      {item.start} - {item.end}
-                    </p>
-                  </div>
-                  {item.summary ? (
-                    <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
-                      {item.summary}
-                    </p>
-                  ) : null}
-                  <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
-                    {item.notes.map((note) => (
-                      <li key={note} className="flex gap-3">
-                        <span className="resume-bullet mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
-                        <span>{note}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
+                    {item.summary ? (
+                      <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
+                        {item.summary}
+                      </p>
+                    ) : null}
+                    <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
+                      {item.notes.map((note) => (
+                        <li key={note} className="flex gap-3">
+                          <span className="suit-dot mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
+                          <span>{note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
             </div>
           </section>
 
-          <section className="archive-card p-6 sm:p-8">
+          <section className="suit-watermark-card suit-scope suit-club archive-card p-6 sm:p-8">
             <div className="max-w-3xl">
               <h2 className="font-serif text-3xl text-[var(--route-accent)]">
                 Tools I actually use
@@ -136,11 +139,11 @@ export default function Resume() {
 
             <div className="capability-grid">
               {resumeData.skills.map((group, index) => {
-                const suit = capabilitySuits[index % capabilitySuits.length];
+                const suit = archiveSuits[index % archiveSuits.length];
 
                 return (
                   <article
-                    className={`capability-ledger-row capability-suit-${suit.name}`}
+                    className={`capability-ledger-row suit-${suit.name}`}
                     key={group.label}
                   >
                     <div aria-hidden="true" className="capability-suit-rail">
@@ -155,8 +158,13 @@ export default function Resume() {
                       className="capability-token-list"
                     >
                       {group.details.map((skill) => (
-                        <li className="capability-token" key={skill}>
-                          {skill}
+                        <li key={skill}>
+                          <TactilePill
+                            className="capability-token"
+                            suit={suit.name}
+                          >
+                            {skill}
+                          </TactilePill>
                         </li>
                       ))}
                     </ul>
@@ -168,8 +176,8 @@ export default function Resume() {
         </section>
 
         <aside className="space-y-6">
-          <section className="resume-color-card resume-suit-club archive-card p-6">
-            <h2 className="resume-color-title font-serif text-2xl text-[var(--route-accent)]">
+          <section className="suit-watermark-card suit-card suit-scope suit-club archive-card p-6">
+            <h2 className="suit-title font-serif text-2xl text-[var(--route-accent)]">
               Contact
             </h2>
             <div className="text-muted mt-5 space-y-4 text-sm leading-7">
@@ -207,8 +215,8 @@ export default function Resume() {
             </div>
           </section>
 
-          <section className="resume-color-card resume-suit-diamond archive-card p-6">
-            <h2 className="resume-color-title font-serif text-2xl text-[var(--route-accent)]">
+          <section className="suit-watermark-card suit-card suit-scope suit-diamond archive-card p-6">
+            <h2 className="suit-title font-serif text-2xl text-[var(--route-accent)]">
               Certifications
             </h2>
             <div className="mt-5 space-y-4">

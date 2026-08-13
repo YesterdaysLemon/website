@@ -6,6 +6,7 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
+    "test": "node --test tests/interest-blackjack-engine.test.ts tests/home-card-table.test.ts tests/bounded-body-physics.test.ts",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {

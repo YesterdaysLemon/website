@@ -1,57 +1,21 @@
-type SuitName = "club" | "heart" | "diamond" | "spade";
-type HandState = "playing" | "stood" | "bust" | "done";
-type Outcome = "win" | "loss" | "push";
-type Phase = "idle" | "dealing" | "player" | "dealer" | "result";
-
-interface SuitDefinition {
-  symbol: string;
-  color: string;
-  category: string;
-  interests: readonly (readonly [string, string])[];
-}
-
-interface Card {
-  id: string;
-  suitName: SuitName;
-  suit: string;
-  color: string;
-  category: string;
-  word: string;
-  fullLabel: string;
-  rank: string;
-  value: number;
-}
-
-interface HandResult {
-  outcome: Outcome;
-  label: string;
-}
-
-interface Hand {
-  cards: Card[];
-  state: HandState;
-  doubled: boolean;
-  fromSplit: boolean;
-  splitAces: boolean;
-  result: HandResult | null;
-}
-
-interface CollectionState {
-  ids: string[];
-  gold: number;
-}
-
-interface GameState {
-  deck: Card[];
-  dealer: Card[];
-  hands: Hand[];
-  activeHandIndex: number;
-  phase: Phase;
-  revealDealer: boolean;
-  shufflePending: boolean;
-  collection: CollectionState;
-  lastAwardKeys: Set<string>;
-}
+import {
+  canDouble as canDoubleHand,
+  canSplit as canSplitHand,
+  createHand,
+  currentHand as getCurrentHand,
+  dealerShouldHit,
+  handValue,
+  isBlackjack,
+  makeInterestDeck,
+  pickRandom,
+  resolveHandAgainstDealer,
+  shouldShuffleBeforeRound,
+  shuffleCards,
+  type Card,
+  type CollectionState,
+  type GameState,
+  type Hand,
+} from "./interest-blackjack-engine";
 
 interface TrophyChipState {
   flipped: boolean;
@@ -78,138 +42,11 @@ interface DragState {
 type Award = { type: "interest"; card: Card } | { type: "gold"; key: string };
 
 export function mountInterestBlackjack(table: HTMLElement) {
-  const CUT_CARD = 13;
-  const MAX_HANDS = 4;
   const STORAGE_KEY = "alireza-interest-blackjack-collection-v1";
-
-  const suitData: Record<SuitName, SuitDefinition> = {
-    club: {
-      symbol: "♣",
-      color: "var(--club)",
-      category: "Mathematics, science & technology",
-      interests: [
-        ["Graphs", "Graph theory"],
-        ["Combinatorics", "Combinatorics"],
-        ["Astronomy", "Astronomy"],
-        ["Computing", "Computing"],
-        ["Simulations", "Simulations"],
-        ["Logic", "Logic"],
-        ["Algebra", "Algebra"],
-        ["Physics", "Physics"],
-        ["Probability", "Probability"],
-        ["Hardware", "Hardware"],
-        ["Emergence", "Emergence"],
-        ["Complexity", "Complexity"],
-        ["Dynamics", "Dynamics"],
-      ],
-    },
-    heart: {
-      symbol: "♥",
-      color: "var(--heart)",
-      category: "Biology, nature & living systems",
-      interests: [
-        ["Botany", "Botany"],
-        ["Connectomes", "Connectomes"],
-        ["Ethology", "Ethology"],
-        ["Digital", "Digital life"],
-        ["Birds", "Birds"],
-        ["Cognition", "Cognition"],
-        ["Swarms", "Swarms"],
-        ["Insects", "Insects"],
-        ["Evolution", "Evolution"],
-        ["Ecology", "Ecology"],
-        ["Microbes", "Microbes"],
-        ["Ecosystems", "Ecosystems"],
-        ["Bonsai", "Bonsai"],
-      ],
-    },
-    diamond: {
-      symbol: "♦",
-      color: "var(--diamond)",
-      category: "Games, art & creative making",
-      interests: [
-        ["Cards", "Blackjack"],
-        ["Boardgames", "Board games"],
-        ["Videogames", "Video games"],
-        ["D&D", "Dungeons & Dragons"],
-        ["Music", "Music"],
-        ["Ukulele", "Ukulele"],
-        ["Guitar", "Guitar"],
-        ["Sculpture", "Sculpture"],
-        ["Minecraft", "Minecraft"],
-        ["WorldEdit", "WorldEdit"],
-        ["Drawing", "Drawing"],
-        ["Menswear", "Menswear"],
-        ["Keyboards", "Custom keyboards"],
-      ],
-    },
-    spade: {
-      symbol: "♠",
-      color: "var(--spade)",
-      category: "Philosophy, society & difficult questions",
-      interests: [
-        ["Philosophy", "Philosophy"],
-        ["Rationality", "Rationality"],
-        ["Geopolitics", "Geopolitics"],
-        ["Alignment", "AI alignment"],
-        ["Safety", "AI safety"],
-        ["Language", "Language"],
-        ["Consciousness", "Consciousness"],
-        ["Sociology", "Sociology"],
-        ["Epistemology", "Epistemology"],
-        ["Ontology", "Ontology"],
-        ["Identity", "Identity"],
-        ["Futurism", "Futurism"],
-        ["Ideology", "Ideology"],
-      ],
-    },
-  };
-
-  const ranks: readonly { label: string; value: number }[] = [
-    { label: "A", value: 11 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-    { label: "4", value: 4 },
-    { label: "5", value: 5 },
-    { label: "6", value: 6 },
-    { label: "7", value: 7 },
-    { label: "8", value: 8 },
-    { label: "9", value: 9 },
-    { label: "10", value: 10 },
-    { label: "J", value: 10 },
-    { label: "Q", value: 10 },
-    { label: "K", value: 10 },
-  ];
-
-  function makeDeck(): Card[] {
-    const cards: Card[] = [];
-
-    for (const [suitName, suit] of Object.entries(suitData) as [
-      SuitName,
-      SuitDefinition,
-    ][]) {
-      suit.interests.forEach(([word, fullLabel], index) => {
-        const rank = ranks[index];
-        cards.push({
-          id: `${suitName}-${rank.label}`,
-          suitName,
-          suit: suit.symbol,
-          color: suit.color,
-          category: suit.category,
-          word,
-          fullLabel,
-          rank: rank.label,
-          value: rank.value,
-        });
-      });
-    }
-
-    return cards;
-  }
-
-  const allCards = makeDeck();
+  const allCards = makeInterestDeck();
   const cardById = new Map(allCards.map((card) => [card.id, card]));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const touchInspection = window.matchMedia("(hover: none), (pointer: coarse)");
   table.classList.add("bj2-table");
   table.innerHTML = `
     <nav class="bj2-nav" aria-label="Blackjack navigation">
@@ -321,9 +158,30 @@ export function mountInterestBlackjack(table: HTMLElement) {
   const doubleButton = required<HTMLButtonElement>("#bj2-double");
   const splitButton = required<HTMLButtonElement>("#bj2-split");
   const dialogueTimers = new Set<number>();
+  const scheduledTimers = new Set<number>();
   const trophyChipStates = new Map<string, TrophyChipState>();
+  const listenerController = new AbortController();
+  const listenerOptions = { signal: listenerController.signal };
+  let trophyInteractionController = new AbortController();
+  let destroyed = false;
   let trophyChipZ = 120;
   let dialoguePointerFrame: number | null = null;
+
+  function schedule(callback: () => void, milliseconds: number): number {
+    const timer = window.setTimeout(() => {
+      scheduledTimers.delete(timer);
+      if (!destroyed) {
+        callback();
+      }
+    }, milliseconds);
+    scheduledTimers.add(timer);
+    return timer;
+  }
+
+  function cancelScheduled(timer: number): void {
+    window.clearTimeout(timer);
+    scheduledTimers.delete(timer);
+  }
 
   function loadCollection(): CollectionState {
     try {
@@ -361,78 +219,53 @@ export function mountInterestBlackjack(table: HTMLElement) {
   };
 
   function saveCollection(): void {
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        ids: game.collection.ids,
-        gold: game.collection.gold,
-      }),
-    );
-  }
-
-  function shuffled<T>(cards: readonly T[]): T[] {
-    const result = [...cards];
-    for (let index = result.length - 1; index > 0; index -= 1) {
-      const swapIndex = Math.floor(Math.random() * (index + 1));
-      [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          ids: game.collection.ids,
+          gold: game.collection.gold,
+        }),
+      );
+    } catch {
+      // The collection still works for this session when storage is blocked.
     }
-    return result;
   }
 
   function pause(milliseconds: number): Promise<void> {
     return new Promise((resolve) =>
-      window.setTimeout(resolve, reduceMotion.matches ? 0 : milliseconds),
+      schedule(resolve, reduceMotion.matches ? 0 : milliseconds),
     );
   }
 
-  function pick<T>(options: readonly T[]): T {
-    return options[Math.floor(Math.random() * options.length)];
-  }
-
-  function handValue(cards: readonly Card[]): { total: number; soft: boolean } {
-    let total = cards.reduce((sum, card) => sum + card.value, 0);
-    let highAces = cards.filter((card) => card.rank === "A").length;
-
-    while (total > 21 && highAces > 0) {
-      total -= 10;
-      highAces -= 1;
-    }
-
-    return {
-      total,
-      soft: highAces > 0 && total <= 21,
-    };
-  }
-
-  function isBlackjack(cards: readonly Card[]): boolean {
-    return cards.length === 2 && handValue(cards).total === 21;
-  }
-
-  function createHand(
-    cards: Card[] = [],
-    options: Partial<Pick<Hand, "fromSplit" | "splitAces">> = {},
-  ): Hand {
-    return {
-      cards,
-      state: "playing",
-      doubled: false,
-      fromSplit: Boolean(options.fromSplit),
-      splitAces: Boolean(options.splitAces),
-      result: null,
-    };
-  }
-
   function currentHand(): Hand | undefined {
-    return game.hands[game.activeHandIndex] || null;
+    return getCurrentHand(game);
   }
 
   function announce(message: string): void {
     liveStatus.textContent = message;
   }
 
+  function runGameAction(action: () => Promise<void>): void {
+    void action().catch((error: unknown) => {
+      if (destroyed) {
+        return;
+      }
+
+      game.phase = "result";
+      game.shufflePending = true;
+      render();
+      showResult(
+        error instanceof Error && error.message.includes("deck ran out")
+          ? "The deck ran dry · a fresh shuffle is ready"
+          : "The table hiccupped · deal again",
+      );
+    });
+  }
+
   function clearDialogue(): void {
     for (const timer of dialogueTimers) {
-      window.clearTimeout(timer);
+      cancelScheduled(timer);
     }
     dialogueTimers.clear();
     dealerSpeech.replaceChildren();
@@ -447,12 +280,12 @@ export function mountInterestBlackjack(table: HTMLElement) {
     }
 
     entry.dataset.fadeScheduled = "true";
-    const fadeTimer = window.setTimeout(
+    const fadeTimer = schedule(
       () => {
         dialogueTimers.delete(fadeTimer);
         entry.classList.add("is-fading");
 
-        const removeTimer = window.setTimeout(
+        const removeTimer = schedule(
           () => {
             dialogueTimers.delete(removeTimer);
             const stack = entry.parentElement;
@@ -677,6 +510,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
         data-card-id="${card.id}"
         tabindex="0"
         aria-label="${label}"
+        aria-expanded="false"
         style="--suit:${card.color};--card-rotate:${((hashString(card.id) % 31) - 15) / 10}deg"
       >
         <div class="bj2-card-corner"><span>${card.rank}</span><span>${card.suit}</span></div>
@@ -700,35 +534,96 @@ export function mountInterestBlackjack(table: HTMLElement) {
     return hash >>> 0;
   }
 
-  function attachCardHoverEffects(): void {
-    for (const card of felt.querySelectorAll<HTMLElement>(
-      ".bj2-card:not(.is-face-down)",
-    )) {
-      card.addEventListener("pointermove", (event) => {
-        if (event.pointerType === "touch") {
-          return;
-        }
-        const rect = card.getBoundingClientRect();
-        const x = Math.min(
-          Math.max((event.clientX - rect.left) / rect.width, 0),
-          1,
-        );
-        const y = Math.min(
-          Math.max((event.clientY - rect.top) / rect.height, 0),
-          1,
-        );
-        card.style.setProperty("--tilt-x", `${((0.5 - y) * 14).toFixed(2)}deg`);
-        card.style.setProperty("--tilt-y", `${((x - 0.5) * 18).toFixed(2)}deg`);
-        card.style.setProperty("--glow-x", `${(x * 100).toFixed(1)}%`);
-        card.style.setProperty("--glow-y", `${(y * 100).toFixed(1)}%`);
-      });
-      card.addEventListener("pointerleave", () => {
-        card.style.setProperty("--tilt-x", "0deg");
-        card.style.setProperty("--tilt-y", "0deg");
-        card.style.setProperty("--glow-x", "50%");
-        card.style.setProperty("--glow-y", "50%");
-      });
+  function cardFromTarget(target: EventTarget | null): HTMLElement | null {
+    if (!(target instanceof Element)) {
+      return null;
     }
+
+    const card = target.closest<HTMLElement>(".bj2-card:not(.is-face-down)");
+    return card && felt.contains(card) ? card : null;
+  }
+
+  function resetCardHover(card: HTMLElement): void {
+    card.style.setProperty("--tilt-x", "0deg");
+    card.style.setProperty("--tilt-y", "0deg");
+    card.style.setProperty("--glow-x", "50%");
+    card.style.setProperty("--glow-y", "50%");
+  }
+
+  function handleCardPointerMove(event: PointerEvent): void {
+    const card = cardFromTarget(event.target);
+    if (!card || event.pointerType === "touch") {
+      return;
+    }
+
+    const rect = card.getBoundingClientRect();
+    const x = Math.min(
+      Math.max((event.clientX - rect.left) / rect.width, 0),
+      1,
+    );
+    const y = Math.min(
+      Math.max((event.clientY - rect.top) / rect.height, 0),
+      1,
+    );
+    card.style.setProperty("--tilt-x", `${((0.5 - y) * 14).toFixed(2)}deg`);
+    card.style.setProperty("--tilt-y", `${((x - 0.5) * 18).toFixed(2)}deg`);
+    card.style.setProperty("--glow-x", `${(x * 100).toFixed(1)}%`);
+    card.style.setProperty("--glow-y", `${(y * 100).toFixed(1)}%`);
+  }
+
+  function handleCardPointerOut(event: PointerEvent): void {
+    const card = cardFromTarget(event.target);
+    if (!card) {
+      return;
+    }
+    if (
+      event.relatedTarget instanceof Node &&
+      card.contains(event.relatedTarget)
+    ) {
+      return;
+    }
+    resetCardHover(card);
+  }
+
+  function toggleCardInspection(card: HTMLElement): void {
+    const shouldInspect = !card.classList.contains("is-inspecting");
+
+    for (const visibleCard of felt.querySelectorAll<HTMLElement>(
+      ".bj2-card.is-inspecting",
+    )) {
+      visibleCard.classList.remove("is-inspecting");
+      visibleCard.setAttribute("aria-expanded", "false");
+    }
+
+    if (shouldInspect) {
+      card.classList.add("is-inspecting");
+      card.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  function handleCardClick(event: MouseEvent): void {
+    if (window.innerWidth > 700 && !touchInspection.matches) {
+      return;
+    }
+
+    const card = cardFromTarget(event.target);
+    if (card) {
+      toggleCardInspection(card);
+    }
+  }
+
+  function handleCardKeyDown(event: KeyboardEvent): void {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    const card = cardFromTarget(event.target);
+    if (!card) {
+      return;
+    }
+
+    event.preventDefault();
+    toggleCardInspection(card);
   }
 
   function renderCards(newCardId: string | null = null): void {
@@ -799,10 +694,8 @@ export function mountInterestBlackjack(table: HTMLElement) {
       .join("");
     handDots.classList.toggle("is-visible", game.hands.length > 1);
 
-    attachCardHoverEffects();
-
     if (game.hands.length > 1 && game.phase === "player") {
-      window.setTimeout(() => {
+      schedule(() => {
         playerHands
           .querySelector(`[data-hand-index="${game.activeHandIndex}"]`)
           ?.scrollIntoView({
@@ -840,29 +733,15 @@ export function mountInterestBlackjack(table: HTMLElement) {
   }
 
   function canDouble(): boolean {
-    const hand = currentHand();
-    return Boolean(
-      game.phase === "player" &&
-        hand?.state === "playing" &&
-        hand.cards.length === 2 &&
-        !hand.splitAces,
-    );
+    return canDoubleHand(game);
   }
 
   function canSplit(): boolean {
-    const hand = currentHand();
-    return Boolean(
-      game.phase === "player" &&
-        hand?.state === "playing" &&
-        hand.cards.length === 2 &&
-        hand.cards[0].rank === hand.cards[1].rank &&
-        game.hands.length < MAX_HANDS &&
-        !(hand.splitAces && hand.cards[0].rank === "A"),
-    );
+    return canSplitHand(game);
   }
 
   function freshShuffle(): void {
-    game.deck = shuffled(allCards);
+    game.deck = shuffleCards(allCards);
     game.shufflePending = false;
     deckCount.textContent = "52";
   }
@@ -905,10 +784,10 @@ export function mountInterestBlackjack(table: HTMLElement) {
 
     clearRoundPresentation();
 
-    if (game.shufflePending || game.deck.length < CUT_CARD) {
+    if (game.shufflePending || shouldShuffleBeforeRound(game.deck.length)) {
       freshShuffle();
       showDealer(
-        pick([
+        pickRandom([
           "Fresh deck.",
           "A clean deck. How optimistic.",
           "Shall we begin again?",
@@ -916,7 +795,11 @@ export function mountInterestBlackjack(table: HTMLElement) {
       );
     } else {
       showDealer(
-        pick(["Another hand.", "The deck remembers.", "Very well. Again."]),
+        pickRandom([
+          "Another hand.",
+          "The deck remembers.",
+          "Very well. Again.",
+        ]),
       );
     }
 
@@ -959,7 +842,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
   function beginPlayerTurn(): void {
     const hand = currentHand();
     if (!hand) {
-      void playDealer();
+      runGameAction(playDealer);
       return;
     }
 
@@ -968,8 +851,8 @@ export function mountInterestBlackjack(table: HTMLElement) {
       hand.state = "stood";
       render();
       showThought(thoughtForHand(hand, game.activeHandIndex));
-      window.setTimeout(
-        () => void advanceHand(),
+      schedule(
+        () => runGameAction(advanceHand),
         reduceMotion.matches ? 0 : 520,
       );
       return;
@@ -1125,7 +1008,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     game.revealDealer = true;
     render();
     showDealer(
-      pick([
+      pickRandom([
         "Let's settle this.",
         "Now we see what caution bought you.",
         "My turn.",
@@ -1134,7 +1017,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     await pause(620);
 
     let value = handValue(game.dealer);
-    while (value.total < 17 || (value.total === 17 && value.soft)) {
+    while (dealerShouldHit(game.dealer)) {
       if (value.total === 17 && value.soft) {
         showDealer("Soft seventeen. House rules require another card.");
         await pause(420);
@@ -1156,7 +1039,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     const awards = awardFromHand(hand.cards, 2);
     render();
     showResult(`Blackjack · ${awardSummary(awards)}`);
-    window.setTimeout(
+    schedule(
       () => showDealer("Blackjack. Nicely done.", { keepResult: true }),
       520,
     );
@@ -1193,36 +1076,22 @@ export function mountInterestBlackjack(table: HTMLElement) {
     const awards = [];
 
     for (const hand of game.hands) {
-      const player = handValue(hand.cards);
-      let outcome: Outcome;
-      let label: string;
+      const result = resolveHandAgainstDealer(hand, game.dealer);
 
-      if (hand.state === "bust" || player.total > 21) {
-        outcome = "loss";
-        label = "bust";
-        losses += 1;
-        busts += 1;
-      } else if (dealer.total > 21) {
-        outcome = "win";
-        label = "win";
+      if (result.outcome === "win") {
         wins += 1;
-      } else if (player.total > dealer.total) {
-        outcome = "win";
-        label = "win";
-        wins += 1;
-      } else if (player.total < dealer.total) {
-        outcome = "loss";
-        label = "loss";
+      } else if (result.outcome === "loss") {
         losses += 1;
+        if (result.label === "bust") {
+          busts += 1;
+        }
       } else {
-        outcome = "push";
-        label = "push";
         pushes += 1;
       }
 
       hand.state = "done";
-      hand.result = { outcome, label };
-      if (outcome === "win") {
+      hand.result = result;
+      if (result.outcome === "win") {
         awards.push(...awardFromHand(hand.cards, hand.doubled ? 2 : 1));
       }
     }
@@ -1242,13 +1111,13 @@ export function mountInterestBlackjack(table: HTMLElement) {
             ? `Dealer busts at ${dealer.total} · ${awardSummary(awards)}`
             : `${player} beats ${dealer.total} · ${awardSummary(awards)}`,
         );
-        window.setTimeout(
+        schedule(
           () => showDealer("Nicely handled.", { keepResult: true }),
           500,
         );
       } else if (hand.result.outcome === "push") {
         showResult(`${player}–${dealer.total} · push`);
-        window.setTimeout(
+        schedule(
           () => showDealer("A draw. We both survive.", { keepResult: true }),
           500,
         );
@@ -1258,7 +1127,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
             ? `Bust at ${player}`
             : `Dealer wins ${dealer.total} to ${player}`,
         );
-        window.setTimeout(
+        schedule(
           () => showDealer("The table remains open.", { keepResult: true }),
           520,
         );
@@ -1272,7 +1141,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
       showResult(
         `${parts.join(" · ")}${awards.length ? ` · ${awardSummary(awards)}` : ""}`,
       );
-      window.setTimeout(
+      schedule(
         () =>
           showDealer(
             wins && losses
@@ -1294,7 +1163,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
   }
 
   function finishRound(): void {
-    if (game.deck.length < CUT_CARD) {
+    if (shouldShuffleBeforeRound(game.deck.length)) {
       game.shufflePending = true;
     }
     render();
@@ -1453,7 +1322,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     chip.setAttribute("aria-pressed", String(state.flipped));
     chip.classList.remove("is-flipping-forward", "is-flipping-backward");
     if (state.flipTimer !== null) {
-      window.clearTimeout(state.flipTimer);
+      cancelScheduled(state.flipTimer);
       state.flipTimer = null;
     }
     if (reduceMotion.matches) {
@@ -1463,7 +1332,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     chip.classList.add(
       state.flipped ? "is-flipping-forward" : "is-flipping-backward",
     );
-    state.flipTimer = window.setTimeout(() => {
+    state.flipTimer = schedule(() => {
       chip.classList.remove("is-flipping-forward", "is-flipping-backward");
       state.flipTimer = null;
     }, 680);
@@ -1588,45 +1457,62 @@ export function mountInterestBlackjack(table: HTMLElement) {
         }
       };
 
-      chip.addEventListener("pointerdown", (event) => {
-        if (event.button !== 0) {
-          return;
-        }
-        event.preventDefault();
-        stopTrophyChipMotion(state);
-        state.z = trophyChipZ;
-        trophyChipZ += 1;
-        chip.style.zIndex = String(state.z);
-        try {
-          chip.setPointerCapture(event.pointerId);
-        } catch {
-          // Window listeners still keep a drag alive without pointer capture.
-        }
-        chip.classList.add("is-dragging");
-        drag = {
-          pointerId: event.pointerId,
-          startX: event.clientX,
-          startY: event.clientY,
-          lastX: event.clientX,
-          lastY: event.clientY,
-          lastTime: performance.now(),
-          moved: false,
-        };
-        window.addEventListener("pointermove", moveDrag, { passive: false });
-        window.addEventListener("pointerup", finishDrag);
-        window.addEventListener("pointercancel", finishDrag);
-      });
-
-      chip.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
+      chip.addEventListener(
+        "pointerdown",
+        (event) => {
+          if (event.button !== 0) {
+            return;
+          }
           event.preventDefault();
-          toggleTrophyChip(chip, state);
-        }
-      });
+          stopTrophyChipMotion(state);
+          state.z = trophyChipZ;
+          trophyChipZ += 1;
+          chip.style.zIndex = String(state.z);
+          try {
+            chip.setPointerCapture(event.pointerId);
+          } catch {
+            // Window listeners still keep a drag alive without pointer capture.
+          }
+          chip.classList.add("is-dragging");
+          drag = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            lastX: event.clientX,
+            lastY: event.clientY,
+            lastTime: performance.now(),
+            moved: false,
+          };
+          window.addEventListener("pointermove", moveDrag, {
+            passive: false,
+            signal: trophyInteractionController.signal,
+          });
+          window.addEventListener("pointerup", finishDrag, {
+            signal: trophyInteractionController.signal,
+          });
+          window.addEventListener("pointercancel", finishDrag, {
+            signal: trophyInteractionController.signal,
+          });
+        },
+        { signal: trophyInteractionController.signal },
+      );
+
+      chip.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleTrophyChip(chip, state);
+          }
+        },
+        { signal: trophyInteractionController.signal },
+      );
     }
   }
 
   function renderCollection(): void {
+    trophyInteractionController.abort();
+    trophyInteractionController = new AbortController();
     for (const state of trophyChipStates.values()) {
       stopTrophyChipMotion(state);
     }
@@ -1741,7 +1627,7 @@ export function mountInterestBlackjack(table: HTMLElement) {
     }
 
     liveStatus.textContent += " Frustrated muttering.";
-    window.setTimeout(
+    schedule(
       () => {
         frustration.innerHTML = "";
       },
@@ -1749,26 +1635,56 @@ export function mountInterestBlackjack(table: HTMLElement) {
     );
   }
 
-  dealButton.addEventListener("click", () => void startRound());
-  hitButton.addEventListener("click", () => void hit());
-  standButton.addEventListener("click", () => void stand());
-  doubleButton.addEventListener("click", () => void doubleDown());
-  splitButton.addEventListener("click", () => void splitHand());
-  deckButton.addEventListener("click", () => {
-    if (game.phase === "player") {
-      void hit();
-    } else if (game.phase === "idle" || game.phase === "result") {
-      void startRound();
-    }
-  });
-  window.addEventListener("resize", queueDialoguePointers);
+  dealButton.addEventListener(
+    "click",
+    () => runGameAction(startRound),
+    listenerOptions,
+  );
+  hitButton.addEventListener(
+    "click",
+    () => runGameAction(hit),
+    listenerOptions,
+  );
+  standButton.addEventListener(
+    "click",
+    () => runGameAction(stand),
+    listenerOptions,
+  );
+  doubleButton.addEventListener(
+    "click",
+    () => runGameAction(doubleDown),
+    listenerOptions,
+  );
+  splitButton.addEventListener(
+    "click",
+    () => runGameAction(splitHand),
+    listenerOptions,
+  );
+  deckButton.addEventListener(
+    "click",
+    () => {
+      if (game.phase === "player") {
+        runGameAction(hit);
+      } else if (game.phase === "idle" || game.phase === "result") {
+        runGameAction(startRound);
+      }
+    },
+    listenerOptions,
+  );
+  felt.addEventListener("pointermove", handleCardPointerMove, listenerOptions);
+  felt.addEventListener("pointerout", handleCardPointerOut, listenerOptions);
+  felt.addEventListener("click", handleCardClick, listenerOptions);
+  felt.addEventListener("keydown", handleCardKeyDown, listenerOptions);
+  window.addEventListener("resize", queueDialoguePointers, listenerOptions);
 
   renderCollection();
   render();
-  void startRound();
+  runGameAction(startRound);
 
   return () => {
-    window.removeEventListener("resize", queueDialoguePointers);
+    destroyed = true;
+    listenerController.abort();
+    trophyInteractionController.abort();
     clearDialogue();
     if (dialoguePointerFrame !== null) {
       window.cancelAnimationFrame(dialoguePointerFrame);
@@ -1776,9 +1692,13 @@ export function mountInterestBlackjack(table: HTMLElement) {
     for (const state of trophyChipStates.values()) {
       stopTrophyChipMotion(state);
       if (state.flipTimer !== null) {
-        window.clearTimeout(state.flipTimer);
+        cancelScheduled(state.flipTimer);
       }
     }
+    for (const timer of scheduledTimers) {
+      window.clearTimeout(timer);
+    }
+    scheduledTimers.clear();
     table.replaceChildren();
     table.classList.remove("bj2-table", "is-playing");
   };

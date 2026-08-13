@@ -6,6 +6,13 @@ export type RouteDesignId =
   | "contact";
 export type SuitName = "spade" | "heart" | "club" | "diamond";
 
+export const archiveSuits = [
+  { name: "club", symbol: "\u2663" },
+  { name: "heart", symbol: "\u2665" },
+  { name: "diamond", symbol: "\u2666" },
+  { name: "spade", symbol: "\u2660" },
+] as const satisfies readonly { name: SuitName; symbol: string }[];
+
 export type RouteDesign = {
   id: RouteDesignId;
   to: string;
@@ -72,12 +79,13 @@ export const archiveNavItems = [
   routeDesigns.resume,
 ];
 
-export function getArchiveMarker(
-  routeId: RouteDesignId,
-  index: number,
-): string {
-  const ranks = ["A", "K", "Q", "J", "10", "9", "8", "7"];
-  const route = routeDesigns[routeId];
+export function getArchiveSuit(index: number, offset = 0) {
+  return archiveSuits[(index + offset) % archiveSuits.length];
+}
 
-  return `${ranks[index % ranks.length]}${route.suit}`;
+export function getArchiveMarker(index: number, offset = 0): string {
+  const ranks = ["A", "K", "Q", "J", "10", "9", "8", "7"];
+  const suit = getArchiveSuit(index, offset);
+
+  return `${ranks[index % ranks.length]}${suit.symbol}`;
 }

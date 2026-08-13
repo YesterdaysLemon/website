@@ -7,12 +7,22 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { RetroSpiralField } from "./components/retro-spiral-field";
+import { routeDesigns, type RouteDesignId } from "./lib/route-design";
 import "./app.css";
 
 const glitchGlyphs = "!<>-_\\/[]{}--=+*^?#________";
+
+const archiveRouteIdsByPath: Record<string, RouteDesignId> = {
+  "/about": "about",
+  "/projects": "projects",
+  "/showcase": "showcase",
+  "/resume": "resume",
+};
 
 function scrambleText(text: string, amount: number) {
   if (amount <= 0) {
@@ -84,7 +94,25 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { pathname } = useLocation();
+  const normalizedPathname = pathname.replace(/\/+$/, "") || "/";
+  const routeId = archiveRouteIdsByPath[normalizedPathname] ?? null;
+  const routeAccent = routeId
+    ? routeDesigns[routeId].accent
+    : routeDesigns.projects.accent;
+
+  return (
+    <div
+      className={routeId ? "site-root has-retro-field" : "site-root"}
+      data-route={routeId ?? undefined}
+      style={{ "--route-accent": routeAccent } as CSSProperties}
+    >
+      <RetroSpiralField />
+      <div className="site-route-layer">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
 
 function NotFoundPage() {

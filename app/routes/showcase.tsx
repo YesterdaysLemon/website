@@ -4,8 +4,9 @@ import { Link } from "react-router";
 
 import { ConstructionMicroLab } from "~/components/construction-micro-lab";
 import { PageShell } from "~/components/page-shell";
+import { TactilePill } from "~/components/tactile-pill";
 import { getProjects } from "~/lib/content.server";
-import { getArchiveMarker } from "~/lib/route-design";
+import { getArchiveMarker, getArchiveSuit } from "~/lib/route-design";
 
 const liveProjectCopy: Record<
   string,
@@ -16,6 +17,12 @@ const liveProjectCopy: Record<
     description:
       "An evidence-first Codex workflow for researching live roles and producing truthful, tailored application batches—with the privacy and support pages a real plugin needs.",
     cta: "Visit the plugin site",
+  },
+  "proof-bonsai": {
+    eyebrow: "Growing from the live frontier",
+    description:
+      "An interactive map grown from committed Krenn–Gu evidence: exact scoped claims, open branches, and failed routes, with the global conjecture kept visibly unresolved.",
+    cta: "Explore the bonsai",
   },
   aquarium: {
     eyebrow: "Now swimming",
@@ -74,6 +81,79 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
       title="Showcase"
     >
       <div className="space-y-10">
+        {workbenchProjects.length ? (
+          <section
+            aria-labelledby="workbench-title"
+            className="archive-card p-6 sm:p-8"
+          >
+            <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
+              Recently active on the workbench
+            </p>
+            <h2
+              className="mt-2 font-serif text-3xl text-[var(--route-accent)] sm:text-4xl"
+              id="workbench-title"
+            >
+              Current builds and research
+            </h2>
+            <p className="text-muted mt-4 max-w-3xl text-sm leading-7 sm:text-base">
+              A deliberately mixed shelf: public repositories with receipts,
+              private builds with clear boundaries, and open research that stays
+              labeled unresolved until the evidence says otherwise.
+            </p>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {workbenchProjects.map((project, index) => {
+                const suit = getArchiveSuit(index, 2);
+
+                return (
+                  <article
+                    className={`suit-watermark-card suit-card suit-scope suit-${suit.name} archive-card showcase-workbench-card flex h-full flex-col p-5`}
+                    key={project.slug}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <TactilePill
+                        className="showcase-kind-pill"
+                        suit={suit.name}
+                      >
+                        {project.repoUrl ? "Public repo" : "Private build"}
+                      </TactilePill>
+                      {project.status ? (
+                        <span className="text-muted text-right text-xs font-semibold">
+                          {project.status}
+                        </span>
+                      ) : null}
+                    </div>
+                    <h3 className="suit-title text-ink mt-4 font-serif text-2xl">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted mt-3 flex-1 text-sm leading-7">
+                      {project.summary}
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      {project.repoUrl ? (
+                        <a
+                          className="archive-button archive-button-primary"
+                          href={project.repoUrl}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          Inspect the repo <span aria-hidden="true">↗</span>
+                        </a>
+                      ) : null}
+                      <Link
+                        className="archive-button archive-button-secondary"
+                        to={project.href}
+                      >
+                        Project notes
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        ) : null}
+
         <section aria-labelledby="live-sites-title">
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -99,10 +179,11 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                 description: project.summary,
                 cta: "Open live site",
               };
+              const suit = getArchiveSuit(index, 1);
 
               return (
                 <article
-                  className="archive-card showcase-live-card flex h-full flex-col overflow-hidden"
+                  className={`suit-card suit-scope suit-${suit.name} archive-card showcase-live-card flex h-full flex-col overflow-hidden`}
                   key={project.slug}
                 >
                   {project.coverImage ? (
@@ -120,12 +201,15 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                           <span aria-hidden="true" />
                           {copy.eyebrow}
                         </p>
-                        <h3 className="mt-3 font-serif text-3xl leading-tight text-[var(--route-accent)]">
+                        <h3 className="suit-title text-ink mt-3 font-serif text-3xl leading-tight">
                           {project.title}
                         </h3>
                       </div>
-                      <span className="archive-marker text-2xl">
-                        {getArchiveMarker("showcase", index)}
+                      <span
+                        aria-hidden="true"
+                        className="archive-marker text-2xl"
+                      >
+                        {getArchiveMarker(index, 1)}
                       </span>
                     </div>
 
@@ -189,72 +273,6 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
             <ConstructionMicroLab />
           </div>
         </section>
-
-        {workbenchProjects.length ? (
-          <section
-            aria-labelledby="workbench-title"
-            className="archive-card p-6 sm:p-8"
-          >
-            <p className="text-muted text-xs font-extrabold tracking-[0.24em] uppercase">
-              Recently active on the workbench
-            </p>
-            <h2
-              className="mt-2 font-serif text-3xl text-[var(--route-accent)] sm:text-4xl"
-              id="workbench-title"
-            >
-              Current builds and research
-            </h2>
-            <p className="text-muted mt-4 max-w-3xl text-sm leading-7 sm:text-base">
-              A deliberately mixed shelf: public repositories with receipts,
-              private builds with clear boundaries, and open research that stays
-              labeled unresolved until the evidence says otherwise.
-            </p>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {workbenchProjects.map((project) => (
-                <article
-                  className="border-line bg-card flex h-full flex-col rounded-[var(--radius)] border p-5"
-                  key={project.slug}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="archive-tag">
-                      {project.repoUrl ? "Public repo" : "Private build"}
-                    </span>
-                    {project.status ? (
-                      <span className="text-muted text-right text-xs font-semibold">
-                        {project.status}
-                      </span>
-                    ) : null}
-                  </div>
-                  <h3 className="mt-4 font-serif text-2xl text-[var(--route-accent)]">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted mt-3 flex-1 text-sm leading-7">
-                    {project.summary}
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {project.repoUrl ? (
-                      <a
-                        className="archive-button archive-button-primary"
-                        href={project.repoUrl}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        Inspect the repo <span aria-hidden="true">↗</span>
-                      </a>
-                    ) : null}
-                    <Link
-                      className="archive-button archive-button-secondary"
-                      to={project.href}
-                    >
-                      Project notes
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        ) : null}
       </div>
     </PageShell>
   );

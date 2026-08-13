@@ -1,5 +1,10 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 
+import {
+  keepBodyInsideBounds,
+  stepBoundedBodies,
+  type BoundedBody,
+} from "~/lib/bounded-body-physics";
 import type { RouteDesign } from "~/lib/route-design";
 
 const underConstructionAssets = [
@@ -54,16 +59,11 @@ type UnderConstructionOverlayProps = {
   route: RouteDesign;
 };
 
-type SpriteBody = {
+type SpriteBody = BoundedBody & {
   element: HTMLImageElement;
   height: number;
-  radius: number;
   rotation: number;
-  velocityX: number;
-  velocityY: number;
   width: number;
-  x: number;
-  y: number;
 };
 
 type LegacyMediaQueryList = MediaQueryList & {
@@ -105,74 +105,6 @@ export function UnderConstructionOverlay({
       }px, 0) rotate(${body.rotation}deg)`;
     };
 
-    const keepInsideStage = (
-      body: SpriteBody,
-      width: number,
-      height: number,
-    ) => {
-      if (body.x - body.radius < 0) {
-        body.x = body.radius;
-        body.velocityX = Math.abs(body.velocityX);
-      } else if (body.x + body.radius > width) {
-        body.x = width - body.radius;
-        body.velocityX = -Math.abs(body.velocityX);
-      }
-
-      if (body.y - body.radius < 0) {
-        body.y = body.radius;
-        body.velocityY = Math.abs(body.velocityY);
-      } else if (body.y + body.radius > height) {
-        body.y = height - body.radius;
-        body.velocityY = -Math.abs(body.velocityY);
-      }
-    };
-
-    const resolveSpriteCollisions = () => {
-      for (let index = 0; index < bodies.length; index += 1) {
-        for (
-          let nextIndex = index + 1;
-          nextIndex < bodies.length;
-          nextIndex += 1
-        ) {
-          const first = bodies[index];
-          const second = bodies[nextIndex];
-          const deltaX = second.x - first.x;
-          const deltaY = second.y - first.y;
-          const minDistance = first.radius + second.radius;
-          const distanceSquared = deltaX * deltaX + deltaY * deltaY;
-
-          if (distanceSquared >= minDistance * minDistance) {
-            continue;
-          }
-
-          const distance = Math.sqrt(distanceSquared) || 1;
-          const normalX = deltaX / distance;
-          const normalY = deltaY / distance;
-          const overlap = minDistance - distance;
-
-          first.x -= normalX * overlap * 0.5;
-          first.y -= normalY * overlap * 0.5;
-          second.x += normalX * overlap * 0.5;
-          second.y += normalY * overlap * 0.5;
-
-          const relativeVelocityX = second.velocityX - first.velocityX;
-          const relativeVelocityY = second.velocityY - first.velocityY;
-          const velocityAlongNormal =
-            relativeVelocityX * normalX + relativeVelocityY * normalY;
-
-          if (velocityAlongNormal >= 0) {
-            continue;
-          }
-
-          const impulse = -velocityAlongNormal;
-          first.velocityX -= impulse * normalX;
-          first.velocityY -= impulse * normalY;
-          second.velocityX += impulse * normalX;
-          second.velocityY += impulse * normalY;
-        }
-      }
-    };
-
     const buildBodies = () => {
       const stageRect = stage.getBoundingClientRect();
 
@@ -201,7 +133,7 @@ export function UnderConstructionOverlay({
           sprite.baseSpeed *
           speedScale *
           (1 + (Math.random() * 2 - 1) * sprite.speedJitter);
-        const body = {
+        const body: SpriteBody = {
           element,
           height,
           radius,
@@ -213,7 +145,10 @@ export function UnderConstructionOverlay({
           y: stageRect.height * sprite.startY + height / 2,
         };
 
-        keepInsideStage(body, stageRect.width, stageRect.height);
+        keepBodyInsideBounds(body, {
+          width: stageRect.width,
+          height: stageRect.height,
+        });
         renderBody(body);
 
         return [body];
@@ -235,18 +170,12 @@ export function UnderConstructionOverlay({
         const deltaTime = Math.min((time - previousTime) / 1000, 0.032);
         previousTime = time;
 
-        bodies.forEach((body) => {
-          body.x += body.velocityX * deltaTime;
-          body.y += body.velocityY * deltaTime;
-          keepInsideStage(body, stageRect.width, stageRect.height);
-        });
-
-        resolveSpriteCollisions();
-
-        bodies.forEach((body) => {
-          keepInsideStage(body, stageRect.width, stageRect.height);
-          renderBody(body);
-        });
+        stepBoundedBodies(
+          bodies,
+          { width: stageRect.width, height: stageRect.height },
+          deltaTime,
+        );
+        bodies.forEach(renderBody);
 
         animationFrame = window.requestAnimationFrame(tick);
       };

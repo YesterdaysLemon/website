@@ -3,7 +3,9 @@ import type { Route } from "./+types/about";
 import { Link } from "react-router";
 
 import { PageShell } from "~/components/page-shell";
+import { TactilePill } from "~/components/tactile-pill";
 import { resumeData } from "~/content/resume";
+import { getArchiveSuit } from "~/lib/route-design";
 
 const focusAreas = [
   {
@@ -131,7 +133,7 @@ export default function About() {
       title="Alireza Afshan"
     >
       <div className="grid gap-8 lg:grid-cols-[0.7fr_0.3fr]">
-        <section className="archive-card order-2 self-start p-6 sm:p-8 lg:order-1">
+        <section className="suit-watermark-card suit-scope suit-spade archive-card order-2 self-start p-6 sm:p-8 lg:order-1">
           <div className="max-w-3xl space-y-5 text-base leading-8 sm:text-lg">
             <p className="text-muted">
               Hiya! I&apos;m Alireza, a software developer with a habit of
@@ -157,8 +159,8 @@ export default function About() {
         </section>
 
         <aside className="order-1 lg:order-2">
-          <section className="archive-card p-6">
-            <h2 className="font-serif text-2xl text-[var(--route-accent)]">
+          <section className="suit-watermark-card about-now-card suit-scope suit-club archive-card p-6">
+            <h2 className="suit-title font-serif text-2xl text-[var(--route-accent)]">
               Right now
             </h2>
             <div className="text-muted mt-5 space-y-3 text-sm leading-7">
@@ -170,28 +172,31 @@ export default function About() {
                 slightly cursed hardware overlap.
               </p>
               <p>Open to remote work or relocation.</p>
-              <div className="mt-5 space-y-3 border-t border-[var(--line)] pt-4">
+              <div className="about-now-links mt-5 border-t border-[var(--line)] pt-4">
                 <a
-                  className="archive-inline-link block"
+                  className="archive-inline-link about-now-link"
                   href={`mailto:${resumeData.email}`}
                 >
-                  {resumeData.email}
+                  <span>{resumeData.email}</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
                 <a
-                  className="archive-inline-link block"
+                  className="archive-inline-link about-now-link"
                   href={resumeData.githubUrl}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  GitHub
+                  <span>GitHub</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
                 <a
-                  className="archive-inline-link block"
+                  className="archive-inline-link about-now-link"
                   href={resumeData.linkedInUrl}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  LinkedIn
+                  <span>LinkedIn</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
               </div>
             </div>
@@ -200,8 +205,8 @@ export default function About() {
       </div>
 
       <div className="mt-8 space-y-8">
-        <section className="archive-card p-6 sm:p-8">
-          <h2 className="font-serif text-3xl text-[var(--route-accent)]">
+        <section className="suit-watermark-card suit-scope suit-diamond archive-card p-6 sm:p-8">
+          <h2 className="suit-title font-serif text-3xl text-[var(--route-accent)]">
             What I like working on
           </h2>
           <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
@@ -209,22 +214,35 @@ export default function About() {
             to know what the system is actually doing.
           </p>
           <div className="about-focus-list">
-            {focusAreas.map((item, index) => (
-              <article className="about-focus-item" key={item.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))}
+            {focusAreas.map((item, index) => {
+              const suit = getArchiveSuit(index);
+
+              return (
+                <article
+                  className={`about-focus-item suit-row suit-scope suit-${suit.name}`}
+                  key={item.title}
+                >
+                  <span aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                    {suit.symbol}
+                  </span>
+                  <div>
+                    <h3 className="suit-title">{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
-        <section className="archive-card p-6 sm:p-8" id="curiosities">
+        <section
+          className="suit-watermark-card suit-scope suit-heart archive-card p-6 sm:p-8"
+          id="curiosities"
+        >
           <div className="about-curiosity-heading">
             <div>
-              <h2 className="font-serif text-3xl text-[var(--route-accent)]">
+              <h2 className="suit-title font-serif text-3xl text-[var(--route-accent)]">
                 Things I keep coming back to
               </h2>
               <p className="text-muted mt-3 max-w-2xl text-sm leading-7">
@@ -249,22 +267,38 @@ export default function About() {
             </Link>
           </div>
           <div className="about-curiosity-list">
-            {curiosityAreas.map((item) => (
-              <article key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul
-                  aria-label={`${item.title} interests`}
-                  className="poker-chip-list about-chip-list"
+            {curiosityAreas.map((item, index) => {
+              const suit = getArchiveSuit(index, 1);
+
+              return (
+                <article
+                  className={`suit-row suit-scope suit-${suit.name}`}
+                  key={item.title}
                 >
-                  {item.items.map((interest) => (
-                    <li className="poker-chip" key={interest}>
-                      {interest}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+                  <h3 className="suit-title">{item.title}</h3>
+                  <p>{item.description}</p>
+                  <ul
+                    aria-label={`${item.title} interests`}
+                    className="poker-chip-list about-chip-list"
+                  >
+                    {item.items.map((interest, interestIndex) => {
+                      const chipSuit = getArchiveSuit(interestIndex, index);
+
+                      return (
+                        <li key={interest}>
+                          <TactilePill
+                            className="poker-chip"
+                            suit={chipSuit.name}
+                          >
+                            {interest}
+                          </TactilePill>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </article>
+              );
+            })}
           </div>
         </section>
       </div>

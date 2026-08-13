@@ -7,6 +7,12 @@ import type {
 
 import { useEffect, useRef, useState } from "react";
 
+import {
+  keepBodyInsideBounds,
+  stepBoundedBodies,
+  type BoundedBody,
+} from "~/lib/bounded-body-physics";
+
 const assetPath = (asset: string) => `/under-construction/${asset}`;
 
 const bouncingCrew = [
@@ -54,16 +60,11 @@ function inspectionGrade(score: number) {
   return "PROBATIONARY LANYARD";
 }
 
-type BouncingBody = {
+type BouncingBody = BoundedBody & {
   element: HTMLButtonElement;
   height: number;
-  radius: number;
   rotation: number;
-  velocityX: number;
-  velocityY: number;
   width: number;
-  x: number;
-  y: number;
 };
 
 function SiteScreensaver() {
@@ -105,73 +106,6 @@ function SiteScreensaver() {
       }px, 0) rotate(${body.rotation}deg)`;
     };
 
-    const keepInsideStage = (
-      body: BouncingBody,
-      width: number,
-      height: number,
-    ) => {
-      const halfWidth = body.width / 2;
-      const halfHeight = body.height / 2;
-
-      if (body.x - halfWidth < 0) {
-        body.x = halfWidth;
-        body.velocityX = Math.abs(body.velocityX);
-      } else if (body.x + halfWidth > width) {
-        body.x = width - halfWidth;
-        body.velocityX = -Math.abs(body.velocityX);
-      }
-
-      if (body.y - halfHeight < 0) {
-        body.y = halfHeight;
-        body.velocityY = Math.abs(body.velocityY);
-      } else if (body.y + halfHeight > height) {
-        body.y = height - halfHeight;
-        body.velocityY = -Math.abs(body.velocityY);
-      }
-    };
-
-    const resolveCollisions = () => {
-      for (let index = 0; index < bodies.length; index += 1) {
-        for (
-          let nextIndex = index + 1;
-          nextIndex < bodies.length;
-          nextIndex += 1
-        ) {
-          const first = bodies[index];
-          const second = bodies[nextIndex];
-          const deltaX = second.x - first.x;
-          const deltaY = second.y - first.y;
-          const minimumDistance = first.radius + second.radius;
-          const distanceSquared = deltaX * deltaX + deltaY * deltaY;
-
-          if (distanceSquared >= minimumDistance * minimumDistance) {
-            continue;
-          }
-
-          const distance = Math.sqrt(distanceSquared) || 1;
-          const normalX = deltaX / distance;
-          const normalY = deltaY / distance;
-          const overlap = minimumDistance - distance;
-          const relativeVelocityX = second.velocityX - first.velocityX;
-          const relativeVelocityY = second.velocityY - first.velocityY;
-          const velocityAlongNormal =
-            relativeVelocityX * normalX + relativeVelocityY * normalY;
-
-          first.x -= normalX * overlap * 0.5;
-          first.y -= normalY * overlap * 0.5;
-          second.x += normalX * overlap * 0.5;
-          second.y += normalY * overlap * 0.5;
-
-          if (velocityAlongNormal < 0) {
-            first.velocityX += velocityAlongNormal * normalX;
-            first.velocityY += velocityAlongNormal * normalY;
-            second.velocityX -= velocityAlongNormal * normalX;
-            second.velocityY -= velocityAlongNormal * normalY;
-          }
-        }
-      }
-    };
-
     const buildBodies = () => {
       const stageRect = stage.getBoundingClientRect();
 
@@ -188,6 +122,8 @@ function SiteScreensaver() {
         const angle = (sprite.angle * Math.PI) / 180;
         const speed = paceSpeeds[pace] * (1 + index * 0.08);
         const body: BouncingBody = {
+          boundaryRadiusX: width / 2,
+          boundaryRadiusY: height / 2,
           element,
           height,
           radius: Math.min(width, height) * 0.38,
@@ -199,7 +135,10 @@ function SiteScreensaver() {
           y: stageRect.height * sprite.startY,
         };
 
-        keepInsideStage(body, stageRect.width, stageRect.height);
+        keepBodyInsideBounds(body, {
+          width: stageRect.width,
+          height: stageRect.height,
+        });
         renderBody(body);
         return [body];
       });
@@ -221,17 +160,12 @@ function SiteScreensaver() {
         const deltaTime = Math.min((time - previousTime) / 1000, 0.032);
         previousTime = time;
 
-        bodies.forEach((body) => {
-          body.x += body.velocityX * deltaTime;
-          body.y += body.velocityY * deltaTime;
-          keepInsideStage(body, stageRect.width, stageRect.height);
-        });
-
-        resolveCollisions();
-        bodies.forEach((body) => {
-          keepInsideStage(body, stageRect.width, stageRect.height);
-          renderBody(body);
-        });
+        stepBoundedBodies(
+          bodies,
+          { width: stageRect.width, height: stageRect.height },
+          deltaTime,
+        );
+        bodies.forEach(renderBody);
         animationFrame = window.requestAnimationFrame(tick);
       };
 

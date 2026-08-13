@@ -4,143 +4,28 @@ import type { Route } from "./+types/home";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
-type CardId = "about" | "showcase" | "projects" | "resume" | "joker";
-type Breakpoint = "mobile" | "tablet" | "desktop";
-
-type ActionCard = {
-  id: CardId;
-  title: string;
-  rank: string;
-  suit: string;
-  to: string;
-  summary: string;
-  accent: string;
-};
-
-type SpreadPosition = {
-  x: number;
-  y: number;
-  rotate: number;
-};
-
-type PixelPosition = {
-  x: number;
-  y: number;
-};
-
-type CardOrigin = {
-  x: number;
-  y: number;
-};
-
-type CardRotations = Record<CardId, number>;
-
-type DragState = {
-  id: CardId;
-  pointerId: number;
-  offsetX: number;
-  offsetY: number;
-  hasMoved: boolean;
-  lastX: number;
-  lastY: number;
-  lastTime: number;
-  velocityX: number;
-  velocityY: number;
-  accelerationX: number;
-  accelerationY: number;
-  startRotation: number;
-  smoothedRotation: number;
-  originX: number;
-  originY: number;
-  cardWidth: number;
-  cardHeight: number;
-  angularVelocity: number;
-};
-
-const actionCards: ActionCard[] = [
-  {
-    id: "about",
-    title: "About",
-    rank: "A",
-    suit: "\u2666",
-    to: "/about",
-    summary: "The crooked route here and the rabbit holes that stuck.",
-    accent: "var(--diamond)",
-  },
-  {
-    id: "showcase",
-    title: "Showcase",
-    rank: "S",
-    suit: "\u2665",
-    to: "/showcase",
-    summary:
-      "Live experiments, tiny websites, and the permanent construction crew.",
-    accent: "var(--heart)",
-  },
-  {
-    id: "joker",
-    title: "Wildcard",
-    rank: "★",
-    suit: "✦",
-    to: "/showcase#micro-experiments",
-    summary: "A random rabbit hole from somewhere in the workbench.",
-    accent: "#8a5a12",
-  },
-  {
-    id: "projects",
-    title: "Projects",
-    rank: "P",
-    suit: "\u2660",
-    to: "/projects",
-    summary: "The useful details, honest limits, and receipts behind the work.",
-    accent: "var(--spade)",
-  },
-  {
-    id: "resume",
-    title: "Resume",
-    rank: "R",
-    suit: "\u2663",
-    to: "/resume",
-    summary: "Experience, skills, and the reasonably tidy version of events.",
-    accent: "var(--club)",
-  },
-];
-
-const spreadPositions: Record<Breakpoint, Record<CardId, SpreadPosition>> = {
-  mobile: {
-    about: { x: 13, y: 78, rotate: -15 },
-    showcase: { x: 32, y: 74, rotate: -7 },
-    joker: { x: 50, y: 72, rotate: 0 },
-    projects: { x: 68, y: 74, rotate: 7 },
-    resume: { x: 87, y: 78, rotate: 15 },
-  },
-  tablet: {
-    about: { x: 22, y: 62, rotate: -17 },
-    showcase: { x: 36, y: 56, rotate: -8 },
-    joker: { x: 50, y: 53, rotate: 0 },
-    projects: { x: 64, y: 56, rotate: 8 },
-    resume: { x: 78, y: 62, rotate: 17 },
-  },
-  desktop: {
-    about: { x: 25, y: 61, rotate: -18 },
-    showcase: { x: 38, y: 55, rotate: -8 },
-    joker: { x: 50, y: 52, rotate: 0 },
-    projects: { x: 62, y: 55, rotate: 8 },
-    resume: { x: 75, y: 61, rotate: 18 },
-  },
-};
-
-const jokerDestinations = [
-  "/about-blackjack-lab.html",
-  "/showcase#micro-experiments",
-  "/projects?project=wurmkickflip",
-  "/projects?project=celegans-sim",
-  "/projects?project=forgeward",
-  "/projects?project=open-mathematics-lab",
-  "/projects?project=job-application-batch-builder",
-] as const;
-
-const initialStackOrder = actionCards.map((card) => card.id);
+import {
+  actionCards,
+  clamp,
+  clampPositionToTable,
+  clampStoredPositions,
+  createBaseRotations,
+  createDragRotation,
+  createMomentumDropRotation,
+  createRandomRotations,
+  getBreakpoint,
+  initialStackOrder,
+  isMailLink,
+  jokerDestinations,
+  spreadPositions,
+  type ActionCard,
+  type Breakpoint,
+  type CardId,
+  type CardOrigin,
+  type CardRotations,
+  type DragState,
+  type PixelPosition,
+} from "~/lib/home-card-table";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -151,105 +36,6 @@ export function meta({}: Route.MetaArgs) {
         "Software developer building inspectable tools, backend systems, simulations, research software, and carefully weird web experiments.",
     },
   ];
-}
-
-function getBreakpoint(width: number): Breakpoint {
-  if (width >= 1024) {
-    return "desktop";
-  }
-
-  if (width >= 640) {
-    return "tablet";
-  }
-
-  return "mobile";
-}
-
-function isMailLink(to: string) {
-  return to.startsWith("mailto:");
-}
-
-function createBaseRotations(breakpoint: Breakpoint): CardRotations {
-  return actionCards.reduce<CardRotations>((rotations, card) => {
-    rotations[card.id] = spreadPositions[breakpoint][card.id].rotate;
-    return rotations;
-  }, {} as CardRotations);
-}
-
-function randomSignedAngle(max: number) {
-  const angle = Math.random() * max * 2 - max;
-
-  if (Math.abs(angle) >= 2.5) {
-    return angle;
-  }
-
-  return angle < 0 ? angle - 3 : angle + 3;
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function createRandomRotations(breakpoint: Breakpoint): CardRotations {
-  const jitter = breakpoint === "mobile" ? 5 : 8;
-
-  return actionCards.reduce<CardRotations>((rotations, card) => {
-    const baseRotation = spreadPositions[breakpoint][card.id].rotate;
-    rotations[card.id] = Number(
-      (baseRotation + randomSignedAngle(jitter)).toFixed(1),
-    );
-    return rotations;
-  }, {} as CardRotations);
-}
-
-function createDragRotation(drag: DragState, breakpoint: Breakpoint) {
-  const maxTilt = breakpoint === "mobile" ? 14 : 20;
-  const leverX = (drag.originX - drag.cardWidth / 2) / (drag.cardWidth / 2);
-  const leverY = (drag.originY - drag.cardHeight / 2) / (drag.cardHeight / 2);
-  const torque = leverX * drag.velocityY - leverY * drag.velocityX;
-  const velocityTilt = drag.velocityX * 6 - drag.velocityY * 1.5;
-  const accelerationTilt = drag.accelerationX * 36;
-  const pickupTorque = torque * 42;
-
-  return Number(
-    clamp(
-      velocityTilt + accelerationTilt + pickupTorque,
-      -maxTilt,
-      maxTilt,
-    ).toFixed(1),
-  );
-}
-
-function createMomentumDropRotation(drag: DragState, breakpoint: Breakpoint) {
-  const maxRotation = breakpoint === "mobile" ? 15 : 24;
-  const speed = Math.hypot(drag.velocityX, drag.velocityY);
-  const direction = Math.atan2(drag.velocityY, drag.velocityX || 0.001);
-  const directionDegrees = (direction * 180) / Math.PI;
-  const speedWeight = clamp(speed / 1.45, 0, 1);
-  const motionSpin =
-    Math.sin(direction) * maxRotation * 0.48 * speedWeight +
-    Math.cos(direction) * maxRotation * 0.2 * speedWeight;
-  const accelerationSpin = clamp(
-    (drag.accelerationX - drag.accelerationY * 0.35) * 180,
-    -maxRotation * 0.34,
-    maxRotation * 0.34,
-  );
-  const angularSpin = clamp(
-    drag.angularVelocity * 44,
-    -maxRotation * 0.62,
-    maxRotation * 0.62,
-  );
-  const carriedSpin = clamp(drag.startRotation * 0.34, -5, 5);
-  const directionBias =
-    clamp(directionDegrees / 180, -1, 1) * 2.2 * speedWeight;
-
-  return Number(
-    clamp(
-      carriedSpin + motionSpin + accelerationSpin + angularSpin + directionBias,
-      -maxRotation,
-      maxRotation,
-    ).toFixed(1),
-  );
 }
 
 export default function Home() {
@@ -286,7 +72,22 @@ export default function Home() {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     function updateBreakpoint() {
-      setBreakpoint(getBreakpoint(window.innerWidth));
+      const nextBreakpoint = getBreakpoint(window.innerWidth);
+      const tableRect = tableRef.current?.getBoundingClientRect();
+
+      setBreakpoint(nextBreakpoint);
+      if (tableRect) {
+        setCardOrigins({});
+        setDragRotations({});
+        setCardRotations(createBaseRotations(nextBreakpoint));
+        setCardPositions((current) =>
+          clampStoredPositions(
+            current,
+            { width: tableRect.width, height: tableRect.height },
+            nextBreakpoint,
+          ),
+        );
+      }
     }
 
     const nextBreakpoint = getBreakpoint(window.innerWidth);
@@ -373,17 +174,12 @@ export default function Home() {
       return { x, y };
     }
 
-    const gutter = breakpoint === "mobile" ? 48 : 82;
-    const minimumY = options?.allowPlayArea
-      ? gutter
-      : breakpoint === "mobile"
-        ? tableRect.height * (2 / 3) + gutter * 0.2
-        : tableRect.height / 3 + gutter * 0.42;
-
-    return {
-      x: Math.min(Math.max(x, gutter), tableRect.width - gutter),
-      y: Math.min(Math.max(y, minimumY), tableRect.height - gutter),
-    };
+    return clampPositionToTable(
+      { x, y },
+      { width: tableRect.width, height: tableRect.height },
+      breakpoint,
+      options,
+    );
   }
 
   function isInsidePlayZone(x: number, y: number) {
@@ -406,7 +202,7 @@ export default function Home() {
     event: PointerEvent<HTMLAnchorElement>,
     cardId: CardId,
   ) {
-    if (event.button !== 0 || playingId) {
+    if (event.button !== 0 || playingId || dragRef.current) {
       return;
     }
 
@@ -558,20 +354,39 @@ export default function Home() {
     }));
   }
 
-  function handlePointerUp(event: PointerEvent<HTMLAnchorElement>) {
+  function finishPointerInteraction(
+    event: PointerEvent<HTMLAnchorElement>,
+    cancelled: boolean,
+  ) {
     const drag = dragRef.current;
 
     if (!drag || drag.pointerId !== event.pointerId) {
       return;
     }
 
+    const tableRect = tableRef.current?.getBoundingClientRect();
     const card = actionCards.find((item) => item.id === drag.id);
-    const finalPosition = getCardCenter(drag.id);
+    const finalPosition = tableRect
+      ? clampToTable(
+          event.clientX - tableRect.left - drag.offsetX,
+          event.clientY - tableRect.top - drag.offsetY,
+          { allowPlayArea: true },
+        )
+      : getCardCenter(drag.id);
     const shouldPlay =
-      drag.hasMoved && isInsidePlayZone(finalPosition.x, finalPosition.y);
+      !cancelled &&
+      drag.hasMoved &&
+      isInsidePlayZone(finalPosition.x, finalPosition.y);
 
     dragRef.current = null;
     resetCardTilt(event.currentTarget);
+    try {
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+    } catch {
+      // Browsers may release capture before dispatching pointercancel.
+    }
     setLiftingId(null);
     setDraggingId(null);
     setDragRotations((current) => {
@@ -579,7 +394,7 @@ export default function Home() {
       return remaining;
     });
 
-    if (drag.hasMoved) {
+    if (drag.hasMoved || cancelled) {
       suppressClickRef.current = true;
       window.setTimeout(() => {
         suppressClickRef.current = false;
@@ -587,6 +402,10 @@ export default function Home() {
     }
 
     if (card && shouldPlay) {
+      setCardPositions((current) => ({
+        ...current,
+        [drag.id]: finalPosition,
+      }));
       setPlayingId(card.id);
       window.setTimeout(() => navigateToCard(card), 260);
       return;
@@ -599,11 +418,21 @@ export default function Home() {
         ...current,
         [drag.id]: settledPosition,
       }));
-      setCardRotations((current) => ({
-        ...current,
-        [drag.id]: createMomentumDropRotation(drag, breakpoint),
-      }));
+      if (!cancelled) {
+        setCardRotations((current) => ({
+          ...current,
+          [drag.id]: createMomentumDropRotation(drag, breakpoint),
+        }));
+      }
     }
+  }
+
+  function handlePointerUp(event: PointerEvent<HTMLAnchorElement>) {
+    finishPointerInteraction(event, false);
+  }
+
+  function handlePointerCancel(event: PointerEvent<HTMLAnchorElement>) {
+    finishPointerInteraction(event, true);
   }
 
   function handleCardClick(
@@ -738,7 +567,7 @@ export default function Home() {
               href={card.to}
               title={card.summary}
               onClick={(event) => handleCardClick(event, card)}
-              onPointerCancel={handlePointerUp}
+              onPointerCancel={handlePointerCancel}
               onPointerDown={(event) => handlePointerDown(event, card.id)}
               onPointerLeave={(event) => resetCardTilt(event.currentTarget)}
               onPointerMove={handlePointerMove}

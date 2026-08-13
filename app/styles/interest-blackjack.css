@@ -193,20 +193,6 @@
   transform: translateX(-50%);
 }
 
-.bj2-rules {
-  position: absolute;
-  top: 10rem;
-  left: 50%;
-  z-index: 2;
-  color: rgba(199, 165, 95, 0.52);
-  font-size: 0.62rem;
-  font-weight: 760;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-
 .bj2-deck {
   position: absolute;
   top: 8.6rem;
@@ -276,10 +262,16 @@
     transform 180ms ease;
 }
 
-.bj2-deck:hover .bj2-deck-back,
 .bj2-deck:focus-visible .bj2-deck-back {
   filter: brightness(1.1);
   transform: translateY(-0.28rem) rotate(-1deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bj2-deck:hover .bj2-deck-back {
+    filter: brightness(1.1);
+    transform: translateY(-0.28rem) rotate(-1deg);
+  }
 }
 
 .bj2-deck:focus-visible {
@@ -451,12 +443,24 @@
   white-space: nowrap;
 }
 
-.bj2-player-hand:has(.bj2-card:not(.is-face-down):is(:hover, :focus-visible))
+.bj2-player-hand:has(
+    .bj2-card:not(.is-face-down):is(:focus-visible, .is-inspecting)
+  )
   .bj2-hand-caption,
-.bj2-dealer-seat:has(.bj2-card:not(.is-face-down):is(:hover, :focus-visible))
+.bj2-dealer-seat:has(
+    .bj2-card:not(.is-face-down):is(:focus-visible, .is-inspecting)
+  )
   .bj2-dealer-score {
   visibility: hidden;
   opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bj2-player-hand:has(.bj2-card:not(.is-face-down):hover) .bj2-hand-caption,
+  .bj2-dealer-seat:has(.bj2-card:not(.is-face-down):hover) .bj2-dealer-score {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .bj2-hand-caption strong {
@@ -569,8 +573,8 @@
   transition: opacity 160ms ease;
 }
 
-.bj2-card:hover,
-.bj2-card:focus-visible {
+.bj2-card:focus-visible,
+.bj2-card.is-inspecting {
   z-index: 60;
   border-color: color-mix(in srgb, var(--suit) 50%, var(--line));
   box-shadow: 0 25px 40px rgba(0, 0, 0, 0.22);
@@ -578,9 +582,24 @@
     rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.045);
 }
 
-.bj2-card:hover::after,
-.bj2-card:focus-visible::after {
+.bj2-card:focus-visible::after,
+.bj2-card.is-inspecting::after {
   opacity: 0.72;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bj2-card:hover {
+    z-index: 60;
+    border-color: color-mix(in srgb, var(--suit) 50%, var(--line));
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.22);
+    transform: translateY(-0.36rem) perspective(760px)
+      rotateZ(var(--card-rotate)) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))
+      scale(1.045);
+  }
+
+  .bj2-card:hover::after {
+    opacity: 0.72;
+  }
 }
 
 .bj2-card.is-new {
@@ -705,10 +724,17 @@
   color: var(--gold);
 }
 
-.bj2-card:not(.is-face-down):hover .bj2-card-tooltip,
-.bj2-card:not(.is-face-down):focus-visible .bj2-card-tooltip {
+.bj2-card:not(.is-face-down):focus-visible .bj2-card-tooltip,
+.bj2-card:not(.is-face-down).is-inspecting .bj2-card-tooltip {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bj2-card:not(.is-face-down):hover .bj2-card-tooltip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .bj2-dealer-character {
@@ -1092,7 +1118,6 @@
   color: #f1d38c;
 }
 
-.bj2-action:hover:not(:disabled),
 .bj2-action:focus-visible:not(:disabled) {
   background: radial-gradient(
     ellipse at 50% 90%,
@@ -1107,15 +1132,38 @@
   text-shadow: 0 0 1.2rem rgba(239, 217, 158, 0.72);
 }
 
-.bj2-action:hover:not(:disabled)::after,
 .bj2-action:focus-visible:not(:disabled)::after {
   opacity: 1;
   transform: scaleX(1);
 }
 
-.bj2-action.is-primary:hover:not(:disabled),
 .bj2-action.is-primary:focus-visible:not(:disabled) {
   color: #fff4d3;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bj2-action:hover:not(:disabled) {
+    background: radial-gradient(
+      ellipse at 50% 90%,
+      rgba(239, 217, 158, 0.2),
+      transparent 66%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(239, 217, 158, 0.34),
+      0 -1rem 2.8rem rgba(199, 165, 95, 0.1);
+    color: #fff4d3;
+    outline: none;
+    text-shadow: 0 0 1.2rem rgba(239, 217, 158, 0.72);
+  }
+
+  .bj2-action:hover:not(:disabled)::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .bj2-action.is-primary:hover:not(:disabled) {
+    color: #fff4d3;
+  }
 }
 
 .bj2-action:focus-visible {
@@ -1564,6 +1612,9 @@
   }
 
   .bj2-nav a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
     font-size: 0.56rem;
   }
 
@@ -1591,10 +1642,6 @@
     top: 9.1rem;
     width: 112vw;
     height: 27rem;
-  }
-
-  .bj2-rules {
-    display: none;
   }
 
   .bj2-deck {
@@ -2062,6 +2109,19 @@
 .bj2-player-thought[data-pointer="bottom"] .bj2-dialogue-line.is-latest::after {
   top: auto;
   bottom: -1.03rem;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .bj2-trophy-chip:not(.is-dragging):hover {
+    filter: none;
+  }
+
+  .bj2-trophy-chip:not(.is-dragging):not(.is-flipping-forward):not(
+      .is-flipping-backward
+    ):hover
+    .bj2-chip-inner {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
