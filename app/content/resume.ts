@@ -47,7 +47,7 @@ export const resumeData: ResumeData = {
   name: "Alireza Afshan",
   role: "Junior Software Developer | Backend, Systems & Developer Tooling",
   summary:
-    "Information Systems graduate with honors who likes working where software meets systems. I build backend services, developer tools, simulations, and small full-stack products, then take them through deterministic tests, CI, containers, and deployment. Recent work spans secure AI tooling, connectome-driven simulation, verifier-first computational research, and the infrastructure behind the small apps on this site. I am looking for junior backend, systems, developer tooling, or DevOps roles.",
+    "Information Systems graduate with honors building backend services, developer tools, and full-stack products across TypeScript, Python, PostgreSQL, and Docker. I have led a six-person capstone, shipped public plugins and self-hosted apps, and built deterministic testing, CI, rollback, and evidence trails into projects ranging from attendance systems to research simulators. I am looking for junior backend, platform, developer tooling, or DevOps roles where careful systems thinking matters.",
   location: "Las Vegas, NV | open to remote work and relocation",
   email: "mail@alirezaafshan.com",
   websiteUrl: "https://alirezaafshan.com",
@@ -55,19 +55,20 @@ export const resumeData: ResumeData = {
   linkedInUrl: "https://www.linkedin.com/in/alireza-afshan",
   experience: [
     {
-      title: "Independent Software, Research & Infrastructure Projects",
+      title: "Independent Software & Systems Portfolio",
       organization: "Personal projects",
       location: "Las Vegas, NV",
       start: "May 2026",
       end: "Present",
       summary:
-        "Building and validating developer tools, simulations, research software, and self-hosted web products across public and private repositories.",
+        "Shipping public developer tools, product prototypes, simulations, and self-hosted infrastructure with a bias toward bounded automation and inspectable evidence.",
       highlights: [
         "Built ForgeWard, a provider-neutral Python CLI that coordinates model-assisted software work through typed outputs, path and budget controls, deterministic checks, inspectable evidence, and explicit human approval gates.",
-        "Developed verifier-first computational research repositories for open graph and number theory problems; published exact finite or conditional checkpoints while keeping every global problem explicitly unresolved.",
-        "Built and evaluated interactive systems including a recurrent-controller worm terrarium with causal controls, a connectome-driven C. elegans simulation, and a reproducible batched-drone training harness.",
+        "Published Job Application Batch Builder, an evidence-first Codex plugin that researches current roles and produces audited DOCX/PDF application packages from candidate-authorized sources without inventing claims.",
         "Built production-shaped product prototypes including RetainerProof, a multi-tenant client value ledger with background jobs, source-backed evidence, and a Dockerized demo environment.",
         "Built a signed webhook deployment manager that runs health-checked Docker rollouts with rollback support across multiple apps on one VPS behind Caddy.",
+        "Built Pocket Museum, a local-first Expo and React Three Fiber prototype with photo intake, 3D exhibit placement, persisted schema migrations, accessible fallbacks, and 93 automated tests.",
+        "Developed verifier-first open-math repositories and reproducible simulation harnesses for recurrent controllers, connectome models, and batched drones, keeping every conclusion scoped to the evidence actually produced.",
       ],
     },
     {
@@ -79,12 +80,10 @@ export const resumeData: ResumeData = {
       summary:
         "Completed prototype attendance verification system for university classrooms, combining mobile software, access point software, backend APIs, and containerized deployment infrastructure.",
       highlights: [
-        "Led backend architecture and implementation for a custom attendance platform using TypeScript, NestJS, PostgreSQL, Docker, and REST APIs.",
-        "Built and maintained the CI/CD pipeline, including automated test execution before merges to the main branch.",
-        "Containerized backend services and supporting infrastructure, preparing the prototype for deployment.",
-        "Developed Python access point software with local SQLite storage and helped consolidate RFID integration into the reader workflow.",
-        "Supported React Native and Expo mobile development, including secure on-device storage with Expo SecureStore.",
-        "Led GitHub onboarding, version control practices, technical documentation, and development guides for a six-person team.",
+        "Led backend architecture for a six-person capstone spanning a NestJS REST API, PostgreSQL, an Expo student app, and a Dockerized Python/Linux reader with local SQLite state.",
+        "Designed device-bound attendance, rotating session challenges, reader heartbeat and access-point control, RFID fallback, live rosters, and course rollups across the mobile, reader, and backend layers.",
+        "Built a PostgreSQL-backed GitHub Actions quality gate with unit and end-to-end tests, then containerized the services and supporting demo infrastructure.",
+        "Led Git/GitHub onboarding, cross-component integration, technical documentation, and troubleshooting guides for the team.",
         "Presented and defended the completed prototype to a three-judge panel; project was accepted and received an A.",
       ],
     },
@@ -97,35 +96,21 @@ export const resumeData: ResumeData = {
       summary:
         "Developed internal software and provided technical support for a CNC factory and door/gate manufacturing business.",
       highlights: [
-        "Built a Python-based image preparation tool to help designers clean and transform worksite photos before use in design workflows.",
-        "Created an interface for perspective transformations, AI-assisted debris removal, automated output handling, and folder-based image export.",
-        "Built a small web app to demonstrate the workflow and assisted with IT support, hardware troubleshooting, and machine configuration.",
+        "Built a Python image-preparation workflow for a CNC design team with interactive perspective correction, AI-assisted debris removal, automated output handling, and folder-based export.",
+        "Created a small web interface for the workflow and supported hardware troubleshooting, machine configuration, and day-to-day factory IT needs.",
       ],
     },
     {
-      title: "Lead Developer - Drive Safe",
-      organization: "Mobile App Proof of Concept",
+      title: "Lead Developer - Mobile Identity & Verification Prototypes",
+      organization: "Academic mobile projects",
       location: "Doha, Qatar",
       start: "December 2024",
       end: "April 2025",
       summary:
-        "Mobile proof of concept for vehicle access verification in a Ministry of Education-aligned academic project.",
+        "Two related Expo/Firebase proofs of concept for photo-based vehicle approvals and QR-based classroom attendance.",
       highlights: [
-        "Built a React Native mobile proof of concept for vehicle access verification with Firebase-backed data handling.",
-        "Developed photo-based verification features to help prevent unauthorized vehicle use in a Ministry of Education-aligned academic project.",
-      ],
-    },
-    {
-      title: "Lead Developer - QR Attendance Verification",
-      organization: "Mobile App Proof of Concept",
-      location: "Doha, Qatar",
-      start: "March 2025",
-      end: "April 2025",
-      summary:
-        "Mobile attendance verification proof of concept using QR-code-based workflows.",
-      highlights: [
-        "Built a React Native and Firebase mobile proof of concept for QR-based student attendance verification.",
-        "Adapted architecture from the Drive Safe project and implemented QR code generation and mobile permission handling.",
+        "Led both cross-platform prototypes on a shared React Native, Expo, and Firebase foundation, reusing routing, permissions, role-specific screens, and real-time cloud state.",
+        "Built photo capture, upload, review, and approval flows for vehicle access; adapted the architecture for teacher-generated QR codes, student scanning, and live attendance rosters.",
       ],
     },
   ],
@@ -162,6 +147,7 @@ export const resumeData: ResumeData = {
       details: [
         "TypeScript & Node.js",
         "Python",
+        "Java & SQL",
         "NestJS",
         "Fastify & Express",
         "PostgreSQL & SQLite",
@@ -184,6 +170,7 @@ export const resumeData: ResumeData = {
         "React Three Fiber",
         "WebGL",
         "Godot & GDScript",
+        "Accessible UI & reduced motion",
       ],
     },
     {

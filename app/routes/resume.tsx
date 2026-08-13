@@ -31,8 +31,8 @@ export default function Resume() {
     >
       <div className="grid gap-8 lg:grid-cols-[0.72fr_0.28fr]">
         <section className="space-y-8">
-          <div className="archive-card p-6 sm:p-8">
-            <p className="text-muted text-xs font-semibold tracking-[0.28em] uppercase">
+          <div className="resume-color-card resume-suit-spade archive-card p-6 sm:p-8">
+            <p className="resume-color-title text-muted text-xs font-semibold tracking-[0.28em] uppercase">
               {resumeData.role}
             </p>
             <p className="text-muted mt-4 max-w-3xl text-base leading-8 sm:text-lg">
@@ -45,10 +45,10 @@ export default function Resume() {
               Experience
             </h2>
             <div className="mt-6 space-y-8">
-              {resumeData.experience.map((role) => (
+              {resumeData.experience.map((role, index) => (
                 <article
                   key={`${role.organization}-${role.start}`}
-                  className="border-line border-t pt-6 first:border-t-0 first:pt-0"
+                  className={`resume-entry resume-suit-${capabilitySuits[index % capabilitySuits.length].name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -70,7 +70,7 @@ export default function Resume() {
                   <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
                     {role.highlights.map((highlight) => (
                       <li key={highlight} className="flex gap-3">
-                        <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
+                        <span className="resume-bullet mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -85,10 +85,10 @@ export default function Resume() {
               Education
             </h2>
             <div className="mt-6 space-y-8">
-              {resumeData.education.map((item) => (
+              {resumeData.education.map((item, index) => (
                 <article
                   key={`${item.institution}-${item.start}`}
-                  className="border-line border-t pt-6 first:border-t-0 first:pt-0"
+                  className={`resume-entry resume-suit-${capabilitySuits[(index + 2) % capabilitySuits.length].name} border-line border-t pt-6 first:border-t-0 first:pt-0`}
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -112,7 +112,7 @@ export default function Resume() {
                   <ul className="text-muted mt-4 space-y-2 text-sm leading-7 sm:text-base">
                     {item.notes.map((note) => (
                       <li key={note} className="flex gap-3">
-                        <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
+                        <span className="resume-bullet mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--route-accent)]" />
                         <span>{note}</span>
                       </li>
                     ))}
@@ -168,8 +168,8 @@ export default function Resume() {
         </section>
 
         <aside className="space-y-6">
-          <section className="archive-card p-6">
-            <h2 className="font-serif text-2xl text-[var(--route-accent)]">
+          <section className="resume-color-card resume-suit-club archive-card p-6">
+            <h2 className="resume-color-title font-serif text-2xl text-[var(--route-accent)]">
               Contact
             </h2>
             <div className="text-muted mt-5 space-y-4 text-sm leading-7">
@@ -207,8 +207,8 @@ export default function Resume() {
             </div>
           </section>
 
-          <section className="archive-card p-6">
-            <h2 className="font-serif text-2xl text-[var(--route-accent)]">
+          <section className="resume-color-card resume-suit-diamond archive-card p-6">
+            <h2 className="resume-color-title font-serif text-2xl text-[var(--route-accent)]">
               Certifications
             </h2>
             <div className="mt-5 space-y-4">
