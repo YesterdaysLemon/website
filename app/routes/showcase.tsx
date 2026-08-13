@@ -178,10 +178,11 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                 The crew&apos;s tiny internet
               </h2>
               <p className="text-muted mt-4 text-sm leading-7 sm:text-base">
-                These little guys used to ricochet around unfinished pages.
-                They&apos;ve been promoted again, and now they operate several
-                tiny, poorly regulated web systems. Push the buttons. Management
-                has accepted the risk.
+                These little guys used to ricochet around unfinished pages. Now
+                they run a five-cabinet construction arcade: chase dispatch
+                orders, salvage load-bearing hardware, earn a jackhammer permit,
+                crack a gearbox, and set beams on tolerance. Every cabinet can
+                be replayed. Management has accepted the risk.
               </p>
             </div>
 

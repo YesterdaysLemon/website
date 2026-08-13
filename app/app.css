@@ -1068,6 +1068,7 @@
   .micro-lab-button:disabled,
   .micro-lab-button:disabled:hover {
     background: var(--card);
+    color: var(--route-accent);
     cursor: not-allowed;
     opacity: 0.42;
     transform: none;
@@ -1106,9 +1107,16 @@
     text-transform: uppercase;
   }
 
+  .micro-lab-screensaver,
+  .micro-load-card,
+  .micro-jackhammer-card,
+  .micro-gear-card {
+    min-height: 31rem;
+  }
+
   .micro-bounce-stage {
     position: relative;
-    min-height: 15.5rem;
+    min-height: 17rem;
     flex: 1;
     overflow: hidden;
     margin: 0.85rem 1rem 0;
@@ -1145,12 +1153,12 @@
     top: 0;
     left: 0;
     z-index: 1;
-    width: 4.1rem;
-    height: 4.1rem;
+    width: 4.8rem;
+    height: 5.15rem;
     padding: 0;
     border: 0;
-    border-radius: 999px;
     background: transparent;
+    color: #fffdf8;
     cursor: pointer;
     will-change: transform;
   }
@@ -1160,16 +1168,37 @@
   }
 
   .micro-bounce-target:focus-visible {
+    border-radius: 0.45rem;
     outline: 3px solid #f5cc3d;
     outline-offset: 3px;
   }
 
   .micro-bounce-target img {
-    width: 100%;
-    height: 100%;
+    display: block;
+    width: 4.15rem;
+    height: 4.15rem;
+    margin: 0 auto;
     object-fit: contain;
     filter: drop-shadow(0 0.25rem 0.35rem rgba(0, 0, 0, 0.28));
     pointer-events: none;
+  }
+
+  .micro-bounce-target > span {
+    display: block;
+    overflow: hidden;
+    padding: 0.16rem 0.28rem;
+    border: 1px solid rgba(255, 253, 248, 0.16);
+    border-radius: 999px;
+    background: rgba(4, 22, 18, 0.72);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.44rem;
+    font-weight: 850;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .micro-bounce-target:not(:disabled):hover img {
@@ -1181,18 +1210,32 @@
     animation: micro-catch-pop 260ms cubic-bezier(0.18, 0.88, 0.24, 1.35);
   }
 
+  .micro-bounce-target.is-hit > span {
+    border-color: rgba(132, 223, 174, 0.72);
+    background: rgba(28, 104, 70, 0.82);
+  }
+
+  .micro-bounce-target.is-wrong {
+    animation: micro-wrong-worker 320ms ease-in-out;
+  }
+
+  .micro-bounce-target.is-wrong > span {
+    border-color: rgba(255, 158, 150, 0.72);
+    background: rgba(143, 28, 23, 0.86);
+  }
+
   .micro-game-scoreboard {
     position: absolute;
     top: 0.55rem;
     left: 0.55rem;
-    z-index: 2;
+    z-index: 3;
     display: flex;
     align-items: center;
     gap: 0.55rem;
     padding: 0.35rem 0.5rem;
     border: 1px solid rgba(255, 253, 248, 0.18);
     border-radius: 999px;
-    background: rgba(4, 22, 18, 0.58);
+    background: rgba(4, 22, 18, 0.7);
     color: #fffdf8;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.54rem;
@@ -1207,48 +1250,157 @@
     color: #f5cc3d;
   }
 
+  .micro-dispatch-board {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    z-index: 3;
+    display: grid;
+    max-width: 46%;
+    padding: 0.36rem 0.52rem;
+    border: 1px solid rgba(245, 204, 61, 0.38);
+    border-radius: 0.35rem;
+    background: rgba(4, 22, 18, 0.78);
+    color: #fffdf8;
+    pointer-events: none;
+    text-align: right;
+    backdrop-filter: blur(4px);
+  }
+
+  .micro-dispatch-board span {
+    color: rgba(255, 253, 248, 0.58);
+    font-size: 0.42rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .micro-dispatch-board strong {
+    overflow: hidden;
+    color: #f5cc3d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.03em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
   .micro-screen-corner {
     position: absolute;
     right: 0.55rem;
     bottom: 0.45rem;
+    left: 0.55rem;
+    z-index: 2;
+    overflow: hidden;
     color: rgba(255, 253, 248, 0.42);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.48rem;
-    letter-spacing: 0.08em;
+    font-size: 0.43rem;
+    letter-spacing: 0.06em;
+    pointer-events: none;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .micro-load-stage {
-    display: grid;
-    min-height: 14rem;
+    display: flex;
+    min-height: 15.2rem;
     flex: 1;
-    place-items: center;
-    padding: 1rem 1rem 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.72rem;
+    justify-content: center;
+    padding: 0.85rem 1rem 0;
+  }
+
+  .micro-salvage-scoreboard {
+    display: flex;
+    width: min(100%, 16rem);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.52rem 0.6rem;
+    border: 1px solid rgba(255, 253, 248, 0.16);
+    border-radius: var(--small-radius);
+    background: #173f34;
+    color: #fffdf8;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.51rem;
+    font-weight: 850;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .micro-salvage-scoreboard strong {
+    color: #f5cc3d;
   }
 
   .micro-load-stage img {
-    width: 7rem;
-    height: 6.5rem;
+    width: 6.6rem;
+    height: 5.5rem;
     object-fit: contain;
+  }
+
+  .micro-integrity-meter {
+    position: relative;
+    width: min(100%, 15rem);
+    height: 0.82rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #c9bba5;
+    box-shadow: inset 0 1px 0 rgba(21, 25, 24, 0.12);
+  }
+
+  .micro-integrity-meter > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #b92924, #d88a28 36%, #2f8f62 74%);
+    transition: width 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .micro-integrity-meter i {
+    position: absolute;
+    top: -0.2rem;
+    z-index: 2;
+    width: 1px;
+    height: 1.2rem;
+    background: rgba(255, 253, 248, 0.78);
+    transform: rotate(22deg);
+  }
+
+  .micro-integrity-meter i:nth-of-type(1) {
+    left: 25%;
+  }
+
+  .micro-integrity-meter i:nth-of-type(2) {
+    left: 50%;
+  }
+
+  .micro-integrity-meter i:nth-of-type(3) {
+    left: 75%;
   }
 
   .micro-danger-button {
     position: relative;
-    min-width: 9.6rem;
+    min-width: min(100%, 11.8rem);
     border: 0;
     border-radius: 999px;
     background: #b92924;
     color: #fffdf8;
     cursor: pointer;
-    font-size: 0.72rem;
+    font-size: 0.62rem;
     font-weight: 950;
-    letter-spacing: 0.13em;
-    padding: 1.15rem 1.35rem;
+    letter-spacing: 0.1em;
+    padding: 1rem 1.15rem;
     text-transform: uppercase;
     box-shadow:
-      inset 0 -0.38rem 0 rgba(80, 8, 6, 0.28),
-      0 0 0 0.42rem #d8cdbc,
-      0 0 0 0.52rem rgba(21, 25, 24, 0.23),
-      0 0.65rem 1.2rem rgba(92, 22, 18, 0.2);
+      inset 0 -0.34rem 0 rgba(80, 8, 6, 0.28),
+      0 0 0 0.36rem #d8cdbc,
+      0 0 0 0.45rem rgba(21, 25, 24, 0.23),
+      0 0.58rem 1.05rem rgba(92, 22, 18, 0.2);
     transition:
       box-shadow 120ms ease,
       transform 120ms ease;
@@ -1260,14 +1412,25 @@
 
   .micro-danger-button:active {
     box-shadow:
-      inset 0 -0.1rem 0 rgba(80, 8, 6, 0.28),
-      0 0 0 0.42rem #d8cdbc,
-      0 0 0 0.52rem rgba(21, 25, 24, 0.23);
-    transform: translateY(0.25rem);
+      inset 0 -0.08rem 0 rgba(80, 8, 6, 0.28),
+      0 0 0 0.36rem #d8cdbc,
+      0 0 0 0.45rem rgba(21, 25, 24, 0.23);
+    transform: translateY(0.22rem);
   }
 
   .micro-load-card.is-critical {
     animation: micro-danger-pulse 680ms steps(2, end) infinite;
+  }
+
+  .micro-load-card.is-collapsed .micro-integrity-meter,
+  .micro-load-card.is-collapsed .micro-lab-readout {
+    border-color: rgba(185, 41, 36, 0.55);
+    background-color: rgba(185, 41, 36, 0.08);
+  }
+
+  .micro-load-card.is-banked .micro-lab-readout {
+    border-color: rgba(47, 143, 98, 0.55);
+    background-color: rgba(47, 143, 98, 0.08);
   }
 
   .micro-lab-readout {
@@ -1293,79 +1456,151 @@
     line-height: 1.45;
   }
 
+  .micro-load-card .micro-lab-readout {
+    min-height: 6.7rem;
+    margin-bottom: 0;
+  }
+
+  .micro-salvage-controls,
+  .micro-jackhammer-controls,
+  .micro-gear-controls,
+  .micro-lab-screensaver .micro-lab-controls {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .micro-gear-controls .micro-lab-actions {
+    justify-content: flex-start;
+  }
+
   .micro-jackhammer-stage {
     display: flex;
-    min-height: 15.2rem;
+    min-height: 16.2rem;
     flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    padding: 1rem;
+    gap: 0.62rem;
+    padding: 0.85rem 1rem 0;
+  }
+
+  .micro-calibration-telemetry {
+    display: flex;
+    width: min(100%, 15rem);
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.42rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 22%, var(--line));
+    border-radius: var(--small-radius);
+    background: rgba(231, 223, 208, 0.48);
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .micro-calibration-telemetry strong {
+    color: var(--route-accent);
   }
 
   .micro-jackhammer-stage img {
-    width: 8.4rem;
-    height: 7.7rem;
+    width: 7.5rem;
+    height: 6.3rem;
     object-fit: contain;
+  }
+
+  .micro-jackhammer-card.is-applying .micro-jackhammer-stage img {
+    animation: micro-jackhammer-work 150ms steps(2, end) infinite;
   }
 
   .micro-jackhammer-card.is-over .micro-jackhammer-stage img {
     animation: micro-jackhammer-shake 90ms steps(2, end) infinite;
   }
 
-  .micro-pressure-meter {
+  .micro-pressure-meter,
+  .micro-certification-meter {
     position: relative;
     width: min(100%, 15rem);
-    height: 0.85rem;
+    height: 0.82rem;
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 999px;
     background: #ded4c2;
   }
 
-  .micro-pressure-meter > span:last-child {
+  .micro-pressure-meter > span:last-child,
+  .micro-certification-meter > span {
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 1;
     border-radius: inherit;
     background: #b92924;
-    transition: width 100ms linear;
+    transition: width 80ms linear;
+  }
+
+  .micro-jackhammer-card.is-safe .micro-pressure-meter > span:last-child,
+  .micro-jackhammer-card.is-approved .micro-pressure-meter > span:last-child {
+    background: #2f8f62;
   }
 
   .micro-pressure-safe-zone {
     position: absolute;
     inset: 0 30% 0 42%;
     z-index: 2;
-    border-right: 1px solid rgba(255, 253, 248, 0.62);
-    border-left: 1px solid rgba(255, 253, 248, 0.62);
-    background: rgba(47, 143, 98, 0.58);
+    border-right: 1px solid rgba(255, 253, 248, 0.72);
+    border-left: 1px solid rgba(255, 253, 248, 0.72);
+    background: rgba(47, 143, 98, 0.45);
     pointer-events: none;
+  }
+
+  .micro-certification-meter {
+    height: 0.58rem;
+    background: repeating-linear-gradient(
+      90deg,
+      #ded4c2 0 calc(20% - 2px),
+      #fffdf8 calc(20% - 2px) 20%
+    );
+  }
+
+  .micro-certification-meter > span {
+    background: linear-gradient(90deg, #286f50, #65b78d);
   }
 
   .micro-jackhammer-stage p {
     min-height: 1rem;
     color: var(--route-accent);
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     font-weight: 900;
     letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  .micro-jackhammer-card.is-approved .micro-jackhammer-stage p {
+    color: #2f8f62;
   }
 
   .micro-jackhammer-button {
-    align-self: center;
-    margin: 0 1rem 1rem;
+    margin: 0;
+    touch-action: none;
+    user-select: none;
   }
 
   .micro-gear-stage {
     position: relative;
-    min-height: 15rem;
+    display: flex;
+    min-height: 18rem;
     flex: 1;
+    flex-direction: column;
+    gap: 0.65rem;
     overflow: hidden;
     margin: 0.9rem 1rem 0;
+    padding: 0.72rem;
     border: 1px solid color-mix(in srgb, var(--route-accent) 24%, var(--line));
     border-radius: var(--small-radius);
     background:
-      linear-gradient(rgba(255, 253, 248, 0.5), rgba(231, 223, 208, 0.78)),
+      linear-gradient(rgba(255, 253, 248, 0.56), rgba(231, 223, 208, 0.82)),
       repeating-linear-gradient(
         90deg,
         transparent 0 18px,
@@ -1373,48 +1608,151 @@
       );
   }
 
-  .micro-gear {
-    position: absolute;
+  .micro-gear-work-order {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid rgba(255, 253, 248, 0.14);
+    border-radius: var(--small-radius);
+    background: #173f34;
+    color: #fffdf8;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-transform: uppercase;
+  }
+
+  .micro-gear-work-order span,
+  .micro-gear-work-order i {
+    padding: 0.45rem 0.55rem;
+    color: rgba(255, 253, 248, 0.6);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+  }
+
+  .micro-gear-work-order strong {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    padding: 0.5rem 0.68rem;
+    border-left: 1px solid rgba(255, 253, 248, 0.13);
+    color: #f5cc3d;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+  }
+
+  .micro-gear-work-order i {
+    padding-top: 0;
+  }
+
+  .micro-gear-selector {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.42rem;
+  }
+
+  .micro-gear-axle {
+    display: grid;
+    min-width: 0;
+    min-height: 7.2rem;
+    place-items: center;
+    padding: 0.42rem 0.2rem;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 22%, var(--line));
+    border-radius: var(--small-radius);
+    background: rgba(255, 253, 248, 0.55);
+    color: var(--route-accent);
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      transform 150ms ease;
+  }
+
+  .micro-gear-axle:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--route-accent) 48%, var(--line));
+    background: rgba(255, 253, 248, 0.9);
+    transform: translateY(-2px);
+  }
+
+  .micro-gear-axle:disabled {
+    cursor: default;
+    opacity: 0.72;
+  }
+
+  .micro-gear-axle span,
+  .micro-gear-axle strong {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.46rem;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .micro-gear-axle strong {
+    color: var(--ink);
+    font-size: 0.54rem;
+  }
+
+  .micro-gear-axle img {
+    width: calc(4.3rem * var(--gear-scale));
+    height: 4.5rem;
+    max-width: 100%;
     object-fit: contain;
     filter: sepia(0.16) saturate(0.88);
+    animation: micro-gear-spin 8s linear infinite;
   }
 
-  .micro-gear-large {
-    top: 1.4rem;
-    left: 12%;
-    width: 9.5rem;
-    animation: micro-gear-spin 9s linear infinite;
+  .micro-gear-axle:nth-child(2) img {
+    animation-name: micro-gear-spin-reverse;
+    animation-duration: 6.5s;
   }
 
-  .micro-gear-small {
-    right: 9%;
-    bottom: 2rem;
-    width: 6.7rem;
-    animation: micro-gear-spin-reverse 6s linear infinite;
+  .micro-gear-card.is-solved .micro-gear-axle {
+    border-color: rgba(47, 143, 98, 0.46);
+    background: rgba(47, 143, 98, 0.08);
   }
 
-  .micro-gear-stage.is-off .micro-gear {
+  .micro-gear-card.is-solved .micro-gear-axle img {
+    animation-duration: 1.4s;
+    filter: sepia(0.08) saturate(1.2) drop-shadow(0 0 0.35rem #77bd98);
+  }
+
+  .micro-gear-card.is-failed .micro-gear-axle img {
     animation-play-state: paused;
-    filter: grayscale(1) opacity(0.62);
+    filter: grayscale(1) opacity(0.55);
   }
 
-  .micro-gear-stage.is-turbo .micro-gear-large {
-    animation-duration: 1.7s;
-  }
-
-  .micro-gear-stage.is-turbo .micro-gear-small {
-    animation-duration: 1.1s;
-  }
-
-  .micro-gear-stage > span {
-    position: absolute;
-    right: 0.6rem;
-    bottom: 0.48rem;
-    color: var(--muted);
+  .micro-gear-history {
+    display: grid;
+    min-height: 4.8rem;
+    align-content: center;
+    gap: 0.22rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px dashed color-mix(in srgb, var(--route-accent) 22%, var(--line));
+    border-radius: var(--small-radius);
+    background: rgba(255, 253, 248, 0.46);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.53rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .micro-gear-history > p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: var(--muted);
+  }
+
+  .micro-gear-history span {
+    color: var(--route-accent);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+  }
+
+  .micro-gear-history strong {
+    font-size: 0.46rem;
+    letter-spacing: 0.03em;
   }
 
   .micro-alignment-card {
@@ -1746,6 +2084,18 @@
   @media (min-width: 760px) {
     .micro-lab-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .micro-salvage-controls,
+    .micro-jackhammer-controls,
+    .micro-gear-controls,
+    .micro-lab-screensaver .micro-lab-controls {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .micro-gear-controls .micro-lab-actions {
+      justify-content: flex-end;
     }
 
     .micro-alignment-card {
@@ -2660,6 +3010,21 @@
   }
 }
 
+@keyframes micro-wrong-worker {
+  0%,
+  100% {
+    filter: none;
+  }
+  30% {
+    filter: saturate(1.7) brightness(0.78);
+    translate: -4px 0;
+  }
+  62% {
+    filter: saturate(1.4) brightness(0.9);
+    translate: 4px 0;
+  }
+}
+
 @keyframes micro-beam-approved {
   0%,
   100% {
@@ -2694,6 +3059,15 @@
   }
   100% {
     transform: translate(2px, -1px) rotate(1deg);
+  }
+}
+
+@keyframes micro-jackhammer-work {
+  0% {
+    transform: translate(-1px, 1px) rotate(-0.4deg);
+  }
+  100% {
+    transform: translate(1px, -1px) rotate(0.4deg);
   }
 }
 
@@ -2848,8 +3222,10 @@
   .showcase-crew-member,
   .card-play-hint-arrow,
   .micro-load-card.is-critical,
+  .micro-bounce-target.is-wrong,
+  .micro-jackhammer-card.is-applying .micro-jackhammer-stage img,
   .micro-jackhammer-card.is-over .micro-jackhammer-stage img,
-  .micro-gear,
+  .micro-gear-axle img,
   .micro-alignment-card.is-perfect .micro-alignment-beam,
   .micro-alignment-card.is-miss .micro-alignment-beam,
   .deployment-live-light,
@@ -2886,6 +3262,12 @@
   }
 
   .micro-alignment-target {
+    transition: none;
+  }
+
+  .micro-integrity-meter > span,
+  .micro-pressure-meter > span:last-child,
+  .micro-certification-meter > span {
     transition: none;
   }
 

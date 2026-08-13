@@ -1,4 +1,9 @@
-import type { CSSProperties, MouseEvent } from "react";
+import type {
+  CSSProperties,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+} from "react";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -30,6 +35,24 @@ const bouncingCrew = [
 
 const paceLabels = ["Union pace", "Regular hustle", "Deadline mode"] as const;
 const paceSpeeds = [48, 82, 128] as const;
+const crewCallSigns = ["Skull foreman", "Hammer tech", "Tunnel crew"] as const;
+const inspectionSequence = [0, 2, 1, 0, 1, 2, 0, 2, 1, 2, 0, 1] as const;
+
+function inspectionGrade(score: number) {
+  if (score >= 520) {
+    return "SITE HAWK";
+  }
+
+  if (score >= 320) {
+    return "CLIPBOARD WIZARD";
+  }
+
+  if (score >= 150) {
+    return "VISIBLE VEST";
+  }
+
+  return "PROBATIONARY LANYARD";
+}
 
 type BouncingBody = {
   element: HTMLButtonElement;
@@ -47,13 +70,20 @@ function SiteScreensaver() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const spriteRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const bodiesRef = useRef<BouncingBody[]>([]);
+  const sequenceRef = useRef(0);
+  const assignmentStartedRef = useRef(0);
   const [pace, setPace] = useState(1);
   const [isShiftActive, setIsShiftActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(20);
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [targetIndex, setTargetIndex] = useState<number>(inspectionSequence[0]);
   const [lastHit, setLastHit] = useState<number | null>(null);
+  const [lastWrong, setLastWrong] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState(
+    "Dispatch is waiting for someone to pick up the clipboard.",
+  );
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -232,6 +262,9 @@ function SiteScreensaver() {
           window.clearInterval(timer);
           setIsShiftActive(false);
           setStreak(0);
+          setFeedback(
+            "Shift over. The clipboard has been returned, reluctantly.",
+          );
           return 0;
         }
 
@@ -248,11 +281,26 @@ function SiteScreensaver() {
     }
   }, [isShiftActive, score]);
 
+  useEffect(() => {
+    if (isShiftActive && timeLeft <= 0) {
+      setIsShiftActive(false);
+      setStreak(0);
+      setFeedback("Audit ended early. Dispatch has confiscated the stopwatch.");
+    }
+  }, [isShiftActive, timeLeft]);
+
   function startShift() {
+    sequenceRef.current = 0;
+    assignmentStartedRef.current = performance.now();
     setScore(0);
     setStreak(0);
     setTimeLeft(20);
+    setTargetIndex(inspectionSequence[0]);
     setLastHit(null);
+    setLastWrong(null);
+    setFeedback(
+      `Dispatch: locate the ${crewCallSigns[inspectionSequence[0]]}.`,
+    );
     setIsShiftActive(true);
   }
 
@@ -260,6 +308,18 @@ function SiteScreensaver() {
     event.stopPropagation();
 
     if (!isShiftActive) {
+      return;
+    }
+
+    if (index !== targetIndex) {
+      setScore((current) => Math.max(0, current - 12));
+      setTimeLeft((current) => Math.max(0, current - 2));
+      setStreak(0);
+      setLastHit(null);
+      setLastWrong(index);
+      setFeedback(
+        `Wrong hard hat. ${crewCallSigns[index]} cost the audit 2 seconds.`,
+      );
       return;
     }
 
@@ -275,16 +335,42 @@ function SiteScreensaver() {
       body.rotation += 17;
     }
 
-    setScore((current) => current + 10 + Math.min(streak, 5) * 3);
+    const reactionTime = performance.now() - assignmentStartedRef.current;
+    const speedBonus = Math.max(0, 20 - Math.floor(reactionTime / 140));
+    const points = 25 + Math.min(streak, 5) * 5 + speedBonus;
+    const nextSequence = (sequenceRef.current + 1) % inspectionSequence.length;
+    const nextTarget = inspectionSequence[nextSequence];
+
+    sequenceRef.current = nextSequence;
+    assignmentStartedRef.current = performance.now();
+    setScore((current) => current + points);
     setStreak((current) => current + 1);
+    setTargetIndex(nextTarget);
     setLastHit(index);
+    setLastWrong(null);
+    setFeedback(
+      `${crewCallSigns[index]} cleared in ${(reactionTime / 1000).toFixed(1)}s · +${points} points.`,
+    );
+  }
+
+  function missInspection() {
+    if (!isShiftActive) {
+      return;
+    }
+
+    setScore((current) => Math.max(0, current - 5));
+    setTimeLeft((current) => Math.max(0, current - 1));
+    setStreak(0);
+    setFeedback("Inspected some perfectly ordinary air. Minus 1 second.");
   }
 
   const shiftMessage = isShiftActive
-    ? `${timeLeft}s left · keep the inspection streak alive`
-    : score > 0
-      ? `Shift complete · ${score} points logged`
-      : "Start a 20-second shift, then catch the crew";
+    ? feedback
+    : timeLeft === 0
+      ? score > 0
+        ? `Shift complete · ${inspectionGrade(score)} · ${score} points`
+        : feedback
+      : "Match each dispatch order to the right moving worker";
 
   return (
     <article className="micro-lab-card micro-lab-screensaver">
@@ -299,25 +385,25 @@ function SiteScreensaver() {
       <div
         aria-label="Catch the moving construction workers during a timed safety audit"
         className="micro-bounce-stage"
-        onClick={() => {
-          if (isShiftActive) {
-            setStreak(0);
-          }
-        }}
+        onClick={missInspection}
         ref={stageRef}
       >
         {bouncingCrew.map((sprite, index) => (
           <button
-            aria-label={`Inspect worker ${index + 1}`}
+            aria-label={`Inspect ${crewCallSigns[index]}`}
             className={[
               "micro-bounce-target",
               lastHit === index ? "is-hit" : "",
+              lastWrong === index ? "is-wrong" : "",
             ].join(" ")}
             disabled={!isShiftActive}
             key={sprite.asset}
             onAnimationEnd={() => {
               if (lastHit === index) {
                 setLastHit(null);
+              }
+              if (lastWrong === index) {
+                setLastWrong(null);
               }
             }}
             onClick={(event) => inspectWorker(event, index)}
@@ -327,25 +413,36 @@ function SiteScreensaver() {
             type="button"
           >
             <img alt="" src={assetPath(sprite.asset)} />
+            <span>{crewCallSigns[index]}</span>
           </button>
         ))}
         <div aria-live="polite" className="micro-game-scoreboard">
           <span>{score.toString().padStart(3, "0")} pts</span>
-          <span>{streak > 1 ? `combo ×${streak}` : "find the crew"}</span>
+          <span>{timeLeft.toString().padStart(2, "0")}s</span>
+        </div>
+        <div className="micro-dispatch-board">
+          <span>Dispatch wants</span>
+          <strong>
+            {isShiftActive ? crewCallSigns[targetIndex] : "Awaiting shift"}
+          </strong>
         </div>
         <span className="micro-screen-corner">
-          20 SECOND SAFETY AUDIT · MISSES BREAK COMBO
+          CORRECT ORDERS BUILD COMBO · WRONG WORKER −2S
         </span>
       </div>
 
       <div className="micro-lab-controls">
         <div className="micro-game-copy">
           <p aria-live="polite">{shiftMessage}</p>
-          <span>Best this visit: {bestScore}</span>
+          <span>
+            Best: {bestScore} ·{" "}
+            {bestScore ? inspectionGrade(bestScore) : "ungraded"}
+          </span>
         </div>
         <div className="micro-lab-actions">
           <button
             className="micro-lab-button"
+            disabled={isShiftActive}
             onClick={() =>
               setPace((current) => (current + 1) % paceLabels.length)
             }
@@ -366,14 +463,6 @@ function SiteScreensaver() {
   );
 }
 
-const incidentMessages = [
-  "All structural buttons accounted for.",
-  "That one was mostly decorative. Probably.",
-  "A distant support beam has become nervous.",
-  "The foreman would like a word.",
-  "This was load-bearing. Reset immediately.",
-] as const;
-
 const incidentSprites = [
   "pinupcalanderladywithunderconstructionsign.gif",
   "anthropromorphisedhammerhittinganthronail.gif",
@@ -382,14 +471,84 @@ const incidentSprites = [
   "angryworkerholdingsigndoyouhaveaproblemwiththat.gif",
 ] as const;
 
-function LoadBearingButton() {
-  const [incidentLevel, setIncidentLevel] = useState(0);
-  const isCritical = incidentLevel === incidentMessages.length - 1;
+const salvageDamage = [9, 12, 7, 15, 10, 18, 8, 14, 20, 11] as const;
 
-  function pressButton() {
-    setIncidentLevel((current) =>
-      current === incidentMessages.length - 1 ? 0 : current + 1,
+type SalvagePhase = "idle" | "playing" | "banked" | "collapsed";
+
+function LoadBearingButton() {
+  const [phase, setPhase] = useState<SalvagePhase>("idle");
+  const [integrity, setIntegrity] = useState(100);
+  const [haul, setHaul] = useState(0);
+  const [bestHaul, setBestHaul] = useState(0);
+  const [presses, setPresses] = useState(0);
+  const [runNumber, setRunNumber] = useState(0);
+  const [status, setStatus] = useState(
+    "Remove suspiciously valuable bolts, then bank the haul before the site folds.",
+  );
+  const isCritical = phase === "playing" && integrity <= 30;
+  const incidentLevel =
+    phase === "collapsed"
+      ? incidentSprites.length - 1
+      : Math.min(
+          incidentSprites.length - 1,
+          Math.floor((100 - integrity) / 22),
+        );
+  const nextReward = 35 + presses * 18 + Math.round((100 - integrity) * 0.6);
+
+  function startSalvage() {
+    setRunNumber((current) => current + 1);
+    setIntegrity(100);
+    setHaul(0);
+    setPresses(0);
+    setStatus(
+      "Fresh structure. Every red-button press removes one profitable bolt.",
     );
+    setPhase("playing");
+  }
+
+  function removeBolt() {
+    if (phase !== "playing") {
+      startSalvage();
+      return;
+    }
+
+    const damage =
+      salvageDamage[(presses + runNumber * 3) % salvageDamage.length];
+    const nextIntegrity = Math.max(0, integrity - damage);
+    const nextHaul = haul + nextReward;
+
+    setIntegrity(nextIntegrity);
+    setPresses((current) => current + 1);
+
+    if (nextIntegrity <= 0) {
+      setHaul(0);
+      setStatus(
+        `Structural enthusiasm exceeded specifications. ${nextHaul} unbanked points became rubble.`,
+      );
+      setPhase("collapsed");
+      return;
+    }
+
+    setHaul(nextHaul);
+    setStatus(
+      nextIntegrity <= 30
+        ? `The building is making legal noises. Bank ${nextHaul} or tempt physics again.`
+        : nextIntegrity <= 55
+          ? `That bolt was load-adjacent. ${nextHaul} points are still unbanked.`
+          : `Bolt acquired. Integrity −${damage} · haul +${nextReward}.`,
+    );
+  }
+
+  function bankSalvage() {
+    if (phase !== "playing" || haul <= 0) {
+      return;
+    }
+
+    setBestHaul((current) => Math.max(current, haul));
+    setStatus(
+      `${haul} points banked. The structure survives on a technicality.`,
+    );
+    setPhase("banked");
   }
 
   return (
@@ -397,25 +556,53 @@ function LoadBearingButton() {
       className={[
         "micro-lab-card micro-load-card",
         isCritical ? "is-critical" : "",
+        phase === "collapsed" ? "is-collapsed" : "",
+        phase === "banked" ? "is-banked" : "",
       ].join(" ")}
     >
       <div className="micro-lab-card-heading">
         <span>02</span>
         <div>
-          <p>Safety control</p>
+          <p>Push-your-luck salvage</p>
           <h3>Load-bearing button</h3>
         </div>
       </div>
 
       <div className="micro-load-stage">
+        <div className="micro-salvage-scoreboard">
+          <span>Integrity {integrity}%</span>
+          <strong>
+            {haul.toString().padStart(4, "0")}{" "}
+            {phase === "banked" ? "banked" : "unbanked"}
+          </strong>
+        </div>
         <img alt="" src={assetPath(incidentSprites[incidentLevel])} />
+        <div
+          aria-label={`Structure integrity ${integrity} percent`}
+          aria-valuemax={100}
+          aria-valuemin={0}
+          aria-valuenow={integrity}
+          className="micro-integrity-meter"
+          role="meter"
+        >
+          <span style={{ width: `${integrity}%` }} />
+          <i />
+          <i />
+          <i />
+        </div>
         <button
           aria-describedby="load-bearing-status"
           className="micro-danger-button"
-          onClick={pressButton}
+          onClick={removeBolt}
           type="button"
         >
-          {isCritical ? "RESET" : "DO NOT PRESS"}
+          {phase === "playing"
+            ? `REMOVE BOLT +${nextReward}`
+            : phase === "collapsed"
+              ? "REBUILD SITE"
+              : phase === "banked"
+                ? "NEW SHIFT"
+                : "START SALVAGE"}
         </button>
       </div>
 
@@ -424,125 +611,489 @@ function LoadBearingButton() {
         className="micro-lab-readout"
         id="load-bearing-status"
       >
-        <span>Incident level {incidentLevel}/4</span>
-        <p>{incidentMessages[incidentLevel]}</p>
+        <span>
+          {phase === "playing"
+            ? `${presses} bolts removed · risk is optional`
+            : `Best bank this visit: ${bestHaul}`}
+        </span>
+        <p>{status}</p>
+      </div>
+
+      <div className="micro-lab-controls micro-salvage-controls">
+        <div className="micro-game-copy">
+          <p>Collapse loses every unbanked point.</p>
+          <span>The red button is still a terrible idea</span>
+        </div>
+        <button
+          className="micro-lab-button micro-lab-button-primary"
+          disabled={phase !== "playing" || haul <= 0}
+          onClick={bankSalvage}
+          type="button"
+        >
+          Bank haul
+        </button>
       </div>
     </article>
   );
 }
 
+const calibrationSafeMinimum = 42;
+const calibrationSafeMaximum = 70;
+
+type CalibrationPhase = "idle" | "running" | "won" | "failed";
+type CalibrationTelemetry = {
+  certification: number;
+  pressure: number;
+  timeLeft: number;
+};
+
 function JackhammerCalibration() {
-  const [pressure, setPressure] = useState(0);
+  const applyingRef = useRef(false);
+  const [phase, setPhase] = useState<CalibrationPhase>("idle");
+  const [isApplying, setIsApplying] = useState(false);
+  const [bestMargin, setBestMargin] = useState(0);
+  const [telemetry, setTelemetry] = useState<CalibrationTelemetry>({
+    certification: 0,
+    pressure: 0,
+    timeLeft: 12,
+  });
+  const [finalStatus, setFinalStatus] = useState(
+    "Hold, release, and feather the pressure inside the green zone for a full permit.",
+  );
 
   useEffect(() => {
-    if (pressure <= 0) {
+    if (phase !== "running") {
       return;
     }
 
-    const drainTimer = window.setInterval(() => {
-      setPressure((current) => Math.max(0, current - 2));
-    }, 120);
+    let previousTime = performance.now();
+    const calibrationTimer = window.setInterval(() => {
+      const time = performance.now();
+      const deltaTime = Math.min((time - previousTime) / 1000, 0.12);
+      previousTime = time;
 
-    return () => window.clearInterval(drainTimer);
-  }, [pressure > 0]);
+      setTelemetry((current) => {
+        const pressureChange = applyingRef.current ? 38 : -19;
+        const pressure = Math.max(
+          0,
+          Math.min(100, current.pressure + pressureChange * deltaTime),
+        );
+        const isInSafeZone =
+          pressure >= calibrationSafeMinimum &&
+          pressure <= calibrationSafeMaximum;
+        const certification = Math.max(
+          0,
+          Math.min(
+            100,
+            current.certification + (isInSafeZone ? 24 : -9) * deltaTime,
+          ),
+        );
 
-  const isApproved = pressure >= 42 && pressure <= 70;
-  const isOver = pressure > 70;
-  const status = isApproved
-    ? "PERMIT APPROVED"
-    : isOver
-      ? "TOO MUCH CONVICTION"
-      : "NEEDS CONVICTION";
+        return {
+          certification,
+          pressure,
+          timeLeft: Math.max(0, current.timeLeft - deltaTime),
+        };
+      });
+    }, 50);
+
+    return () => window.clearInterval(calibrationTimer);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "running") {
+      applyingRef.current = false;
+      setIsApplying(false);
+      return;
+    }
+
+    if (telemetry.certification >= 100) {
+      const remaining = Math.max(0, telemetry.timeLeft);
+      applyingRef.current = false;
+      setBestMargin((current) => Math.max(current, remaining));
+      setFinalStatus(
+        `PERMIT STAMPED · ${remaining.toFixed(1)} seconds left on the clock.`,
+      );
+      setPhase("won");
+    } else if (telemetry.pressure >= 96) {
+      applyingRef.current = false;
+      setFinalStatus("PRESSURE EVENT · the jackhammer has joined management.");
+      setPhase("failed");
+    } else if (telemetry.timeLeft <= 0) {
+      applyingRef.current = false;
+      setFinalStatus(
+        "PERMIT DENIED · conviction wandered outside the green zone.",
+      );
+      setPhase("failed");
+    }
+  }, [phase, telemetry]);
+
+  function startCalibration() {
+    applyingRef.current = false;
+    setIsApplying(false);
+    setTelemetry({ certification: 0, pressure: 0, timeLeft: 12 });
+    setFinalStatus(
+      "Test live. Build pressure, then feather it inside the green zone.",
+    );
+    setPhase("running");
+  }
+
+  function beginApplying(event: PointerEvent<HTMLButtonElement>) {
+    if (phase !== "running") {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    applyingRef.current = true;
+    setIsApplying(true);
+    setTelemetry((current) => ({
+      ...current,
+      pressure: Math.min(100, current.pressure + 4),
+    }));
+  }
+
+  function stopApplying() {
+    applyingRef.current = false;
+    setIsApplying(false);
+  }
+
+  function handlePressureKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (
+      phase !== "running" ||
+      event.repeat ||
+      (event.key !== " " && event.key !== "Enter")
+    ) {
+      return;
+    }
+
+    applyingRef.current = true;
+    setIsApplying(true);
+    setTelemetry((current) => ({
+      ...current,
+      pressure: Math.min(100, current.pressure + 4),
+    }));
+  }
+
+  function handlePressureKeyUp(event: KeyboardEvent<HTMLButtonElement>) {
+    if (event.key === " " || event.key === "Enter") {
+      stopApplying();
+    }
+  }
+
+  const isSafe =
+    telemetry.pressure >= calibrationSafeMinimum &&
+    telemetry.pressure <= calibrationSafeMaximum;
+  const isOver = telemetry.pressure > calibrationSafeMaximum;
+  const liveStatus =
+    telemetry.pressure < 32
+      ? "BUILD PRESSURE"
+      : telemetry.pressure < calibrationSafeMinimum
+        ? "ALMOST IN TOLERANCE"
+        : isSafe
+          ? "HOLD IT STEADY"
+          : telemetry.pressure < 88
+            ? "EASE OFF"
+            : "LET GO IMMEDIATELY";
+  const status = phase === "running" ? liveStatus : finalStatus;
 
   return (
     <article
       className={[
         "micro-lab-card micro-jackhammer-card",
         isOver ? "is-over" : "",
+        isSafe && phase === "running" ? "is-safe" : "",
+        isApplying ? "is-applying" : "",
+        phase === "won" ? "is-approved" : "",
       ].join(" ")}
     >
       <div className="micro-lab-card-heading">
         <span>03</span>
         <div>
-          <p>Skill assessment</p>
+          <p>Pressure-control trial</p>
           <h3>Jackhammer calibration</h3>
         </div>
       </div>
 
       <div className="micro-jackhammer-stage">
+        <div className="micro-calibration-telemetry">
+          <span>{Math.ceil(telemetry.timeLeft)}s remaining</span>
+          <strong>{Math.round(telemetry.certification)}% certified</strong>
+        </div>
         <img alt="" src={assetPath("manusingjackhammerwithdifficulty.gif")} />
         <div
           className="micro-pressure-meter"
           role="meter"
           aria-valuemax={100}
           aria-valuemin={0}
-          aria-valuenow={pressure}
+          aria-valuenow={Math.round(telemetry.pressure)}
+          aria-label="Jackhammer pressure"
         >
           <span className="micro-pressure-safe-zone" />
-          <span style={{ width: `${pressure}%` }} />
+          <span style={{ width: `${telemetry.pressure}%` }} />
+        </div>
+        <div
+          aria-label="Permit certification progress"
+          aria-valuemax={100}
+          aria-valuemin={0}
+          aria-valuenow={Math.round(telemetry.certification)}
+          className="micro-certification-meter"
+          role="progressbar"
+        >
+          <span style={{ width: `${telemetry.certification}%` }} />
         </div>
         <p aria-live="polite">{status}</p>
       </div>
 
-      <button
-        className="micro-lab-button micro-jackhammer-button"
-        onClick={() => setPressure((current) => Math.min(100, current + 17))}
-        type="button"
-      >
-        Apply enthusiasm
-      </button>
+      <div className="micro-lab-controls micro-jackhammer-controls">
+        <div className="micro-game-copy">
+          <p>
+            {phase === "running"
+              ? "Hold to build pressure · release to bleed it"
+              : "Earn 100% certification before the 12-second clock expires"}
+          </p>
+          <span>
+            Best margin:{" "}
+            {bestMargin > 0 ? `${bestMargin.toFixed(1)}s` : "unpermitted"}
+          </span>
+        </div>
+        <button
+          aria-keyshortcuts="Enter Space"
+          aria-pressed={phase === "running" ? isApplying : undefined}
+          className="micro-lab-button micro-lab-button-primary micro-jackhammer-button"
+          onBlur={stopApplying}
+          onClick={() => {
+            if (phase !== "running") {
+              startCalibration();
+            }
+          }}
+          onKeyDown={handlePressureKeyDown}
+          onKeyUp={handlePressureKeyUp}
+          onPointerCancel={stopApplying}
+          onPointerDown={beginApplying}
+          onPointerLeave={stopApplying}
+          onPointerUp={stopApplying}
+          type="button"
+        >
+          {phase === "running"
+            ? isApplying
+              ? "Applying pressure"
+              : "Hold for pressure"
+            : phase === "idle"
+              ? "Start permit test"
+              : "Run it again"}
+        </button>
+      </div>
     </article>
   );
 }
 
-const gearboxModes = [
-  { label: "Offline for lunch", className: "is-off" },
-  { label: "Questionably operational", className: "is-on" },
-  { label: "Warranty voided", className: "is-turbo" },
+const gearSizes = [
+  { code: "S", label: "small", scale: 0.72, teeth: 12 },
+  { code: "M", label: "medium", scale: 0.9, teeth: 18 },
+  { code: "L", label: "large", scale: 1.08, teeth: 24 },
+] as const;
+const gearboxOrders = [
+  [2, 0, 1],
+  [1, 2, 2],
+  [0, 2, 1],
+  [2, 1, 0],
+  [1, 0, 2],
 ] as const;
 
+type GearboxPhase = "idle" | "playing" | "solved" | "failed";
+type GearGuess = {
+  configuration: number[];
+  exact: number;
+  misplaced: number;
+};
+
+function scoreGearGuess(configuration: number[], target: readonly number[]) {
+  let exact = 0;
+  const remainingGuess = [0, 0, 0];
+  const remainingTarget = [0, 0, 0];
+
+  configuration.forEach((gear, index) => {
+    if (gear === target[index]) {
+      exact += 1;
+    } else {
+      remainingGuess[gear] += 1;
+      remainingTarget[target[index]] += 1;
+    }
+  });
+
+  const misplaced = remainingGuess.reduce(
+    (total, count, index) => total + Math.min(count, remainingTarget[index]),
+    0,
+  );
+
+  return { exact, misplaced };
+}
+
 function Gearbox() {
-  const [mode, setMode] = useState(0);
-  const currentMode = gearboxModes[mode];
+  const [phase, setPhase] = useState<GearboxPhase>("idle");
+  const [orderIndex, setOrderIndex] = useState(-1);
+  const [configuration, setConfiguration] = useState([0, 0, 0]);
+  const [history, setHistory] = useState<GearGuess[]>([]);
+  const [bestSolve, setBestSolve] = useState<number | null>(null);
+  const [status, setStatus] = useState(
+    "A sealed work order hides one three-gear configuration. Five tests, no warranty.",
+  );
+  const target = gearboxOrders[Math.max(0, orderIndex)];
+  const attempts = history.length;
+
+  function startWorkOrder() {
+    const nextOrder = (orderIndex + 1) % gearboxOrders.length;
+
+    setOrderIndex(nextOrder);
+    setConfiguration([0, 0, 0]);
+    setHistory([]);
+    setStatus(
+      "Work order loaded. LOCK means right gear and axle; SWAP means right gear, wrong axle.",
+    );
+    setPhase("playing");
+  }
+
+  function cycleGear(index: number) {
+    if (phase !== "playing") {
+      return;
+    }
+
+    setConfiguration((current) =>
+      current.map((gear, gearIndex) =>
+        gearIndex === index ? (gear + 1) % gearSizes.length : gear,
+      ),
+    );
+  }
+
+  function testConfiguration() {
+    if (phase !== "playing") {
+      return;
+    }
+
+    const result = scoreGearGuess(configuration, target);
+    const nextHistory = [
+      ...history,
+      { configuration: [...configuration], ...result },
+    ];
+    const nextAttempts = nextHistory.length;
+
+    setHistory(nextHistory);
+
+    if (result.exact === configuration.length) {
+      setBestSolve((current) =>
+        current === null ? nextAttempts : Math.min(current, nextAttempts),
+      );
+      setStatus(
+        `MESH CERTIFIED · solved in ${nextAttempts} ${nextAttempts === 1 ? "test" : "tests"}. Suspiciously competent.`,
+      );
+      setPhase("solved");
+    } else if (nextAttempts >= 5) {
+      const answer = target.map((gear) => gearSizes[gear].code).join("–");
+      setStatus(`GEARBOX UNIONIZED · the hidden order was ${answer}.`);
+      setPhase("failed");
+    } else {
+      setStatus(
+        `${result.exact} LOCK · ${result.misplaced} SWAP · ${5 - nextAttempts} tests remain.`,
+      );
+    }
+  }
+
+  const revealedOrder =
+    phase === "solved" || phase === "failed"
+      ? target.map((gear) => gearSizes[gear].code).join("–")
+      : "?–?–?";
 
   return (
-    <article className="micro-lab-card micro-gear-card">
+    <article
+      className={[
+        "micro-lab-card micro-gear-card",
+        phase === "solved" ? "is-solved" : "",
+        phase === "failed" ? "is-failed" : "",
+      ].join(" ")}
+    >
       <div className="micro-lab-card-heading">
         <span>04</span>
         <div>
-          <p>Infrastructure</p>
+          <p>Five-guess codebreaker</p>
           <h3>Central gearbox</h3>
         </div>
       </div>
 
-      <div
-        className={`micro-gear-stage ${currentMode.className}`}
-        style={{ "--gear-mode": mode } as CSSProperties}
-      >
-        <img
-          alt=""
-          className="micro-gear micro-gear-large"
-          src={assetPath("gears1.gif")}
-        />
-        <img
-          alt=""
-          className="micro-gear micro-gear-small"
-          src={assetPath("gears2.gif")}
-        />
-        <span>OUTPUT: {37 + mode * 31}% USEFUL</span>
+      <div className="micro-gear-stage">
+        <div className="micro-gear-work-order">
+          <span>Hidden service order</span>
+          <strong>{revealedOrder}</strong>
+          <i>{attempts}/5 tests</i>
+        </div>
+
+        <div aria-label="Gear selection" className="micro-gear-selector">
+          {configuration.map((gear, index) => {
+            const gearSize = gearSizes[gear];
+
+            return (
+              <button
+                aria-label={`Axle ${String.fromCharCode(65 + index)} has a ${gearSize.label} ${gearSize.teeth}-tooth gear. Change gear.`}
+                className="micro-gear-axle"
+                disabled={phase !== "playing"}
+                key={index}
+                onClick={() => cycleGear(index)}
+                style={{ "--gear-scale": gearSize.scale } as CSSProperties}
+                type="button"
+              >
+                <span>Axle {String.fromCharCode(65 + index)}</span>
+                <img alt="" src={assetPath("gears2.gif")} />
+                <strong>
+                  {gearSize.code} · {gearSize.teeth}T
+                </strong>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="micro-gear-history">
+          {history.length === 0 ? (
+            <p>Choose S, M, or L on each axle, then test the mesh.</p>
+          ) : (
+            history.slice(-3).map((guess, index) => (
+              <p key={`${history.length}-${index}`}>
+                <span>
+                  {guess.configuration
+                    .map((gear) => gearSizes[gear].code)
+                    .join("–")}
+                </span>
+                <strong>
+                  {guess.exact} lock · {guess.misplaced} swap
+                </strong>
+              </p>
+            ))
+          )}
+        </div>
       </div>
 
-      <div className="micro-lab-controls">
-        <p aria-live="polite">{currentMode.label}</p>
-        <button
-          className="micro-lab-button"
-          onClick={() =>
-            setMode((current) => (current + 1) % gearboxModes.length)
-          }
-          type="button"
-        >
-          Turn crank
-        </button>
+      <div className="micro-lab-controls micro-gear-controls">
+        <div className="micro-game-copy">
+          <p aria-live="polite">{status}</p>
+          <span>
+            Best solve: {bestSolve === null ? "sealed" : `${bestSolve}/5 tests`}
+          </span>
+        </div>
+        <div className="micro-lab-actions">
+          <button
+            className="micro-lab-button"
+            onClick={startWorkOrder}
+            type="button"
+          >
+            {phase === "idle" ? "Pull work order" : "New order"}
+          </button>
+          <button
+            className="micro-lab-button micro-lab-button-primary"
+            disabled={phase !== "playing"}
+            onClick={testConfiguration}
+            type="button"
+          >
+            Test mesh
+          </button>
+        </div>
       </div>
     </article>
   );
