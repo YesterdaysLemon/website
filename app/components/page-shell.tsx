@@ -20,6 +20,8 @@ type PageShellProps = {
   children: ReactNode;
 };
 
+const githubSponsorsUrl = "https://github.com/sponsors/YesterdaysLemon";
+
 export function PageShell({
   routeId,
   title,
@@ -215,13 +217,27 @@ export function PageShell({
 
         <footer className="border-line text-muted flex flex-col gap-3 border-t py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>Alireza Afshan 2026</p>
-          <a
-            className="archive-inline-link w-fit"
-            href={footerContact.to}
-            style={{ "--route-accent": footerContact.accent } as CSSProperties}
-          >
-            mail@alirezaafshan.com
-          </a>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:justify-end">
+            <a
+              className="archive-inline-link inline-flex min-h-11 w-fit items-center"
+              href={footerContact.to}
+              style={
+                { "--route-accent": footerContact.accent } as CSSProperties
+              }
+            >
+              mail@alirezaafshan.com
+            </a>
+            <a
+              aria-label="Sponsor Alireza's work on GitHub"
+              className="archive-inline-link inline-flex min-h-11 w-fit items-center"
+              href={githubSponsorsUrl}
+              rel="noreferrer"
+              style={{ "--route-accent": "var(--heart)" } as CSSProperties}
+              target="_blank"
+            >
+              <span aria-hidden="true">♥ sponsor me</span>
+            </a>
+          </div>
         </footer>
       </div>
     </div>
