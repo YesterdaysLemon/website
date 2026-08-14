@@ -24,6 +24,19 @@ const archiveRouteIdsByPath: Record<string, RouteDesignId> = {
   "/resume": "resume",
 };
 
+const pageSurfaceByPath: Record<string, string> = {
+  "/": "#102f28",
+  "/about-blackjack-lab.html": "#0b2c24",
+};
+
+function normalizePathname(pathname: string) {
+  return pathname.replace(/\/+$/, "") || "/";
+}
+
+function getPageSurface(pathname: string) {
+  return pageSurfaceByPath[normalizePathname(pathname)] ?? "#e7dfd0";
+}
+
 function scrambleText(text: string, amount: number) {
   if (amount <= 0) {
     return text;
@@ -58,11 +71,15 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+  const pageSurface = getPageSurface(pathname);
+
   return (
-    <html lang="en">
+    <html lang="en" style={{ "--page-surface": pageSurface } as CSSProperties}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content={pageSurface} />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -84,7 +101,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-paper text-ink min-h-screen antialiased">
+      <body className="text-ink min-h-screen antialiased">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -95,7 +112,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
 export default function App() {
   const { pathname } = useLocation();
-  const normalizedPathname = pathname.replace(/\/+$/, "") || "/";
+  const normalizedPathname = normalizePathname(pathname);
   const routeId = archiveRouteIdsByPath[normalizedPathname] ?? null;
   const routeAccent = routeId
     ? routeDesigns[routeId].accent

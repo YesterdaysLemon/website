@@ -30,8 +30,10 @@
     --small-radius: 5px;
   }
 
-  html {
-    background: var(--paper);
+  html,
+  body {
+    min-height: 100%;
+    background-color: var(--page-surface, var(--paper));
   }
 
   body {
