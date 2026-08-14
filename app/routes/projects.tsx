@@ -1,6 +1,6 @@
 import type { Route } from "./+types/projects";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import { DeploymentPipeline } from "~/components/deployment-pipeline";
 import { MarkdownContent } from "~/components/markdown-content";
@@ -71,7 +71,6 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   const { projects } = loaderData;
   const [projectView, setProjectView] = useState<ProjectView>("all");
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const selectedSlug = searchParams.get("project");
   const selectedProject =
     projects.find((project) => project.slug === selectedSlug) ?? null;
@@ -95,7 +94,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        navigate("/projects");
+        window.location.assign("/projects");
       }
     }
 
@@ -104,7 +103,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [navigate, selectedProject]);
+  }, [selectedProject]);
 
   return (
     <PageShell
@@ -185,6 +184,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
               <Link
                 aria-label={`Open ${project.title}`}
                 className="project-card-link project-card-visual-link"
+                reloadDocument
                 to={project.href}
               >
                 <div aria-hidden="true" className="project-card-visual">
@@ -213,6 +213,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
                 <div className="mb-3 flex items-start justify-between gap-4">
                   <Link
                     className="project-card-link project-card-title-link min-w-0"
+                    reloadDocument
                     to={project.href}
                   >
                     <h2 className="suit-title text-ink font-serif text-2xl leading-tight">
@@ -255,6 +256,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
 
                 <Link
                   className="archive-inline-link project-card-link project-card-cta mt-6 w-fit text-sm font-bold"
+                  reloadDocument
                   to={project.href}
                 >
                   Open project
@@ -285,6 +287,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
           <Link
             aria-label="Close project details"
             className="bg-ink/55 absolute inset-0 backdrop-blur-sm"
+            reloadDocument
             to="/projects"
           />
 
@@ -307,6 +310,7 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
               <Link
                 autoFocus
                 className="archive-button archive-button-secondary"
+                reloadDocument
                 to="/projects"
               >
                 Close

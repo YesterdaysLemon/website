@@ -250,7 +250,11 @@ export default function About() {
               </p>
             </div>
 
-            <Link className="interest-deck-link" to="/about-blackjack-lab.html">
+            <Link
+              className="interest-deck-link"
+              reloadDocument
+              to="/about-blackjack-lab.html"
+            >
               <span className="interest-deck-suits" aria-hidden="true">
                 <span>♣</span>
                 <span>♥</span>

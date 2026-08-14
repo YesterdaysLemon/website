@@ -2,7 +2,6 @@ import type { CSSProperties, MouseEvent, PointerEvent } from "react";
 import type { Route } from "./+types/home";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 
 import {
   actionCards,
@@ -39,7 +38,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const navigate = useNavigate();
   const tableRef = useRef<HTMLDivElement | null>(null);
   const playZoneRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<DragState | null>(null);
@@ -132,7 +130,7 @@ export default function Home() {
     if (card.id === "joker") {
       const destination =
         jokerDestinations[Math.floor(Math.random() * jokerDestinations.length)];
-      navigate(destination);
+      window.location.assign(destination);
       return;
     }
 
@@ -141,7 +139,7 @@ export default function Home() {
       return;
     }
 
-    navigate(card.to);
+    window.location.assign(card.to);
   }
 
   function getCardCenter(cardId: CardId) {
