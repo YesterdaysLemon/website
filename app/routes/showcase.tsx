@@ -142,7 +142,6 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                       ) : null}
                       <Link
                         className="archive-button archive-button-secondary"
-                        reloadDocument
                         to={project.href}
                       >
                         Project notes
@@ -229,7 +228,6 @@ export default function Showcase({ loaderData }: Route.ComponentProps) {
                       </a>
                       <Link
                         className="archive-button archive-button-secondary"
-                        reloadDocument
                         to={project.href}
                       >
                         Project notes

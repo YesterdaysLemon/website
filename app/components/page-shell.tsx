@@ -101,6 +101,7 @@ export function PageShell({
       <div className="archive-page-content mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pt-5 sm:px-8 sm:py-5 lg:px-10">
         <header className="border-line flex flex-col gap-9 border-b pb-9">
           <div className="bg-warm-card border-line z-40 flex flex-col gap-4 rounded-[var(--radius)] border px-4 py-4 shadow-[0_14px_38px_rgba(21,25,24,0.035)] sm:sticky sm:top-5 sm:flex-row sm:items-start sm:justify-between sm:px-5">
+            {/* Home uses a different Safari edge surface, so cross it with a fresh document. */}
             <NavLink
               className="text-muted hover:text-ink focus-visible:ring-offset-paper inline-flex min-h-11 items-center text-sm font-extrabold tracking-[0.22em] uppercase transition focus-visible:ring-2 focus-visible:ring-[var(--route-accent)] focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-0"
               end
@@ -110,6 +111,7 @@ export function PageShell({
               Alireza Afshan
             </NavLink>
 
+            {/* Archive routes share one surface, so client navigation preserves the field. */}
             <nav
               aria-label="Main navigation"
               className="archive-main-nav border-line bg-warm-card/95 fixed right-4 left-4 z-50 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 rounded-[var(--radius)] border px-4 py-3 text-sm font-semibold shadow-[0_6px_18px_rgba(21,25,24,0.08)] backdrop-blur sm:static sm:z-auto sm:justify-start sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none"
@@ -125,7 +127,6 @@ export function PageShell({
                       isActive ? "is-active" : "",
                     ].join(" ")
                   }
-                  reloadDocument
                   style={{ "--nav-accent": item.accent } as CSSProperties}
                   to={item.to}
                 >
