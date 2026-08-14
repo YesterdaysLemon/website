@@ -25,7 +25,8 @@ const archiveRouteIdsByPath: Record<string, RouteDesignId> = {
 };
 
 const pageSurfaceByPath: Record<string, string> = {
-  "/": "#102f28",
+  // Safari only accepts a solid theme color, so match the homepage gradient's top edge.
+  "/": "#2c5445",
   "/about-blackjack-lab.html": "#0b2c24",
 };
 

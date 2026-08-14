@@ -100,6 +100,8 @@
     inset: 0;
     z-index: 0;
     overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5rem);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 5rem);
     pointer-events: none;
     opacity: 0;
     transition: opacity 420ms ease;
