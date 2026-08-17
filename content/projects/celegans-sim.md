@@ -11,6 +11,7 @@ tags:
   - Browser visualization
 repoUrl: https://github.com/YesterdaysLemon/celegans-sim
 liveUrl: https://worm.alirezaafshan.com
+coverImage: /images/projects/celegans-sim/viewer-animal.png
 order: 4
 ---
 
