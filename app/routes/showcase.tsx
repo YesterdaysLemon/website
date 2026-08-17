@@ -36,10 +36,15 @@ const liveProjectCopy: Record<
       "One bird gets the front page every day, pulled from recent eBird sightings with a little help from Wikipedia.",
     cta: "Meet today's bird",
   },
+  "celegans-sim": {
+    eyebrow: "302 neurons, live in one dish",
+    description:
+      "An inspectable connectome-to-body simulation with an intentionally candid boundary: an open scientific work in progress, not a biologically complete digital animal.",
+    cta: "Enter the worm lab",
+  },
 };
 
 const workbenchOrder = [
-  "celegans-sim",
   "open-mathematics-lab",
   "retainerproof",
   "forgeward",

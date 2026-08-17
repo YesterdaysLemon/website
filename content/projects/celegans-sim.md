@@ -1,14 +1,16 @@
 ---
 title: C. elegans Connectome Simulator
-summary: A private scientific-computing lab running 302 graded-potential neurons, 95 body-wall muscles, an inextensible low-Reynolds-number body, and a browser viewer as one closed loop.
+summary: A public scientific-computing lab running 302 graded-potential neurons, 95 body-wall muscles, an inextensible low-Reynolds-number body, and a browser viewer as one closed loop.
 year: 2026
-status: Private simulation lab
+status: Live public simulation lab
 tags:
   - Python
   - Scientific computing
   - Connectomics
   - Biomechanics
   - Browser visualization
+repoUrl: https://github.com/YesterdaysLemon/celegans-sim
+liveUrl: https://worm.alirezaafshan.com
 order: 4
 ---
 
@@ -18,7 +20,7 @@ This is the sort of project that begins with “could I simulate the whole worm?
 
 The model closes the loop from a chemical and physical world, through sensory neurons and the reconstructed connectome, into individual muscle cells and an inextensible body moving through a viscous medium. The browser is deliberately just the viewer; the simulation remains the project.
 
-It is a private work in progress, and it is not presented as a biologically complete digital animal or an OpenWorm result. The value so far is in making every subsystem explicit enough to measure, test, and replace.
+It is an open work in progress with a public browser viewer, and it is not presented as a biologically complete digital animal or an OpenWorm result. The value so far is in making every subsystem explicit enough to measure, test, and replace.
 
 <!-- ai-summary -->
 

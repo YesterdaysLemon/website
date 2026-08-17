@@ -84,6 +84,13 @@ Project markdown uses frontmatter plus `personal-notes` and `ai-summary` body
 sections. Image references should use site-relative paths such as
 `/images/projects/my-project/cover.png`.
 
+### Public site link contract
+
+- Every standalone public site exposes a visible link back to `https://alirezaafshan.com`.
+- Every deployed public site has a project entry with a `liveUrl`, which makes it available from Showcase.
+- Confirm each repository's actual deploy branch before release; do not assume `main` or `master`.
+- Do not add a `liveUrl` for a prototype until the public deployment exists.
+
 ## Copy maintenance notes
 
 Use this section as a quick map when refreshing page copy.

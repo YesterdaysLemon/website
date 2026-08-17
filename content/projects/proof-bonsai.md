@@ -9,7 +9,7 @@ tags:
   - Exact research
   - Evidence provenance
   - Cloudflare
-repoUrl: https://github.com/YesterdaysLemon/krenn-gu-research/tree/codex/proof-visualizer-20260811/tools/proof-visualizer
+repoUrl: https://github.com/YesterdaysLemon/krenn-gu-research/tree/main/tools/proof-visualizer
 liveUrl: https://proof-bonsai.alirezaafshan.com
 coverImage: /images/projects/proof-bonsai/cover.webp
 order: 11
